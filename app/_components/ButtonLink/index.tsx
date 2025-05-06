@@ -12,5 +12,5 @@ export default function ButtonLink({ href, children }: Props){
         <a href={href} className={styles.button}>
             {children}
         </a>
-    )
+    );
 }
