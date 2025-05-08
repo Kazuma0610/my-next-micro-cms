@@ -1,14 +1,16 @@
 import Image from "next/image";
 import styles from "./not-found.module.css";
 
+import Hero from "@/app/_components/Hero";
+
 export default function Notfound() {
     return (
         <>
 
           <section className={styles.top}>
             <div>
-              <h1 className={styles.title}>テクノロジーの力で世界を変える</h1>
-              <p className={styles.description}>私たちは市場をリードしているグローバルテックカンパニーです</p>
+              <h1 className={styles.title}>Not Found</h1>
+              <p className={styles.sub}>404ページ</p>
             </div>
             <Image className={styles.bgimg} 
               src="/img-mv.jpg" 
