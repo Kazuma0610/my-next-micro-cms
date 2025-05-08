@@ -9,7 +9,7 @@ export default function RootLayout( { children }: Props ) {
     return (
         <>
           <Hero title="Members" sub="メンバー" />
-          <Sheet>{ children }</Sheet>;
+          <Sheet>{ children }</Sheet>
         </>
     );
 }
