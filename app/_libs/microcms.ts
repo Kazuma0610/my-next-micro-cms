@@ -13,8 +13,8 @@ export type Member = {
 } & MicroCMSListContent;
 
 export type Category = {
-  name:string;
-} & MicroCMSListContent
+  name: string;
+} & MicroCMSListContent;
 
 export type News = {
   title: string;

@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { getMembersList } from "@/app/_libs/microcms";
-import { MEMBERS_LIST_LIMIT } from "@/app/_constants";
+import { getMembersList } from '@/app/_libs/microcms';
+import { MEMBERS_LIST_LIMIT } from '@/app/_constants';
 import styles from './page.module.css';
 
 export default async function Page() {
