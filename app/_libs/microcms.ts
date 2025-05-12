@@ -54,12 +54,26 @@ export const getNewsList = async (queries?:MicroCMSQueries) => {
     return listData;
 };
 
+//ニュースページの不正なURL直接入力を防ぐ
 export const getNewsDetail = async (
   contentId: string,
   queries?: MicroCMSQueries
 ) => {
   const detailData = await client.getListDetail<News>({
     endpoint: "news",
+    contentId,
+    queries,
+  });
+  return detailData;
+};
+
+//ニュースページのカテゴリーの不正なURL直接入力を防ぐ
+export const getCategoryDetail = async (
+  contentId: string,
+  queries?: MicroCMSQueries
+) => {
+  const detailData = await client.getListDetail<Category>({
+    endpoint: "categories",
     contentId,
     queries,
   });
