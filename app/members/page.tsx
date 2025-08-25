@@ -1,7 +1,8 @@
-import Image from 'next/image';
-import { getMembersList } from '@/app/_libs/microcms';
-import { MEMBERS_LIST_LIMIT } from '@/app/_constants';
-import styles from './page.module.css';
+import Image from "next/image";
+import { getMembersList } from "@/app/_libs/microcms";
+import { MEMBERS_LIST_LIMIT } from "@/app/_constants";
+import styles from "./page.module.css";
+import Breadcrumbs from "@/app/_components/Breadcrumbs";
 
 export default async function Page() {
   const data = await getMembersList({ limit: MEMBERS_LIST_LIMIT });
@@ -11,6 +12,7 @@ export default async function Page() {
         <p className={styles.empty}>メンバーが登録されていません。</p>
       ) : (
         <ul>
+          <Breadcrumbs />
           {data.contents.map((member) => (
             <li key={member.id} className={styles.list}>
               <Image

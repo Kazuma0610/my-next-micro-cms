@@ -1,0 +1,15 @@
+.breadcrumb {
+  display: flex;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.breadcrumb li:not(:first-child) {
+  margin-left: 8px;
+}
+
+.breadcrumb li span {
+  margin: 0 4px;
+}
