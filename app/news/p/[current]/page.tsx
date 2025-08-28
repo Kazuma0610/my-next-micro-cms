@@ -31,7 +31,7 @@ export default async function Page({ params }: Props) {
     <>
       <Breadcrumbs />
       <NewsList news={news} />
-      <Pagination totalCount={totalCount} />
+      <Pagination totalCount={totalCount} current={current} />
     </>
   );
 }
