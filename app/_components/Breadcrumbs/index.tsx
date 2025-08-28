@@ -37,12 +37,16 @@ const Breadcrumbs: React.FC = () => {
         {pathParts.map((part, idx) => {
           const href = "/" + pathParts.slice(0, idx + 1).join("/");
           // 記事詳細ページ（/news/スラッグ）だけ特別扱い
-          const isNewsDetail = pathParts[0] === "news" && pathParts.length === 1 && pathname.startsWith("/news/") && pathname.split("/").filter(Boolean).length === 2;
+          const isNewsDetail =
+            pathParts[0] === "news" &&
+            pathParts.length === 1 &&
+            pathname.startsWith("/news/") &&
+            pathname.split("/").filter(Boolean).length === 2;
           // /news/category/xxx や /news/p/2 などは通常通り最後だけisLast
           const isLast = idx === pathParts.length - 1 && !isNewsDetail;
           return (
-            <li key={href} style={{ marginLeft: 8 }}>
-              <span style={{ margin: "0 4px" }}>/</span>
+            <li key={href} style={{ marginLeft: 0 }}>
+              <span style={{ margin: "0 10px" }}>/</span>
               {isLast ? (
                 <span>{nameMap[part] ?? decodeURIComponent(part)}</span>
               ) : (
