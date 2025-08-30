@@ -39,6 +39,7 @@
   cursor: pointer;
   margin-top: 20px;
   padding: 10px 30px;
+  color: var(--color-text-main);
 }
 
 .clearButton {
