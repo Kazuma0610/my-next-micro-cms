@@ -1,5 +1,7 @@
 .form {
   margin-bottom: 24px;
+  position: relative;
+  box-sizing: border-box;
 }
 
 .search {
@@ -28,4 +30,23 @@
   background-color: transparent;
   border: 1px solid transparent;
   font-size: 16px;
+}
+
+.searchButton {
+  background: none;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  padding: 10px 30px;
+}
+
+.clearButton {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }

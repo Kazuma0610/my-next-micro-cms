@@ -3,20 +3,22 @@
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import Styles from "./index.module.css";
-import { Suspense } from "react";
+import { Suspense, useRef, useState } from "react";
 
 function SearchFieldComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [inputValue, setInputValue] = useState(searchParams.get("q") ?? "");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const q = e.currentTarget.elements.namedItem("q");
-    if (q instanceof HTMLInputElement) {
-      const params = new URLSearchParams();
-      params.set("q", q.value.trim());
-      router.push(`/news/search?${params.toString()}`);
-    }
+    const params = new URLSearchParams();
+    params.set("q", inputValue.trim());
+    router.push(`/news/search?${params.toString()}`);
+  };
+
+  const handleClear = () => {
+    setInputValue("");
   };
 
   return (
@@ -32,11 +34,28 @@ function SearchFieldComponent() {
         <input
           type="text"
           name="q"
-          defaultValue={searchParams.get("q") ?? undefined}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
           placeholder="キーワードを入力"
           className={Styles.searchInput}
         />
+        <button
+          type="button"
+          onClick={handleClear}
+          className={Styles.clearButton}
+        >
+          <Image
+            src="/erase.svg"
+            alt="クリア"
+            width={16}
+            height={16}
+            loading="eager"
+          />
+        </button>
       </label>
+      <button type="submit" className={Styles.searchButton}>
+        検索
+      </button>
     </form>
   );
 }
