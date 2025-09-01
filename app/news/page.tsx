@@ -5,7 +5,7 @@ import SearchField from "@/app/_components/SearchField";
 import { NEWS_LIST_LIMIT } from "@/app/_constants";
 import Breadcrumbs from "@/app/_components/Breadcrumbs";
 
-export const revalidate = 0;
+export const revalidate = 1;
 
 export default async function Page() {
   const { contents: news, totalCount } = await getNewsList({
