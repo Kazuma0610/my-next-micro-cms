@@ -3,6 +3,10 @@
   margin-bottom: 40px;
 }
 
+.textfield {
+  font-size: 16px;
+}
+
 @media (max-width: 640px) {
   .text {
     text-align: left;
