@@ -97,7 +97,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
     console.log(e);
     return {
       status: "error",
-      message: "お問い合わせに失敗しました",
+      message: "お問い合わせに失敗",
     };
   }
 
