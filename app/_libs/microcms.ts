@@ -83,3 +83,21 @@ export const getCategoryDetail = async (
   });
   return detailData;
 };
+
+//サイトマップ用にnewsの全件取得
+export const getAllNewsList = async () => {
+  const listData = await client.getAllContents<News>({
+    endpoint: "news",
+  });
+
+  return listData;
+};
+
+//サイトマップ用にnewsカテゴリー全件取得
+export const getAllCategoryList = async () => {
+  const listData = await client.getAllContents<Category>({
+    endpoint: "categories",
+  });
+
+  return listData;
+};
