@@ -93,7 +93,9 @@ export default function ContactForm() {
           Object.entries(form).forEach(([key, value]) => fd.append(key, value));
           const result = await createContactData(state, fd);
           setState(result);
+          console.log(result);
           if (result.status === "success") setStep("done");
+          console.log("送信ボタンがクリックされました");
         }}
       >
         <h2>確認画面</h2>
