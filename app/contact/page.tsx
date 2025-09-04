@@ -1,9 +1,11 @@
 import styles from "./page.module.css";
 import ContactForm from "../_components/ContactForm";
+import Breadcrumbs from "../_components/Breadcrumbs";
 
 export default function Page() {
   return (
     <div className={styles.container}>
+      <Breadcrumbs />
       <p className={styles.text}>
         ご質問、ご相談は下記フォームよりお問い合わせください。
         <br />
