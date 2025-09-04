@@ -30,9 +30,9 @@ const initialState = {
 };
 
 export default function ContactForm() {
-  const [step, setStep] = useState<"input" | "confirm">("input");
+  const [step, setStep] = useState<"input" | "confirm" | "done">("input");
   const [form, setForm] = useState<FormData>(initialForm);
-  const [state, formAction] = useFormState(createContactData, initialState);
+  const [state, setState] = useState(initialState);
 
   // 入力変更
   const handleChange = (
@@ -41,9 +41,17 @@ export default function ContactForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // 確認画面へ
-  const handleConfirm = (e: React.FormEvent) => {
+  // 確認画面へ（バリデーション実行）
+  const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
+    const fd = new FormData();
+    Object.entries(form).forEach(([key, value]) => fd.append(key, value));
+    const result = await createContactData(state, fd);
+    if (result.status === "error") {
+      setState(result);
+      return;
+    }
+    setState(initialState);
     setStep("confirm");
   };
 
@@ -51,7 +59,7 @@ export default function ContactForm() {
   const handleBack = () => setStep("input");
 
   // 完了画面
-  if (state.status === "success") {
+  if (step === "done") {
     return (
       <div>
         <p className={styles.success}>
@@ -63,9 +71,9 @@ export default function ContactForm() {
           type="button"
           className={styles.button}
           onClick={() => {
-            setForm(initialForm); // 入力値リセット
-            setStep("input"); // 入力画面に戻す
-            window.location.reload(); // ← これを追加
+            setForm(initialForm);
+            setState(initialState);
+            setStep("input");
           }}
         >
           入力画面に戻る
@@ -77,7 +85,17 @@ export default function ContactForm() {
   // 確認画面
   if (step === "confirm") {
     return (
-      <form className={styles.confirm} action={formAction}>
+      <form
+        className={styles.confirm}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const fd = new FormData();
+          Object.entries(form).forEach(([key, value]) => fd.append(key, value));
+          const result = await createContactData(state, fd);
+          setState(result);
+          if (result.status === "success") setStep("done");
+        }}
+      >
         <h2>確認画面</h2>
         <ul>
           <li>姓: {form.lastname}</li>
@@ -110,7 +128,6 @@ export default function ContactForm() {
   // 入力画面
   return (
     <form className={styles.form} onSubmit={handleConfirm}>
-      {/* ...既存のinput群... */}
       <div className={styles.horizontal}>
         <div className={styles.item}>
           <label className={styles.label} htmlFor="lastname">
@@ -123,7 +140,6 @@ export default function ContactForm() {
             name="lastname"
             value={form.lastname}
             onChange={handleChange}
-            required
           />
         </div>
         <div className={styles.item}>
@@ -137,7 +153,6 @@ export default function ContactForm() {
             name="firstname"
             value={form.firstname}
             onChange={handleChange}
-            required
           />
         </div>
       </div>
@@ -152,7 +167,6 @@ export default function ContactForm() {
           name="company"
           value={form.company}
           onChange={handleChange}
-          required
         />
       </div>
       <div className={styles.item}>
@@ -166,7 +180,6 @@ export default function ContactForm() {
           name="email"
           value={form.email}
           onChange={handleChange}
-          required
         />
       </div>
       <div className={styles.item}>
@@ -179,7 +192,6 @@ export default function ContactForm() {
           name="message"
           value={form.message}
           onChange={handleChange}
-          required
         />
       </div>
       <div className={styles.actions}>
