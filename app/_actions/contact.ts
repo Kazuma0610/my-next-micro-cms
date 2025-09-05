@@ -5,6 +5,11 @@ function validateEmail(email: string) {
   return pattern.test(email);
 }
 
+function validatenumber(number: string) {
+  const pattern = /^[0-9]+$/;
+  return pattern.test(number);
+}
+
 // HubSpot送信のみ
 export async function createContactData(_prevState: any, formData: FormData) {
   const rawFormData = {
@@ -12,7 +17,9 @@ export async function createContactData(_prevState: any, formData: FormData) {
     firstname: formData.get("firstname") as string,
     company: formData.get("company") as string,
     email: formData.get("email") as string,
+    phone: formData.get("phone") as string,
     message: formData.get("message") as string,
+    radio_rfi: formData.get("radio_rfi") as string, // ←ラジオボタン値
   };
 
   const result = await fetch(
@@ -46,6 +53,16 @@ export async function createContactData(_prevState: any, formData: FormData) {
           },
           {
             objectTypeId: "0-1",
+            name: "phone",
+            value: rawFormData.phone,
+          },
+          {
+            objectTypeId: "0-1",
+            name: "radio_rfi",
+            value: rawFormData.radio_rfi,
+          },
+          {
+            objectTypeId: "0-1",
             name: "message",
             value: rawFormData.message,
           },
@@ -76,6 +93,8 @@ export async function validateContactData(_prevState: any, formData: FormData) {
     firstname: formData.get("firstname") as string,
     company: formData.get("company") as string,
     email: formData.get("email") as string,
+    phone: formData.get("phone") as string,
+    radio_rfi: formData.get("radio_rfi") as string,
     message: formData.get("message") as string,
   };
 
@@ -93,6 +112,12 @@ export async function validateContactData(_prevState: any, formData: FormData) {
   }
   if (!validateEmail(rawFormData.email)) {
     return { status: "error", message: "メールアドレスの形式が誤っています" };
+  }
+  if (!validatenumber(rawFormData.phone)) {
+    return { status: "error", message: "電話番号を数字のみで入力してください" };
+  }
+  if (!rawFormData.radio_rfi) {
+    return { status: "error", message: "お問合わせ種別を選択してください" };
   }
   if (!rawFormData.message) {
     return { status: "error", message: "メッセージを入力してください" };

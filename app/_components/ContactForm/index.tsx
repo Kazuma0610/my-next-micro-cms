@@ -13,14 +13,19 @@ type FormData = {
   firstname: string;
   company: string;
   email: string;
+  phone: string;
+  radio_rfi: string;
   message: string;
 };
 
+// 初期値
 const initialForm: FormData = {
   lastname: "",
   firstname: "",
   company: "",
   email: "",
+  phone: "",
+  radio_rfi: "",
   message: "",
 };
 
@@ -102,6 +107,8 @@ export default function ContactForm() {
           <li>名: {form.firstname}</li>
           <li>会社名: {form.company}</li>
           <li>メール: {form.email}</li>
+          <li>電話番号: {form.phone}</li>
+          <li>お問合わせ種別: {form.radio_rfi}</li>
           <li>メッセージ: {form.message}</li>
         </ul>
         {/* hidden inputで値を渡す */}
@@ -109,6 +116,8 @@ export default function ContactForm() {
         <input type="hidden" name="firstname" value={form.firstname} />
         <input type="hidden" name="company" value={form.company} />
         <input type="hidden" name="email" value={form.email} />
+        <input type="hidden" name="phone" value={form.phone} />
+        <input type="hidden" name="radio_rfi" value={form.radio_rfi} />
         <input type="hidden" name="message" value={form.message} />
         <div className={styles.actions}>
           <button type="button" onClick={handleBack} className={styles.button}>
@@ -181,6 +190,66 @@ export default function ContactForm() {
           value={form.email}
           onChange={handleChange}
         />
+      </div>
+      <div className={styles.item}>
+        <label className={styles.label} htmlFor="phone">
+          電話番号
+        </label>
+        <input
+          className={styles.textfield}
+          type="tel"
+          id="phone"
+          name="phone"
+          value={form.phone}
+          onChange={handleChange}
+        />
+      </div>
+      <div>
+        <label className={styles.label} htmlFor="radio_rfi">
+          お問合わせ種別
+        </label>
+        <div>
+          <label>
+            <input
+              type="radio"
+              name="radio_rfi"
+              value="会社概要"
+              checked={form.radio_rfi === "会社概要"}
+              onChange={handleChange}
+            />
+            会社概要
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="radio_rfi"
+              value="製品"
+              checked={form.radio_rfi === "製品"}
+              onChange={handleChange}
+            />
+            製品
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="radio_rfi"
+              value="サービスカタログ"
+              checked={form.radio_rfi === "サービスカタログ"}
+              onChange={handleChange}
+            />
+            サービスカタログ
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="radio_rfi"
+              value="料金プラン"
+              checked={form.radio_rfi === "料金プラン"}
+              onChange={handleChange}
+            />
+            料金プラン
+          </label>
+        </div>
       </div>
       <div className={styles.item}>
         <label className={styles.label} htmlFor="message">
