@@ -1,6 +1,6 @@
 "use client";
 
-import { createContactData } from "@/app/_actions/contact";
+import { validateContactData, createContactData } from "@/app/_actions/contact";
 import { useFormState } from "react-dom";
 import { useState } from "react";
 import styles from "./index.module.css";
@@ -46,13 +46,23 @@ export default function ContactForm() {
     e.preventDefault();
     const fd = new FormData();
     Object.entries(form).forEach(([key, value]) => fd.append(key, value));
-    const result = await createContactData(state, fd);
+    const result = await validateContactData(state, fd);
     if (result.status === "error") {
       setState(result);
       return;
     }
     setState(initialState);
     setStep("confirm");
+  };
+
+  // 送信（HubSpot送信）
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const fd = new FormData();
+    Object.entries(form).forEach(([key, value]) => fd.append(key, value));
+    const result = await createContactData(state, fd);
+    setState(result);
+    if (result.status === "success") setStep("done");
   };
 
   // 戻る
@@ -85,19 +95,7 @@ export default function ContactForm() {
   // 確認画面
   if (step === "confirm") {
     return (
-      <form
-        className={styles.confirm}
-        onSubmit={async (e) => {
-          e.preventDefault();
-          const fd = new FormData();
-          Object.entries(form).forEach(([key, value]) => fd.append(key, value));
-          const result = await createContactData(state, fd);
-          setState(result);
-          console.log(result);
-          if (result.status === "success") setStep("done");
-          console.log("送信ボタンがクリックされました");
-        }}
-      >
+      <form className={styles.confirm} onSubmit={handleSubmit}>
         <h2>確認画面</h2>
         <ul>
           <li>姓: {form.lastname}</li>
