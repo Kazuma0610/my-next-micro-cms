@@ -1,11 +1,8 @@
 "use client";
 
 import { validateContactData, createContactData } from "@/app/_actions/contact";
-import { useFormState } from "react-dom";
 import { useState } from "react";
 import styles from "./index.module.css";
-
-// ...FormData, initialFormはそのまま...
 
 // 入力値の型
 type FormData = {
@@ -49,9 +46,12 @@ export default function ContactForm() {
   // 確認画面へ（バリデーション実行）
   const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
-    const fd = new FormData();
-    Object.entries(form).forEach(([key, value]) => fd.append(key, value));
-    const result = await validateContactData(state, fd);
+    // formオブジェクトをFormDataインスタンスに変換
+    const formData = new window.FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+    const result = await validateContactData(null, formData);
     if (result.status === "error") {
       setState(result);
       return;
@@ -60,14 +60,23 @@ export default function ContactForm() {
     setStep("confirm");
   };
 
-  // 送信（HubSpot送信）
+  // 送信（Gmail等へ送信API呼び出し）
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const fd = new FormData();
-    Object.entries(form).forEach(([key, value]) => fd.append(key, value));
-    const result = await createContactData(state, fd);
-    setState(result);
-    if (result.status === "success") setStep("done");
+    setState(initialState);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const result = await res.json();
+      setState(result);
+      if (result.status === "success") setStep("done");
+    } catch {
+      setState({ status: "error", message: "送信に失敗しました" });
+    }
   };
 
   // 戻る
@@ -111,14 +120,6 @@ export default function ContactForm() {
           <li>お問合わせ種別: {form.radio_rfi}</li>
           <li>メッセージ: {form.message}</li>
         </ul>
-        {/* hidden inputで値を渡す */}
-        <input type="hidden" name="lastname" value={form.lastname} />
-        <input type="hidden" name="firstname" value={form.firstname} />
-        <input type="hidden" name="company" value={form.company} />
-        <input type="hidden" name="email" value={form.email} />
-        <input type="hidden" name="phone" value={form.phone} />
-        <input type="hidden" name="radio_rfi" value={form.radio_rfi} />
-        <input type="hidden" name="message" value={form.message} />
         <div className={styles.actions}>
           <button type="button" onClick={handleBack} className={styles.button}>
             戻る

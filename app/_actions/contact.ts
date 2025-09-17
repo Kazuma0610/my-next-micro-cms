@@ -1,5 +1,7 @@
 "use server";
 
+import sgMail from "@sendgrid/mail";
+
 function validateEmail(email: string) {
   const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return pattern.test(email);
@@ -10,7 +12,7 @@ function validatenumber(number: string) {
   return pattern.test(number);
 }
 
-// HubSpot送信のみ
+// メール送信のみ
 export async function createContactData(_prevState: any, formData: FormData) {
   const rawFormData = {
     lastname: formData.get("lastname") as string,
@@ -18,72 +20,43 @@ export async function createContactData(_prevState: any, formData: FormData) {
     company: formData.get("company") as string,
     email: formData.get("email") as string,
     phone: formData.get("phone") as string,
+    radio_rfi: formData.get("radio_rfi") as string,
     message: formData.get("message") as string,
-    radio_rfi: formData.get("radio_rfi") as string, // ←ラジオボタン値
   };
 
-  const result = await fetch(
-    `https://api.hsforms.com/submissions/v3/integration/submit/${process.env.HUBSPOT_PORTAL_ID}/${process.env.HUBSPOT_FORM_ID}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: [
-          {
-            objectTypeId: "0-1",
-            name: "lastname",
-            value: rawFormData.lastname,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "firstname",
-            value: rawFormData.firstname,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "company",
-            value: rawFormData.company,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "email",
-            value: rawFormData.email,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "phone",
-            value: rawFormData.phone,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "radio_rfi",
-            value: rawFormData.radio_rfi,
-          },
-          {
-            objectTypeId: "0-1",
-            name: "message",
-            value: rawFormData.message,
-          },
-        ],
-      }),
-    }
-  );
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+
+  const msg = {
+    to: "daieirecord.ec@gmail.com", // 送信先
+    from: { email: process.env.SENDGRID_FROM!, name: "お問い合わせ" }, // 認証済み送信元
+    subject: "お問い合わせ内容",
+    text: `
+      姓: ${rawFormData.lastname}
+      名: ${rawFormData.firstname}
+      会社名: ${rawFormData.company}
+      メール: ${rawFormData.email}
+      電話番号: ${rawFormData.phone}
+      お問合わせ種別: ${rawFormData.radio_rfi}
+      メッセージ: ${rawFormData.message}
+    `,
+  };
 
   try {
-    await result.json();
-  } catch (e) {
+    await sgMail.send(msg);
+    return {
+      status: "success",
+      message: "送信しました",
+    };
+  } catch (e: any) {
     console.log(e);
+    if (e.response && e.response.body) {
+      console.log(e.response.body); // ← ここに追加
+    }
     return {
       status: "error",
-      message: "お問い合わせに失敗",
+      message: "メール送信に失敗しました",
     };
   }
-  return {
-    status: "success",
-    message: "OK",
-  };
 }
 
 // バリデーションのみ
