@@ -27,7 +27,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
   const msg = {
-    to: "daieirecord.ec@gmail.com", // 送信先
+    to: ["daieirecord.ec@gmail.com", "mail@kazuma.work"], // 送信先
     from: { email: process.env.SENDGRID_FROM!, name: "お問い合わせ" }, // 認証済み送信元
     subject: "お問い合わせ内容",
     text: `
