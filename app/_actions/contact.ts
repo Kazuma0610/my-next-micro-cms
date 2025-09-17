@@ -21,6 +21,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
     email: formData.get("email") as string,
     phone: formData.get("phone") as string,
     radio_rfi: formData.get("radio_rfi") as string,
+    interests: (formData.get("interests") as string)?.split(",") || [],
     message: formData.get("message") as string,
   };
 
@@ -37,6 +38,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
       メール: ${rawFormData.email}
       電話番号: ${rawFormData.phone}
       お問合わせ種別: ${rawFormData.radio_rfi}
+      ご興味のある項目: ${rawFormData.interests.join(", ")}
       メッセージ: ${rawFormData.message}
     `,
   };
@@ -68,6 +70,7 @@ export async function validateContactData(_prevState: any, formData: FormData) {
     email: formData.get("email") as string,
     phone: formData.get("phone") as string,
     radio_rfi: formData.get("radio_rfi") as string,
+    interests: (formData.get("interests") as string)?.split(",") || [],
     message: formData.get("message") as string,
   };
 
@@ -91,6 +94,13 @@ export async function validateContactData(_prevState: any, formData: FormData) {
   }
   if (!rawFormData.radio_rfi) {
     return { status: "error", message: "お問合わせ種別を選択してください" };
+  }
+  if (
+    !rawFormData.interests ||
+    !rawFormData.interests.length ||
+    rawFormData.interests[0] === ""
+  ) {
+    return { status: "error", message: "ご興味のある項目を選択してください" };
   }
   if (!rawFormData.message) {
     return { status: "error", message: "メッセージを入力してください" };

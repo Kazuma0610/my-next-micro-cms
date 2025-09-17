@@ -12,6 +12,7 @@ type FormData = {
   email: string;
   phone: string;
   radio_rfi: string;
+  interests: string[]; // 追加
   message: string;
 };
 
@@ -23,6 +24,7 @@ const initialForm: FormData = {
   email: "",
   phone: "",
   radio_rfi: "",
+  interests: [], // 追加
   message: "",
 };
 
@@ -43,13 +45,27 @@ export default function ContactForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+    setForm((prev) => {
+      const interests = checked
+        ? [...prev.interests, value]
+        : prev.interests.filter((v) => v !== value);
+      return { ...prev, interests };
+    });
+  };
+
   // 確認画面へ（バリデーション実行）
   const handleConfirm = async (e: React.FormEvent) => {
     e.preventDefault();
     // formオブジェクトをFormDataインスタンスに変換
     const formData = new window.FormData();
     Object.entries(form).forEach(([key, value]) => {
-      formData.append(key, value);
+      if (Array.isArray(value)) {
+        formData.append(key, value.length ? value.join(",") : "");
+      } else {
+        formData.append(key, value);
+      }
     });
     const result = await validateContactData(null, formData);
     if (result.status === "error") {
@@ -58,9 +74,10 @@ export default function ContactForm() {
     }
     setState(initialState);
     setStep("confirm");
+    console.log(formData.get("interests"));
   };
 
-  // 送信（Gmail等へ送信API呼び出し）
+  // メール送信（SendGrid API）
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setState(initialState);
@@ -118,6 +135,7 @@ export default function ContactForm() {
           <li>メール: {form.email}</li>
           <li>電話番号: {form.phone}</li>
           <li>お問合わせ種別: {form.radio_rfi}</li>
+          <li>ご興味のある項目: {form.interests.join(", ")}</li>
           <li>メッセージ: {form.message}</li>
         </ul>
         <div className={styles.actions}>
@@ -251,6 +269,37 @@ export default function ContactForm() {
             料金プラン
           </label>
         </div>
+      </div>
+      <div className={styles.item}>
+        <label className={styles.label}>ご興味のある項目（複数選択可）</label>
+        <label>
+          <input
+            type="checkbox"
+            value="製品"
+            checked={form.interests.includes("製品")}
+            onChange={handleCheckboxChange}
+          />
+          製品
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="サービス"
+            checked={form.interests.includes("サービス")}
+            onChange={handleCheckboxChange}
+          />
+          サービス
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            value="サポート"
+            checked={form.interests.includes("サポート")}
+            onChange={handleCheckboxChange}
+          />
+          サポート
+        </label>
+        {/* 必要に応じて追加 */}
       </div>
       <div className={styles.item}>
         <label className={styles.label} htmlFor="message">
