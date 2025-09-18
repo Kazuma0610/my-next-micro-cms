@@ -2,6 +2,7 @@
 
 import { validateContactData, createContactData } from "@/app/_actions/contact";
 import { useState } from "react";
+import Image from "next/image";
 import styles from "./index.module.css";
 
 // 入力値の型
@@ -16,6 +17,9 @@ type FormData = {
   radio_rfi: string;
   interests: string[]; // 追加
   message: string;
+  fileBase64?: string;
+  fileName?: string;
+  fileType?: string;
 };
 
 // 初期値
@@ -30,6 +34,9 @@ const initialForm: FormData = {
   radio_rfi: "",
   interests: [], // 追加
   message: "",
+  fileBase64: "",
+  fileName: "",
+  fileType: "",
 };
 
 const initialState = {
@@ -67,7 +74,7 @@ export default function ContactForm() {
     Object.entries(form).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         formData.append(key, value.length ? value.join(",") : "");
-      } else {
+      } else if (value !== undefined) {
         formData.append(key, value);
       }
     });
@@ -100,10 +107,45 @@ export default function ContactForm() {
     }
   };
 
+  // 画像添付（1枚のみ対応）
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setForm((prev) => ({
+        ...prev,
+        fileBase64: "",
+        fileName: "",
+        fileType: "",
+      }));
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      setForm((prev) => ({
+        ...prev,
+        fileBase64: base64,
+        fileName: file.name,
+        fileType: file.type,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   // メール送信（SendGrid API）
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setState(initialState);
+
+    // FormDataを作成
+    const formData = new window.FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        formData.append(key, value.length ? value.join(",") : "");
+      } else if (value !== undefined && key !== "files") {
+        formData.append(key, value);
+      }
+    });
 
     try {
       const res = await fetch("/api/contact", {
@@ -162,6 +204,25 @@ export default function ContactForm() {
           <li>お問合わせ種別: {form.radio_rfi}</li>
           <li>ご興味のある項目: {form.interests.join(", ")}</li>
           <li>メッセージ: {form.message}</li>
+          <li>
+            添付ファイル: {form.fileName || "なし"}
+            {/* テキストの下に画像を表示 */}
+            {form.fileBase64 && form.fileType && (
+              <div style={{ marginTop: "8px" }}>
+                <Image
+                  src={`data:${form.fileType};base64,${form.fileBase64}`}
+                  alt={form.fileName ?? ""}
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "contain",
+                    maxWidth: "200px",
+                    maxHeight: "200px",
+                  }}
+                />
+              </div>
+            )}
+          </li>
         </ul>
         <div className={styles.actions}>
           <button type="button" onClick={handleBack} className={styles.button}>
@@ -366,6 +427,10 @@ export default function ContactForm() {
           value={form.message}
           onChange={handleChange}
         />
+      </div>
+      <div className={styles.item}>
+        <label className={styles.label}>画像添付</label>
+        <input type="file" accept="image/*" onChange={handleFileChange} />
       </div>
       <div className={styles.actions}>
         {state.status === "error" && (

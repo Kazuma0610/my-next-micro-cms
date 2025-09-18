@@ -32,6 +32,22 @@ export async function createContactData(_prevState: any, formData: FormData) {
     message: formData.get("message") as string,
   };
 
+  // 画像添付（1枚のみ対応）
+  const fileBase64 = formData.get("fileBase64") as string | undefined;
+  const fileName = formData.get("fileName") as string | undefined;
+  const fileType = formData.get("fileType") as string | undefined;
+
+  const attachments = [];
+  if (fileBase64 && fileName && fileType) {
+    attachments.push({
+      content: fileBase64,
+      filename: fileName,
+      type: fileType,
+      disposition: "attachment",
+    });
+  }
+  console.log("attachments", attachments); // ← ここで中身を確認
+
   sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
 
   const msg = {
@@ -50,6 +66,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
       ご興味のある項目: ${rawFormData.interests.join(", ")}
       メッセージ: ${rawFormData.message}
     `,
+    attachments, // ← 1枚のみ添付
   };
 
   // 管理者宛てメール
@@ -70,6 +87,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
       お問合わせ種別: ${rawFormData.radio_rfi}
       ご興味のある項目: ${rawFormData.interests.join(", ")}
       メッセージ: ${rawFormData.message}
+      ${attachments.length > 0 ? "添付ファイル有り" : ""}
 
     ----------------------------------------
     `,
@@ -97,6 +115,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
       お問合わせ種別: ${rawFormData.radio_rfi}
       ご興味のある項目: ${rawFormData.interests.join(", ")}
       メッセージ: ${rawFormData.message}
+      ${attachments.length > 0 ? "添付ファイル有り" : ""}
 
     ----------------------------------------
   `,
