@@ -12,12 +12,19 @@ function validatenumber(number: string) {
   return pattern.test(number);
 }
 
+function zipcodenumber(number: string) {
+  const pattern = /^[0-9]{3}-?[0-9]{4}$/;
+  return pattern.test(number);
+}
+
 // メール送信のみ
 export async function createContactData(_prevState: any, formData: FormData) {
   const rawFormData = {
     lastname: formData.get("lastname") as string,
     firstname: formData.get("firstname") as string,
     company: formData.get("company") as string,
+    zipcode: formData.get("zipcode") as string,
+    address: formData.get("address") as string,
     email: formData.get("email") as string,
     phone: formData.get("phone") as string,
     radio_rfi: formData.get("radio_rfi") as string,
@@ -35,6 +42,8 @@ export async function createContactData(_prevState: any, formData: FormData) {
       姓: ${rawFormData.lastname}
       名: ${rawFormData.firstname}
       会社名: ${rawFormData.company}
+      郵便番号: ${rawFormData.zipcode}
+      住所: ${rawFormData.address}
       メール: ${rawFormData.email}
       電話番号: ${rawFormData.phone}
       お問合わせ種別: ${rawFormData.radio_rfi}
@@ -67,6 +76,8 @@ export async function validateContactData(_prevState: any, formData: FormData) {
     lastname: formData.get("lastname") as string,
     firstname: formData.get("firstname") as string,
     company: formData.get("company") as string,
+    zipcode: formData.get("zipcode") as string,
+    address: formData.get("address") as string,
     email: formData.get("email") as string,
     phone: formData.get("phone") as string,
     radio_rfi: formData.get("radio_rfi") as string,
@@ -82,6 +93,15 @@ export async function validateContactData(_prevState: any, formData: FormData) {
   }
   if (!rawFormData.company) {
     return { status: "error", message: "会社名を入力してください" };
+  }
+  if (!rawFormData.zipcode) {
+    return { status: "error", message: "郵便番号を入力してください" };
+  }
+  if (!zipcodenumber(rawFormData.zipcode)) {
+    return { status: "error", message: "郵便番号を数字のみで入力してください" };
+  }
+  if (!rawFormData.address) {
+    return { status: "error", message: "住所を入力してください" };
   }
   if (!rawFormData.email) {
     return { status: "error", message: "メールアドレスを入力してください" };

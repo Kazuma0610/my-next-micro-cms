@@ -9,6 +9,8 @@ type FormData = {
   lastname: string;
   firstname: string;
   company: string;
+  zipcode: string; // 追加
+  address: string; // 追加
   email: string;
   phone: string;
   radio_rfi: string;
@@ -21,6 +23,8 @@ const initialForm: FormData = {
   lastname: "",
   firstname: "",
   company: "",
+  zipcode: "", // 追加
+  address: "", // 追加
   email: "",
   phone: "",
   radio_rfi: "",
@@ -75,6 +79,25 @@ export default function ContactForm() {
     setState(initialState);
     setStep("confirm");
     console.log(formData.get("interests"));
+  };
+
+  // 郵便番号入力時に住所自動取得
+  const handleZipcodeBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const zipcode = e.target.value.replace("-", "").trim();
+    if (/^\d{7}$/.test(zipcode)) {
+      try {
+        const res = await fetch(
+          `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipcode}`
+        );
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+          const address = `${data.results[0].address1}${data.results[0].address2}${data.results[0].address3}`;
+          setForm((prev) => ({ ...prev, address }));
+        }
+      } catch {
+        // 住所取得失敗時は何もしない（必要ならエラー表示も可）
+      }
+    }
   };
 
   // メール送信（SendGrid API）
@@ -132,6 +155,8 @@ export default function ContactForm() {
           <li>姓: {form.lastname}</li>
           <li>名: {form.firstname}</li>
           <li>会社名: {form.company}</li>
+          <li>郵便番号: {form.zipcode}</li>
+          <li>住所: {form.address}</li>
           <li>メール: {form.email}</li>
           <li>電話番号: {form.phone}</li>
           <li>お問合わせ種別: {form.radio_rfi}</li>
@@ -195,6 +220,35 @@ export default function ContactForm() {
           name="company"
           value={form.company}
           onChange={handleChange}
+        />
+      </div>
+      <div className={styles.item}>
+        <label className={styles.label} htmlFor="zipcode">
+          郵便番号
+        </label>
+        <input
+          className={styles.textfield}
+          type="text"
+          id="zipcode"
+          name="zipcode"
+          value={form.zipcode}
+          onChange={handleChange}
+          onBlur={handleZipcodeBlur}
+          placeholder="例: 123-4567"
+        />
+      </div>
+      <div className={styles.item}>
+        <label className={styles.label} htmlFor="address">
+          住所
+        </label>
+        <input
+          className={styles.textfield}
+          type="text"
+          id="address"
+          name="address"
+          value={form.address}
+          onChange={handleChange}
+          placeholder="例: 東京都千代田区1-1-1"
         />
       </div>
       <div className={styles.item}>
