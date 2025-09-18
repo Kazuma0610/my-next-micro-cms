@@ -52,8 +52,60 @@ export async function createContactData(_prevState: any, formData: FormData) {
     `,
   };
 
+  // 管理者宛てメール
+  const adminMsg = {
+    to: "mail@daieirecord.jp",
+    from: { email: process.env.SENDGRID_FROM!, name: "お問い合わせ" },
+    subject: "お問い合わせ内容",
+    text: `...お問い合わせ内容...
+    ----------------------------------------
+
+      姓: ${rawFormData.lastname}
+      名: ${rawFormData.firstname}
+      会社名: ${rawFormData.company}
+      郵便番号: ${rawFormData.zipcode}
+      住所: ${rawFormData.address}
+      メール: ${rawFormData.email}
+      電話番号: ${rawFormData.phone}
+      お問合わせ種別: ${rawFormData.radio_rfi}
+      ご興味のある項目: ${rawFormData.interests.join(", ")}
+      メッセージ: ${rawFormData.message}
+
+    ----------------------------------------
+    `,
+  };
+
+  // ユーザー宛て自動返信メール
+  const userMsg = {
+    to: rawFormData.email,
+    from: { email: process.env.SENDGRID_FROM!, name: "お問い合わせ" },
+    subject: "お問い合わせありがとうございます",
+    text: `
+    ${rawFormData.lastname}${rawFormData.firstname}様
+    お問い合わせありがとうございます。
+    下記の内容を確認し、担当者よりご連絡いたします。
+
+    ----------------------------------------
+
+      姓: ${rawFormData.lastname}
+      名: ${rawFormData.firstname}
+      会社名: ${rawFormData.company}
+      郵便番号: ${rawFormData.zipcode}
+      住所: ${rawFormData.address}
+      メール: ${rawFormData.email}
+      電話番号: ${rawFormData.phone}
+      お問合わせ種別: ${rawFormData.radio_rfi}
+      ご興味のある項目: ${rawFormData.interests.join(", ")}
+      メッセージ: ${rawFormData.message}
+
+    ----------------------------------------
+  `,
+  };
+
   try {
     await sgMail.send(msg);
+    await sgMail.send(adminMsg);
+    await sgMail.send(userMsg);
     return {
       status: "success",
       message: "送信しました",
