@@ -33,16 +33,28 @@ export async function createContactData(_prevState: any, formData: FormData) {
   };
 
   // 画像添付（1枚のみ対応）
-  const fileBase64 = formData.get("fileBase64") as string | undefined;
-  const fileName = formData.get("fileName") as string | undefined;
-  const fileType = formData.get("fileType") as string | undefined;
+  const fileBase641 = formData.get("fileBase641") as string | undefined;
+  const fileName1 = formData.get("fileName1") as string | undefined;
+  const fileType1 = formData.get("fileType1") as string | undefined;
+
+  const fileBase642 = formData.get("fileBase642") as string | undefined;
+  const fileName2 = formData.get("fileName2") as string | undefined;
+  const fileType2 = formData.get("fileType2") as string | undefined;
 
   const attachments = [];
-  if (fileBase64 && fileName && fileType) {
+  if (fileBase641 && fileName1 && fileType1) {
     attachments.push({
-      content: fileBase64,
-      filename: fileName,
-      type: fileType,
+      content: fileBase641,
+      filename: fileName1,
+      type: fileType1,
+      disposition: "attachment",
+    });
+  }
+  if (fileBase642 && fileName2 && fileType2) {
+    attachments.push({
+      content: fileBase642,
+      filename: fileName2,
+      type: fileType2,
       disposition: "attachment",
     });
   }

@@ -17,9 +17,12 @@ type FormData = {
   radio_rfi: string;
   interests: string[]; // 追加
   message: string;
-  fileBase64?: string;
-  fileName?: string;
-  fileType?: string;
+  fileBase641?: string;
+  fileName1?: string;
+  fileType1?: string;
+  fileBase642?: string;
+  fileName2?: string;
+  fileType2?: string;
 };
 
 // 初期値
@@ -34,9 +37,12 @@ const initialForm: FormData = {
   radio_rfi: "",
   interests: [], // 追加
   message: "",
-  fileBase64: "",
-  fileName: "",
-  fileType: "",
+  fileBase641: "",
+  fileName1: "",
+  fileType1: "",
+  fileBase642: "",
+  fileName2: "",
+  fileType2: "",
 };
 
 const initialState = {
@@ -107,15 +113,15 @@ export default function ContactForm() {
     }
   };
 
-  // 画像添付（1枚のみ対応）
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // 画像添付1
+  const handleFileChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) {
       setForm((prev) => ({
         ...prev,
-        fileBase64: "",
-        fileName: "",
-        fileType: "",
+        fileBase641: "",
+        fileName1: "",
+        fileType1: "",
       }));
       return;
     }
@@ -124,9 +130,34 @@ export default function ContactForm() {
       const base64 = (reader.result as string).split(",")[1];
       setForm((prev) => ({
         ...prev,
-        fileBase64: base64,
-        fileName: file.name,
-        fileType: file.type,
+        fileBase641: base64,
+        fileName1: file.name,
+        fileType1: file.type,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // 画像添付2
+  const handleFileChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setForm((prev) => ({
+        ...prev,
+        fileBase642: "",
+        fileName2: "",
+        fileType2: "",
+      }));
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      setForm((prev) => ({
+        ...prev,
+        fileBase642: base64,
+        fileName2: file.name,
+        fileType2: file.type,
       }));
     };
     reader.readAsDataURL(file);
@@ -205,13 +236,30 @@ export default function ContactForm() {
           <li>ご興味のある項目: {form.interests.join(", ")}</li>
           <li>メッセージ: {form.message}</li>
           <li>
-            添付ファイル: {form.fileName || "なし"}
-            {/* テキストの下に画像を表示 */}
-            {form.fileBase64 && form.fileType && (
+            添付ファイル1: {form.fileName1 || "なし"}
+            {form.fileBase641 && form.fileType1 && (
               <div style={{ marginTop: "8px" }}>
                 <Image
-                  src={`data:${form.fileType};base64,${form.fileBase64}`}
-                  alt={form.fileName ?? ""}
+                  src={`data:${form.fileType1};base64,${form.fileBase641}`}
+                  alt={form.fileName1 ?? ""}
+                  width={200}
+                  height={200}
+                  style={{
+                    objectFit: "contain",
+                    maxWidth: "200px",
+                    maxHeight: "200px",
+                  }}
+                />
+              </div>
+            )}
+          </li>
+          <li>
+            添付ファイル2: {form.fileName2 || "なし"}
+            {form.fileBase642 && form.fileType2 && (
+              <div style={{ marginTop: "8px" }}>
+                <Image
+                  src={`data:${form.fileType2};base64,${form.fileBase642}`}
+                  alt={form.fileName2 ?? ""}
                   width={200}
                   height={200}
                   style={{
@@ -429,8 +477,12 @@ export default function ContactForm() {
         />
       </div>
       <div className={styles.item}>
-        <label className={styles.label}>画像添付</label>
-        <input type="file" accept="image/*" onChange={handleFileChange} />
+        <label className={styles.label}>画像添付1</label>
+        <input type="file" accept="image/*" onChange={handleFileChange1} />
+      </div>
+      <div className={styles.item}>
+        <label className={styles.label}>画像添付2</label>
+        <input type="file" accept="image/*" onChange={handleFileChange2} />
       </div>
       <div className={styles.actions}>
         {state.status === "error" && (
