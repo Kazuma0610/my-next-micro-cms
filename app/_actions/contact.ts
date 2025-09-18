@@ -29,10 +29,11 @@ export async function createContactData(_prevState: any, formData: FormData) {
     phone: formData.get("phone") as string,
     radio_rfi: formData.get("radio_rfi") as string,
     interests: (formData.get("interests") as string)?.split(",") || [],
+    department: formData.get("department") as string,
     message: formData.get("message") as string,
   };
 
-  // 画像添付（1枚のみ対応）
+  // 画像添付（1枚、2枚対応）
   const fileBase641 = formData.get("fileBase641") as string | undefined;
   const fileName1 = formData.get("fileName1") as string | undefined;
   const fileType1 = formData.get("fileType1") as string | undefined;
@@ -76,6 +77,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
       電話番号: ${rawFormData.phone}
       お問合わせ種別: ${rawFormData.radio_rfi}
       ご興味のある項目: ${rawFormData.interests.join(", ")}
+      部署: ${rawFormData.department}
       メッセージ: ${rawFormData.message}
     `,
     attachments, // ← 1枚のみ添付
@@ -98,6 +100,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
       電話番号: ${rawFormData.phone}
       お問合わせ種別: ${rawFormData.radio_rfi}
       ご興味のある項目: ${rawFormData.interests.join(", ")}
+      部署: ${rawFormData.department}
       メッセージ: ${rawFormData.message}
       ${attachments.length > 0 ? "添付ファイル有り" : ""}
 
@@ -126,6 +129,7 @@ export async function createContactData(_prevState: any, formData: FormData) {
       電話番号: ${rawFormData.phone}
       お問合わせ種別: ${rawFormData.radio_rfi}
       ご興味のある項目: ${rawFormData.interests.join(", ")}
+      部署: ${rawFormData.department}
       メッセージ: ${rawFormData.message}
       ${attachments.length > 0 ? "添付ファイル有り" : ""}
 
@@ -165,6 +169,7 @@ export async function validateContactData(_prevState: any, formData: FormData) {
     phone: formData.get("phone") as string,
     radio_rfi: formData.get("radio_rfi") as string,
     interests: (formData.get("interests") as string)?.split(",") || [],
+    department: formData.get("department") as string,
     message: formData.get("message") as string,
   };
 
@@ -204,6 +209,9 @@ export async function validateContactData(_prevState: any, formData: FormData) {
     rawFormData.interests[0] === ""
   ) {
     return { status: "error", message: "ご興味のある項目を選択してください" };
+  }
+  if (!rawFormData.department) {
+    return { status: "error", message: "部署を入力してください" };
   }
   if (!rawFormData.message) {
     return { status: "error", message: "メッセージを入力してください" };

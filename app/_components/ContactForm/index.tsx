@@ -16,6 +16,7 @@ type FormData = {
   phone: string;
   radio_rfi: string;
   interests: string[]; // 追加
+  department?: string; // 追加
   message: string;
   fileBase641?: string;
   fileName1?: string;
@@ -36,6 +37,7 @@ const initialForm: FormData = {
   phone: "",
   radio_rfi: "",
   interests: [], // 追加
+  department: "",
   message: "",
   fileBase641: "",
   fileName1: "",
@@ -57,7 +59,9 @@ export default function ContactForm() {
 
   // 入力変更
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -234,6 +238,7 @@ export default function ContactForm() {
           <li>電話番号: {form.phone}</li>
           <li>お問合わせ種別: {form.radio_rfi}</li>
           <li>ご興味のある項目: {form.interests.join(", ")}</li>
+          <li>部署: {form.department}</li>
           <li>メッセージ: {form.message}</li>
           <li>
             添付ファイル1: {form.fileName1 || "なし"}
@@ -463,6 +468,24 @@ export default function ContactForm() {
           サポート
         </label>
         {/* 必要に応じて追加 */}
+      </div>
+      <div className={styles.item}>
+        <label className={styles.label} htmlFor="department">
+          部署
+        </label>
+        <select
+          id="department"
+          name="department"
+          value={form.department ?? ""}
+          onChange={handleChange}
+          className={styles.textfield}
+        >
+          <option value="">選択してください</option>
+          <option value="営業部">営業部</option>
+          <option value="技術部">技術部</option>
+          <option value="総務部">総務部</option>
+          {/* 必要に応じて追加 */}
+        </select>
       </div>
       <div className={styles.item}>
         <label className={styles.label} htmlFor="message">
