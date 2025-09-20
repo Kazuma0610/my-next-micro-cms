@@ -29,8 +29,12 @@ export default function Pagination({
             href = q
               ? `${basePath}?page=${p}&q=${encodeURIComponent(q)}`
               : `${basePath}?page=${p}`;
+          } else if (basePath.includes("?")) {
+            // カテゴリーやその他のパラメータが既に含まれている場合
+            href = p === 1 ? basePath : `${basePath}&page=${p}`;
           } else {
-            href = `${basePath}/p/${p}`;
+            // 通常のニュース一覧の場合
+            href = p === 1 ? basePath : `${basePath}?page=${p}`;
           }
           return (
             <li className={styles.list} key={p}>

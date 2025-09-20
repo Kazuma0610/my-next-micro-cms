@@ -53,6 +53,15 @@ export const getNewsList = async (queries?: MicroCMSQueries) => {
   return listData;
 };
 
+// カテゴリー一覧取得
+export const getCategoryList = async (queries?: MicroCMSQueries) => {
+  const listData = await client.getList<Category>({
+    endpoint: "categories",
+    queries,
+  });
+  return listData;
+};
+
 //ニュースページの不正なURL直接入力を防ぐ
 export const getNewsDetail = async (
   contentId: string,
