@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Category } from "@/app/_libs/microcms";
+import styles from "./index.module.css";
 
 type Props = {
   categories: Category[];
@@ -30,9 +31,12 @@ export default function CategoryFilter({ categories }: Props) {
 
   return (
     <div>
-      <label htmlFor="category">カテゴリー</label>
+      <label className={styles.label} htmlFor="category">
+        カテゴリー検索
+      </label>
       <select
         id="category"
+        className={styles.select}
         value={currentCategory}
         onChange={handleCategoryChange}
       >
