@@ -22,6 +22,8 @@ export type News = {
   content: string;
   thumbnail?: MicroCMSImage;
   category: Category;
+  author?: string; // 投稿者フィールドを追加
+  tags?: string[]; // タグフィールドを追加（複数選択）
 } & MicroCMSListContent;
 
 if (!process.env.MICROCMS_SERVICE_DOMAIN) {

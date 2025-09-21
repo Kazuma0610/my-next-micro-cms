@@ -11,17 +11,85 @@
   text-align: left;
 }
 
-.meta {
+/*　カテゴリーセクション設定*/
+.categorySection,
+.dateSection {
+  margin-bottom: 1rem;
+}
+
+.categorySection {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border-light);
+}
+/* タグセクションのスタイル */
+/* カテゴリーとタグの横並び表示 */
+.categoryAndTags {
   display: flex;
-  justify-content: flex-start;
+  flex-wrap: wrap;
   align-items: center;
-  flex-shrink: 1;
-  gap: 24px;
-  margin-bottom: 64px;
+  gap: 2rem;
+}
+
+.categoryLink {
+  flex-shrink: 0; /* カテゴリーのサイズを固定 */
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.tag {
+  display: inline-block;
+  background-color: var(--color-bg-sub);
+  color: var(--color-text-main);
+  padding: 0.4rem 0.8rem;
+  border-radius: 1.2rem;
+  font-size: var(--font-size-xs);
+  border: 1px solid var(--color-border);
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.tag:hover {
+  background-color: var(--color-border);
+}
+
+.dates {
+  display: flex;
+  gap: 2rem; /* 投稿日と更新日の間隔 */
+  align-items: center;
+}
+
+.publishDate,
+.updateDate,
+.author {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-sub);
+  white-space: nowrap; /* テキストの折り返しを防ぐ */
+}
+
+.author {
+  font-style: italic;
 }
 
 .categoryLink {
   display: flex;
+}
+
+/* 投稿者セクションのスタイル */
+.authorSection {
+  margin-top: 0.5rem;
+}
+
+.author {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-sub);
+  font-style: italic;
 }
 
 .thumbnail {
@@ -159,6 +227,24 @@
   padding: 1rem;
 }
 
+/* タブレット用 */
+@media (max-width: 768px) {
+  .categoryAndTags {
+    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tagList {
+    gap: 0.6rem;
+  }
+
+  .tag {
+    font-size: var(--font-size-xs);
+    padding: 0.3rem 0.6rem;
+  }
+}
+
 @media (max-width: 640px) {
   .title {
     font-size: var(--font-size-s-title);
@@ -173,9 +259,27 @@
 
   .meta {
     display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
     align-items: center;
-    margin-bottom: 40px;
-    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .dates {
+    display: flex;
+    gap: 1.5rem; /* スマホでは間隔を少し狭める */
+    align-items: center;
+  }
+
+  .Article_publishDate__zOQyj,
+  .Article_updateDate__zOQyj {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-sub);
   }
 
   .thumbnail {
@@ -217,5 +321,33 @@
     font-size: var(--font-size-base);
     font-weight: bold;
     margin: 2.8rem 0 1rem;
+  }
+}
+/* スマートフォン用 */
+@media (max-width: 480px) {
+  /* カテゴリーとタグを縦並びに */
+  .categoryAndTags {
+    gap: 0.8rem;
+  }
+  .tagList {
+    gap: 0.4rem;
+  }
+  /* 投稿日と更新日*/
+  .dates {
+    gap: 0rem 1.5rem;
+    flex-wrap: wrap;
+  }
+  .publishDate,
+  .updateDate,
+  .author {
+    font-size: var(--font-size-xs);
+  }
+}
+/* 非常に狭い画面では縦並びに戻す */
+@media (max-width: 350px) {
+  .dates {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
   }
 }
