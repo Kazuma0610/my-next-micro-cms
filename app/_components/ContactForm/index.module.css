@@ -121,6 +121,7 @@
   color: #000;
 }
 
+/*ボタン*/
 .actions {
   text-align: center;
   margin-top: 40px;
@@ -212,6 +213,16 @@
   /*終了画面のボタン中央配置*/
   .done-actions {
     text-align: center; /* スマホでも中央配置を維持 */
+  }
+  /* ドロップダウンスタイル */
+  .select-dropdown {
+    padding: 15px 12px !important;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    color: #000;
   }
 }
 
