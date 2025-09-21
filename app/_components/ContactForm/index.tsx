@@ -501,11 +501,21 @@ export default function ContactForm() {
       </div>
       <div className={styles.item}>
         <label className={styles.label}>画像添付1</label>
-        <input type="file" accept="image/*" onChange={handleFileChange1} />
+        <input
+          className={styles.textfield}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange1}
+        />
       </div>
       <div className={styles.item}>
         <label className={styles.label}>画像添付2</label>
-        <input type="file" accept="image/*" onChange={handleFileChange2} />
+        <input
+          className={styles.textfield}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange2}
+        />
       </div>
       <div className={styles.actions}>
         {state.status === "error" && (
