@@ -1,11 +1,11 @@
 .title {
-  font-size: 2.4rem;
+  font-size: var(--font-size-4xl);
   margin-bottom: 24px;
   text-align: left;
 }
 
 .description {
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   color: var(--color-text-sub);
   margin: 24px 0;
   text-align: left;
@@ -35,32 +35,32 @@
 }
 
 .content > h1 {
-  font-size: 2rem;
+  font-size: var(--font-size-3xl);
   font-weight: bold;
   border-bottom: 1px solid var(--color-border);
   margin: 2.8rem 0 1rem;
 }
 
 .content > h2 {
-  font-size: 1.6rem;
+  font-size: var(--font-size-2xl);
   font-weight: bold;
   margin: 2.8em 0 1rem;
 }
 
 .content > h3 {
-  font-size: 1.4rem;
+  font-size: var(--font-size-xl);
   font-weight: bold;
   margin: 2.8rem 0 1rem;
 }
 
 .content > h4 {
-  font-size: 1.2rem;
+  font-size: var(--font-size-lg);
   font-weight: bold;
   margin: 2.8rem 0 1rem;
 }
 
 .content > h5 {
-  font-size: 1.1rem;
+  font-size: var(--font-size-md);
   font-weight: bold;
   margin: 2.8rem 0 1rem;
 }
@@ -161,12 +161,12 @@
 
 @media (max-width: 640px) {
   .title {
-    font-size: 1.5rem;
+    font-size: var(--font-size-s-title);
     margin-bottom: 20px;
   }
 
   .description {
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
     color: var(--color-text-sub);
     margin: 24px 0 40px;
   }
@@ -189,32 +189,32 @@
   }
 
   .content > h1 {
-    font-size: 1.5rem;
+    font-size: var(--font-size-2xl);
     font-weight: bold;
     border-bottom: 1px solid var(--color-border);
     margin: 2.8rem 0 1rem;
   }
 
   .content > h2 {
-    font-size: 1.4rem;
+    font-size: var(--font-size-xl);
     font-weight: bold;
     margin: 2.8em 0 1rem;
   }
 
   .content > h3 {
-    font-size: 1.3rem;
+    font-size: var(--font-size-lg);
     font-weight: bold;
     margin: 2.8rem 0 1rem;
   }
 
   .content > h4 {
-    font-size: 1.2rem;
+    font-size: var(--font-size-md);
     font-weight: bold;
     margin: 2.8rem 0 1rem;
   }
 
   .content > h5 {
-    font-size: 1.1rem;
+    font-size: var(--font-size-base);
     font-weight: bold;
     margin: 2.8rem 0 1rem;
   }

@@ -28,7 +28,6 @@
   border-radius: 4px;
   line-height: 1.5;
   width: 100%;
-  font-size: 16px;
 }
 
 .textarea {
@@ -38,6 +37,16 @@
   line-height: 1.5;
   width: 100%;
   font-size: 16px;
+}
+
+.select-dropdown {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  cursor: pointer;
+  color: #000;
 }
 
 .actions {

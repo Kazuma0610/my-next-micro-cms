@@ -478,7 +478,7 @@ export default function ContactForm() {
           name="department"
           value={form.department ?? ""}
           onChange={handleChange}
-          className={styles.textfield}
+          className={styles["select-dropdown"]}
         >
           <option value="">選択してください</option>
           <option value="営業部">営業部</option>

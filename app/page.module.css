@@ -10,7 +10,7 @@
 }
 
 .title {
-  font-size: 3rem;
+  font-size: var(--font-size-m-title);
   font-weight: bold;
   text-align: center;
   margin-bottom: 1rem;
@@ -44,7 +44,7 @@
 }
 
 .newsTitle {
-  font-size: 1.5rem;
+  font-size: var(--font-size-s-title);
 }
 
 .newsLink {
@@ -54,25 +54,24 @@
 }
 
 @media (max-width: 100px) {
-  .news{
+  .news {
     width: calc(100% - 160px);
   }
 }
 
 @media (max-width: 640px) {
-
   .top {
     padding: 120px 16px;
   }
-  
+
   .title {
-    font-size: 2rem;
+    font-size: var(--font-size-2xl);
     text-align: left;
   }
 
   .description {
     text-align: center;
-    font-size: 0.9rem;
+    font-size: var(--font-size-xs);
     text-align: left;
   }
 
@@ -100,5 +99,4 @@
     bottom: auto;
     margin-top: 16px;
   }
-
 }
