@@ -1,10 +1,21 @@
 .text {
-  text-align: left;
+  text-align: center;
   margin-bottom: 30px;
 }
 
 @media (max-width: 640px) {
   .text {
     text-align: left;
+  }
+}
+
+/* スマートフォンでbrタグを非表示 */
+@media (max-width: 48rem) {
+  .text {
+    text-align: left;
+    margin-bottom: 30px;
+  }
+  .text br {
+    display: none;
   }
 }

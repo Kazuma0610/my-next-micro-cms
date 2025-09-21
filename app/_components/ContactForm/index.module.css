@@ -111,8 +111,9 @@
   font-size: 16px;
 }
 
+/* ドロップダウンスタイル */
 .select-dropdown {
-  padding: 8px 12px !important;
+  padding: 15px 12px !important;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
@@ -123,6 +124,9 @@
 .actions {
   text-align: center;
   margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 2rem; /* この行を追加 */
 }
 
 .button {
@@ -171,6 +175,27 @@
   box-shadow: 0 0 0 2px rgba(51, 51, 51, 0.1);
 }
 
+/*確認画面の編集*/
+.confirm ul li {
+  margin-bottom: 5px;
+}
+
+/*終了画面の編集*/
+/* 完了画面用のボタン中央配置 */
+.success {
+  background-color: var(--color-bg-sub);
+  text-align: center;
+  padding: 4rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 5rem; /* ボタンとの間隔を追加 */
+}
+
+/* 完了画面のボタンラッパー */
+.done-actions {
+  text-align: center;
+  margin-top: 2rem;
+}
+
 /* スマートフォン用の追加スタイル */
 @media (max-width: 768px) {
   .file-input {
@@ -182,6 +207,11 @@
 @media (max-width: 640px) {
   .success {
     text-align: left;
+    padding: 2rem;
+  }
+  /*終了画面のボタン中央配置*/
+  .done-actions {
+    text-align: center; /* スマホでも中央配置を維持 */
   }
 }
 
@@ -211,11 +241,24 @@
   .checkbox-text {
     font-size: var(--font-size-sm);
   }
+  /*スマホだけbr無し*/
+  .success br {
+    display: none;
+  }
 }
 
 /* 非常に狭い画面用 */
 @media (max-width: 300px) {
+  /* ラジオボタン調整 */
   .radio-item {
     flex-basis: 100%; /* 1列レイアウト */
+  }
+  /*ボタン調整*/
+  .actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .button {
+    width: 100%; /* フル幅にする */
   }
 }

@@ -208,17 +208,19 @@ export default function ContactForm() {
           <br />
           お返事まで今しばらくお待ちください。
         </p>
-        <button
-          type="button"
-          className={styles.button}
-          onClick={() => {
-            setForm(initialForm);
-            setState(initialState);
-            setStep("input");
-          }}
-        >
-          入力画面に戻る
-        </button>
+        <div className={styles["done-actions"]}>
+          <button
+            type="button"
+            className={styles.button}
+            onClick={() => {
+              setForm(initialForm);
+              setState(initialState);
+              setStep("input");
+            }}
+          >
+            入力画面に戻る
+          </button>
+        </div>
       </div>
     );
   }
