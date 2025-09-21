@@ -86,7 +86,7 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  color: var(--color-text-main);
+  color: var(--color-text-main) !important;
   /* フォーカス時のスタイルをカスタマイズ */
   outline: none;
 }
