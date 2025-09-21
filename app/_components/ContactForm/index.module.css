@@ -1,3 +1,25 @@
+/* フォーム全体のテキストサイズを16pxに統一 */
+.form,
+.form input,
+.form textarea,
+.form select,
+.form label,
+.form button,
+.form span,
+.form p,
+.form li,
+.confirm,
+.confirm *,
+.success {
+  font-size: 1.6rem !important; /* 16px */
+}
+
+/* プレースホルダーも統一 */
+.form input::placeholder,
+.form textarea::placeholder {
+  font-size: 1.6rem !important;
+}
+
 .form {
   max-width: 600px;
   margin: 0 auto;
