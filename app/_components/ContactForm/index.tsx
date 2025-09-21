@@ -391,12 +391,12 @@ export default function ContactForm() {
           onChange={handleChange}
         />
       </div>
-      <div>
+      <div className={styles["item-radio"]}>
         <label className={styles.label} htmlFor="radio_rfi">
           お問合わせ種別
         </label>
-        <div>
-          <label>
+        <div className={styles["radio-group"]}>
+          <label className={styles["radio-item"]}>
             <input
               type="radio"
               name="radio_rfi"
@@ -404,9 +404,9 @@ export default function ContactForm() {
               checked={form.radio_rfi === "会社概要"}
               onChange={handleChange}
             />
-            会社概要
+            <span className={styles["radio-text"]}>会社概要</span>
           </label>
-          <label>
+          <label className={styles["radio-item"]}>
             <input
               type="radio"
               name="radio_rfi"
@@ -414,9 +414,9 @@ export default function ContactForm() {
               checked={form.radio_rfi === "製品"}
               onChange={handleChange}
             />
-            製品
+            <span className={styles["radio-text"]}>製品</span>
           </label>
-          <label>
+          <label className={styles["radio-item"]}>
             <input
               type="radio"
               name="radio_rfi"
@@ -424,9 +424,9 @@ export default function ContactForm() {
               checked={form.radio_rfi === "サービスカタログ"}
               onChange={handleChange}
             />
-            サービスカタログ
+            <span className={styles["radio-text"]}>サービスカタログ</span>
           </label>
-          <label>
+          <label className={styles["radio-item"]}>
             <input
               type="radio"
               name="radio_rfi"
@@ -434,40 +434,107 @@ export default function ContactForm() {
               checked={form.radio_rfi === "料金プラン"}
               onChange={handleChange}
             />
-            料金プラン
+            <span className={styles["radio-text"]}>料金プラン</span>
+          </label>
+          <label className={styles["radio-item"]}>
+            <input
+              type="radio"
+              name="radio_rfi"
+              value="技術サポート"
+              checked={form.radio_rfi === "技術サポート"}
+              onChange={handleChange}
+            />
+            <span className={styles["radio-text"]}>技術サポート</span>
+          </label>
+          <label className={styles["radio-item"]}>
+            <input
+              type="radio"
+              name="radio_rfi"
+              value="営業相談"
+              checked={form.radio_rfi === "営業相談"}
+              onChange={handleChange}
+            />
+            <span className={styles["radio-text"]}>営業相談</span>
+          </label>
+          <label className={styles["radio-item"]}>
+            <input
+              type="radio"
+              name="radio_rfi"
+              value="その他"
+              checked={form.radio_rfi === "その他"}
+              onChange={handleChange}
+            />
+            <span className={styles["radio-text"]}>その他</span>
           </label>
         </div>
       </div>
-      <div className={styles.item}>
+      <div className={styles["item-checkbox"]}>
         <label className={styles.label}>ご興味のある項目（複数選択可）</label>
-        <label>
-          <input
-            type="checkbox"
-            value="製品"
-            checked={form.interests.includes("製品")}
-            onChange={handleCheckboxChange}
-          />
-          製品
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="サービス"
-            checked={form.interests.includes("サービス")}
-            onChange={handleCheckboxChange}
-          />
-          サービス
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            value="サポート"
-            checked={form.interests.includes("サポート")}
-            onChange={handleCheckboxChange}
-          />
-          サポート
-        </label>
-        {/* 必要に応じて追加 */}
+        <div className={styles["checkbox-group"]}>
+          <label className={styles["checkbox-item"]}>
+            <input
+              type="checkbox"
+              value="製品"
+              checked={form.interests.includes("製品")}
+              onChange={handleCheckboxChange}
+            />
+            <span className={styles["checkbox-text"]}>製品</span>
+          </label>
+          <label className={styles["checkbox-item"]}>
+            <input
+              type="checkbox"
+              value="サービス"
+              checked={form.interests.includes("サービス")}
+              onChange={handleCheckboxChange}
+            />
+            <span className={styles["checkbox-text"]}>サービス</span>
+          </label>
+          <label className={styles["checkbox-item"]}>
+            <input
+              type="checkbox"
+              value="サポート"
+              checked={form.interests.includes("サポート")}
+              onChange={handleCheckboxChange}
+            />
+            <span className={styles["checkbox-text"]}>サポート</span>
+          </label>
+          <label className={styles["checkbox-item"]}>
+            <input
+              type="checkbox"
+              value="コンサルティング"
+              checked={form.interests.includes("コンサルティング")}
+              onChange={handleCheckboxChange}
+            />
+            <span className={styles["checkbox-text"]}>コンサルティング</span>
+          </label>
+          <label className={styles["checkbox-item"]}>
+            <input
+              type="checkbox"
+              value="導入支援"
+              checked={form.interests.includes("導入支援")}
+              onChange={handleCheckboxChange}
+            />
+            <span className={styles["checkbox-text"]}>導入支援</span>
+          </label>
+          <label className={styles["checkbox-item"]}>
+            <input
+              type="checkbox"
+              value="研修・教育"
+              checked={form.interests.includes("研修・教育")}
+              onChange={handleCheckboxChange}
+            />
+            <span className={styles["checkbox-text"]}>研修・教育</span>
+          </label>
+          <label className={styles["checkbox-item"]}>
+            <input
+              type="checkbox"
+              value="その他"
+              checked={form.interests.includes("その他")}
+              onChange={handleCheckboxChange}
+            />
+            <span className={styles["checkbox-text"]}>その他</span>
+          </label>
+        </div>
       </div>
       <div className={styles.item}>
         <label className={styles.label} htmlFor="department">

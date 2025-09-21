@@ -7,7 +7,82 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 8px 0;
+  padding: 10px 0;
+}
+
+/* ラジオボタン調整 */
+.item-radio {
+  margin-top: 10px;
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 2rem; /* 縦間隔 横間隔 */
+  margin-top: 0.8rem;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: 0; /* flex-shrinkを有効にする */
+}
+
+.radio-item input[type="radio"] {
+  margin-right: 0.6rem;
+  cursor: pointer;
+}
+
+.radio-text {
+  font-size: var(--font-size-base);
+  color: var(--color-text-main);
+  white-space: nowrap; /* テキストの改行を防ぐ */
+}
+
+.radio-item:hover .radio-text {
+  color: var(--color-text-sub);
+}
+
+/* チェックボックス調整 */
+.item-checkbox {
+  margin-top: 10px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem 2rem; /* 縦間隔 横間隔 */
+  margin-top: 0.8rem;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  min-width: 0; /* flex-shrinkを有効にする */
+}
+
+.checkbox-item input[type="checkbox"] {
+  margin-right: 0.6rem;
+  cursor: pointer;
+}
+
+.checkbox-text {
+  font-size: var(--font-size-base);
+  color: var(--color-text-main);
+  white-space: nowrap; /* テキストの改行を防ぐ */
+}
+
+.checkbox-item:hover .checkbox-text {
+  color: var(--color-text-sub);
+}
+
+/* チェックボックスのカスタムスタイル（オプション） */
+.checkbox-item input[type="checkbox"] {
+  width: 1.6rem;
+  height: 1.6rem;
+  accent-color: var(--color-button-primary);
 }
 
 .horizontal {
@@ -37,7 +112,7 @@
 }
 
 .select-dropdown {
-  padding: 8px 12px;
+  padding: 8px 12px !important;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
@@ -107,5 +182,40 @@
 @media (max-width: 640px) {
   .success {
     text-align: left;
+  }
+}
+
+/* スマートフォン用 */
+@media (max-width: 480px) {
+  /* ラジオボタン調整 */
+  .radio-group {
+    gap: 1rem 1.5rem;
+  }
+
+  .radio-item {
+    flex-basis: calc(50% - 0.75rem); /* 2列レイアウト */
+  }
+
+  .radio-text {
+    font-size: var(--font-size-sm);
+  }
+  /* チェックボックス調整 */
+  .checkbox-group {
+    gap: 1rem 1.5rem;
+  }
+
+  .checkbox-item {
+    flex-basis: calc(50% - 0.75rem); /* 2列レイアウト */
+  }
+
+  .checkbox-text {
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* 非常に狭い画面用 */
+@media (max-width: 300px) {
+  .radio-item {
+    flex-basis: 100%; /* 1列レイアウト */
   }
 }
