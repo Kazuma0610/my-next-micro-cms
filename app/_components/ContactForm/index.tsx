@@ -502,7 +502,7 @@ export default function ContactForm() {
       <div className={styles.item}>
         <label className={styles.label}>画像添付1</label>
         <input
-          className={styles.textfield}
+          className={styles["file-input"]}
           type="file"
           accept="image/*"
           onChange={handleFileChange1}
@@ -511,7 +511,7 @@ export default function ContactForm() {
       <div className={styles.item}>
         <label className={styles.label}>画像添付2</label>
         <input
-          className={styles.textfield}
+          className={styles["file-input"]}
           type="file"
           accept="image/*"
           onChange={handleFileChange2}
