@@ -10,7 +10,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.4rem; /* アイコンとテキストの間隔 */
-  background-color: var(--color-button-primary);
+  background-color: var(--color-folder-bg);
   color: var(--color-text-unpainted);
   font-size: var(--font-size-xs);
   font-weight: bold;

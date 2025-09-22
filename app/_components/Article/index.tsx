@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { News } from "@/app/_libs/microcms";
 import Date from "../Date";
 import Category from "../Category";
+import { formatDate } from "@/app/_libs/utils"; // この行を追加
 import styles from "./index.module.css";
 import Breadcrumbs from "@/app/_components/Breadcrumbs";
 
@@ -56,14 +57,19 @@ export default function Article({ data }: Props) {
 
       <div className={styles.dateSection}>
         <div className={styles.dates}>
-          <span
-            className={styles.publishDate}
-            style={{ fontSize: "12px" }} // 一時的な確認用
-          >
+          <span className={styles.publishDate}>
             投稿日: <Date date={data.publishedAt ?? data.createdAt} />
           </span>
           <span className={styles.updateDate}>
-            更新日: <Date date={data.updatedAt} />
+            <Image
+              src="/load.svg"
+              alt=""
+              width={16}
+              height={16}
+              loading="eager"
+              className={styles.updateIcon}
+            />
+            更新日: {formatDate(data.updatedAt)}
           </span>
           {/* 投稿者も同じ行に配置 */}
           {data.author && (
