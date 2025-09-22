@@ -36,7 +36,17 @@ export default function Article({ data }: Props) {
                   href={`/news?tag=${encodeURIComponent(tag)}`}
                   className={styles.tagLink}
                 >
-                  <span className={styles.tag}>#{tag}</span>
+                  <span className={styles.tag}>
+                    <Image
+                      src="/tags.svg"
+                      alt=""
+                      width={14}
+                      height={14}
+                      loading="eager"
+                      className={styles.tagIcon}
+                    />
+                    {tag}
+                  </span>
                 </Link>
               ))}
             </div>
@@ -46,7 +56,10 @@ export default function Article({ data }: Props) {
 
       <div className={styles.dateSection}>
         <div className={styles.dates}>
-          <span className={styles.publishDate}>
+          <span
+            className={styles.publishDate}
+            style={{ fontSize: "12px" }} // 一時的な確認用
+          >
             投稿日: <Date date={data.publishedAt ?? data.createdAt} />
           </span>
           <span className={styles.updateDate}>
@@ -54,7 +67,17 @@ export default function Article({ data }: Props) {
           </span>
           {/* 投稿者も同じ行に配置 */}
           {data.author && (
-            <span className={styles.author}>投稿者: {data.author}</span>
+            <span className={styles.author}>
+              <Image
+                src="/writer.svg"
+                alt=""
+                width={14}
+                height={14}
+                loading="eager"
+                className={styles.authorIcon}
+              />
+              投稿者: {data.author}
+            </span>
           )}
         </div>
       </div>
