@@ -1,3 +1,24 @@
+/* コンテナ：メインとサイドバーの横並び */
+.container {
+  display: flex;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  align-items: flex-start;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* サイドバーのスペース確保 */
+.sidebarArea {
+  flex: 0 0 300px; /* 固定幅でサイドバー領域を確保 */
+  position: relative;
+}
+
 .title {
   font-size: var(--font-size-4xl);
   margin-bottom: 24px;
@@ -285,6 +306,11 @@
 
 /* タブレット用 */
 @media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
   .categoryAndTags {
     gap: 1rem;
     flex-direction: column;
@@ -385,6 +411,17 @@
     margin: 2.8rem 0 1rem;
   }
 }
+/* レスポンシブ対応 */
+@media (max-width: 1250px) {
+  .container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .main {
+    min-height: auto; /* スマホでは通常の高さに戻す */
+  }
+}
+
 /* スマートフォン用 */
 @media (max-width: 480px) {
   /* カテゴリーとタグを縦並びに */
@@ -406,6 +443,7 @@
     gap: 0.3rem;
   }
 }
+
 /* 非常に狭い画面では縦並びに戻す */
 @media (max-width: 350px) {
   .dates {

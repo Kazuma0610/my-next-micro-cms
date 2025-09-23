@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getNewsDetail } from "@/app/_libs/microcms";
+import {
+  getNewsDetail,
+  getNewsList,
+  getCategoryList,
+} from "@/app/_libs/microcms";
 import Article from "@/app/_components/Article";
 import ButtonLink from "@/app/_components/ButtonLink";
 import styles from "./page.module.css";
@@ -38,9 +42,19 @@ export default async function Page({ params, searchParams }: Props) {
     draftKey: searchParams.dk,
   }).catch(notFound);
 
+  // サイドバー用のデータを並行取得
+  const [recentNewsResponse, categoriesResponse] = await Promise.all([
+    getNewsList({ limit: 5 }), // 最新記事5件
+    getCategoryList(), // カテゴリー一覧
+  ]);
+
   return (
     <>
-      <Article data={data} />
+      <Article
+        data={data}
+        recentNews={recentNewsResponse.contents}
+        categories={categoriesResponse.contents}
+      />
       <div className={styles.footer}>
         <ButtonLink href="/news">ニュース一覧へ</ButtonLink>
       </div>
