@@ -53,9 +53,10 @@
   bottom: -40px;
 }
 
-@media (max-width: 100px) {
+/* 1250px以下の画面でレスポンシブ対応を追加 */
+@media (max-width: 1250px) {
   .news {
-    width: calc(100% - 160px);
+    width: calc(100% - 80px); /* 1250px以下では画面幅に合わせる */
   }
 }
 
@@ -98,5 +99,11 @@
     right: auto;
     bottom: auto;
     margin-top: 16px;
+  }
+}
+
+@media (max-width: 100px) {
+  .news {
+    width: calc(100% - 160px);
   }
 }
