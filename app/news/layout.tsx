@@ -16,7 +16,7 @@ export default function NewsLayout({ children }: Props) {
   return (
     <>
       <Hero title="NEWS" sub="ニュース" />
-      <Sheet>{children}</Sheet>
+      {children}
     </>
   );
 }

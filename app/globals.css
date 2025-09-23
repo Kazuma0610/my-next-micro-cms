@@ -32,6 +32,9 @@
   --font-size-4xl: 3.8rem; /* 38px */
   --font-size-s-title: 2.4rem; /* 24px */
   --font-size-m-title: 4.8rem; /* 48px */
+
+  /* その他の共通変数 */
+  --sheet-width: 1250px;
 }
 
 * {

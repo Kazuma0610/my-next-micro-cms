@@ -2,7 +2,8 @@
 .container {
   display: flex;
   gap: 2rem;
-  max-width: 1200px;
+  max-width: 1250px; /* 1200px から 1250px に変更 */
+  width: 100%; /* 画面幅1250px以下では100%幅 */
   margin: 0 auto;
   padding: 0 1rem;
   align-items: flex-start;
@@ -414,6 +415,7 @@
 /* レスポンシブ対応 */
 @media (max-width: 1250px) {
   .container {
+    max-width: 100%;
     flex-direction: column;
     gap: 1rem;
   }

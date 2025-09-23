@@ -8,6 +8,7 @@ import {
 import Article from "@/app/_components/Article";
 import ButtonLink from "@/app/_components/ButtonLink";
 import styles from "./page.module.css";
+import Sheet from "@/app/_components/Sheet";
 
 type Props = {
   params: {
@@ -48,8 +49,13 @@ export default async function Page({ params, searchParams }: Props) {
     getCategoryList(), // カテゴリー一覧
   ]);
 
+  // サイドバーがあるかどうかを判定
+  const hasSidebar = !!(
+    recentNewsResponse.contents?.length && categoriesResponse.contents?.length
+  );
+
   return (
-    <>
+    <Sheet hasSidebar={hasSidebar}>
       <Article
         data={data}
         recentNews={recentNewsResponse.contents}
@@ -58,6 +64,6 @@ export default async function Page({ params, searchParams }: Props) {
       <div className={styles.footer}>
         <ButtonLink href="/news">ニュース一覧へ</ButtonLink>
       </div>
-    </>
+    </Sheet>
   );
 }

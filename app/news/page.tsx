@@ -6,6 +6,7 @@ import CategoryFilter from "@/app/_components/CategoryFilter";
 import TagFilter from "../_components/TagFilter";
 import { NEWS_LIST_LIMIT } from "@/app/_constants";
 import Breadcrumbs from "@/app/_components/Breadcrumbs";
+import Sheet from "@/app/_components/Sheet";
 
 type Props = {
   searchParams: {
@@ -109,7 +110,7 @@ export default async function Page({ searchParams }: Props) {
   }`;
 
   return (
-    <>
+    <Sheet hasSidebar={false}>
       <Breadcrumbs />
       <SearchField />
       <CategoryFilter categories={categories} />
@@ -120,6 +121,6 @@ export default async function Page({ searchParams }: Props) {
         current={currentPage}
         basePath={basePath}
       />
-    </>
+    </Sheet>
   );
 }
