@@ -4,6 +4,7 @@ import NewsList from "@/app/_components/NewsList";
 import Pagination from "@/app/_components/Pagination";
 import SearchField from "@/app/_components/SearchField";
 import Breadcrumbs from "@/app/_components/Breadcrumbs";
+import Sheet from "@/app/_components/Sheet"; // 追加
 
 type Props = {
   searchParams: {
@@ -23,7 +24,7 @@ export default async function Page({ searchParams }: Props) {
   });
 
   return (
-    <>
+    <Sheet hasSidebar={false}>
       <Breadcrumbs />
       <SearchField />
       <NewsList news={news} />
@@ -33,6 +34,6 @@ export default async function Page({ searchParams }: Props) {
         current={page}
         basePath="/news/search"
       />
-    </>
+    </Sheet>
   );
 }
