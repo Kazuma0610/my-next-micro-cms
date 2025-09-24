@@ -12,9 +12,17 @@ type Props = {
     id: string;
     name: string;
   }>;
+  tags?: Array<{
+    id: string;
+    name: string;
+  }>; // タグを追加
 };
 
-export default function Sidebar({ recentNews = [], categories = [] }: Props) {
+export default function Sidebar({
+  recentNews = [],
+  categories = [],
+  tags = [],
+}: Props) {
   return (
     <aside className={styles.sidebar}>
       {/* 最新記事 */}
@@ -48,6 +56,22 @@ export default function Sidebar({ recentNews = [], categories = [] }: Props) {
                   className={styles.categoryLink}
                 >
                   {category.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* タグ一覧 */}
+      {tags.length > 0 && (
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>タグ</h3>
+          <ul className={styles.tagList}>
+            {tags.map((tag) => (
+              <li key={tag.id} className={styles.tagItem}>
+                <Link href={`/news?tag=${tag.id}`} className={styles.tagLink}>
+                  #{tag.name}
                 </Link>
               </li>
             ))}

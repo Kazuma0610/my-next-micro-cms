@@ -95,6 +95,36 @@
   color: var(--color-text-unpainted);
 }
 
+/* タグ一覧 */
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+}
+
+.tagItem {
+  /* flex item */
+}
+
+.tagLink {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background-color: var(--color-bg-sub);
+  color: var(--color-text-main);
+  text-decoration: none;
+  border-radius: 1rem;
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
+}
+
+.tagLink:hover {
+  background-color: var(--color-button-primary);
+  color: var(--color-text-unpainted);
+  transform: translateY(-1px);
+}
+
 /* 検索フォーム */
 .searchForm {
   display: flex;

@@ -68,6 +68,20 @@ export const getCategoryList = async (queries?: MicroCMSQueries) => {
   return listData;
 };
 
+// タグ一覧取得
+export const getAllTags = async () => {
+  const { contents } = await getNewsList({ limit: 100 }); // 全記事取得
+  const tagSet = new Set<string>();
+
+  contents.forEach((news) => {
+    if (news.tags) {
+      news.tags.forEach((tag) => tagSet.add(tag));
+    }
+  });
+
+  return Array.from(tagSet).map((tag) => ({ id: tag, name: tag }));
+};
+
 //ニュースページの不正なURL直接入力を防ぐ
 export const getNewsDetail = async (
   contentId: string,

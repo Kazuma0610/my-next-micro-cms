@@ -19,9 +19,13 @@ type Props = {
     id: string;
     name: string;
   }>;
+  tags?: Array<{
+    id: string;
+    name: string;
+  }>; // タグを追加
 };
 
-export default function Article({ data, recentNews, categories }: Props) {
+export default function Article({ data, recentNews, categories, tags }: Props) {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -114,7 +118,7 @@ export default function Article({ data, recentNews, categories }: Props) {
         />
       </main>
 
-      <Sidebar recentNews={recentNews} categories={categories} />
+      <Sidebar recentNews={recentNews} categories={categories} tags={tags} />
     </div>
   );
 }
