@@ -5,6 +5,7 @@ import {
   getNewsList,
   getCategoryList,
   getAllTags, // 追加
+  getRelatedNews, // 追加
 } from "@/app/_libs/microcms";
 import Article from "@/app/_components/Article";
 import ButtonLink from "@/app/_components/ButtonLink";
@@ -45,11 +46,13 @@ export default async function Page({ params, searchParams }: Props) {
   }).catch(notFound);
 
   // サイドバー用のデータを並行取得
-  const [recentNewsResponse, categoriesResponse, allTags] = await Promise.all([
-    getNewsList({ limit: 5 }), // 最新記事5件
-    getCategoryList(), // カテゴリー一覧
-    getAllTags(), // タグを取得
-  ]);
+  const [recentNewsResponse, categoriesResponse, allTags, relatedNews] =
+    await Promise.all([
+      getNewsList({ limit: 5 }), // 最新記事5件
+      getCategoryList(), // カテゴリー一覧
+      getAllTags(), // タグを取得
+      getRelatedNews(data.id, data.category.id, data.tags, 4), // 関連記事を取得
+    ]);
 
   // サイドバーがあるかどうかを判定
   const hasSidebar = !!(
@@ -63,6 +66,7 @@ export default async function Page({ params, searchParams }: Props) {
         recentNews={recentNewsResponse.contents}
         categories={categoriesResponse.contents}
         tags={allTags}
+        relatedNews={relatedNews} // 関連記事を渡す
       />
       <div className={styles.footer}>
         <ButtonLink href="/news">ニュース一覧へ</ButtonLink>

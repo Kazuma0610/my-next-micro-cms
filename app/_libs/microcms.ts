@@ -82,6 +82,45 @@ export const getAllTags = async () => {
   return Array.from(tagSet).map((tag) => ({ id: tag, name: tag }));
 };
 
+// 関連記事を取得
+export const getRelatedNews = async (
+  currentNewsId: string,
+  categoryId: string,
+  tags?: string[],
+  limit = 4
+) => {
+  // 1. 同じカテゴリーの記事を取得
+  const categoryRelated = await getNewsList({
+    filters: `category[equals]${categoryId}[and]id[not_equals]${currentNewsId}`,
+    limit: limit,
+  });
+
+  // 2. タグが一致する記事も取得したい場合（オプション）
+  let tagRelated = { contents: [] as News[] };
+  if (tags && tags.length > 0) {
+    // タグでフィルタリング（複雑なクエリになるため、シンプルに1つのタグで検索）
+    try {
+      tagRelated = await getNewsList({
+        q: tags[0], // 最初のタグで検索
+        filters: `id[not_equals]${currentNewsId}`,
+        limit: 2,
+      });
+    } catch (error) {
+      console.warn("Tag search failed:", error);
+    }
+  }
+
+  // 重複を除去して結合
+  const allRelated = [...categoryRelated.contents];
+  tagRelated.contents.forEach((news) => {
+    if (!allRelated.some((item) => item.id === news.id)) {
+      allRelated.push(news);
+    }
+  });
+
+  return allRelated.slice(0, limit);
+};
+
 //ニュースページの不正なURL直接入力を防ぐ
 export const getNewsDetail = async (
   contentId: string,

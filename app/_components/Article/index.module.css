@@ -305,6 +305,87 @@
   padding: 1rem;
 }
 
+/*関連記事セクション設定*/
+/* 関連記事セクション */
+.relatedSection {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.relatedTitle {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--color-text-main);
+}
+
+.relatedList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.relatedItem {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.relatedItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.relatedLink {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.relatedImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+}
+
+.relatedImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.relatedContent {
+  padding: 1.5rem;
+}
+
+.relatedNewsTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+  color: var(--color-text-main);
+}
+
+.relatedDescription {
+  font-size: 1.2rem;
+  color: var(--color-text-sub);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.relatedMeta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.1rem;
+  color: var(--color-text-sub);
+}
+
 /* タブレット用 */
 @media (max-width: 768px) {
   .container {
@@ -325,6 +406,14 @@
   .tag {
     font-size: var(--font-size-xs);
     padding: 0.3rem 0.6rem;
+  }
+
+  .relatedList {
+    grid-template-columns: 1fr;
+  }
+
+  .relatedTitle {
+    font-size: 1.8rem;
   }
 }
 

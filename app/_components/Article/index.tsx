@@ -23,9 +23,16 @@ type Props = {
     id: string;
     name: string;
   }>; // タグを追加
+  relatedNews?: News[]; // 関連記事を追加
 };
 
-export default function Article({ data, recentNews, categories, tags }: Props) {
+export default function Article({
+  data,
+  recentNews,
+  categories,
+  tags,
+  relatedNews,
+}: Props) {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -116,6 +123,45 @@ export default function Article({ data, recentNews, categories, tags }: Props) {
             __html: data.content,
           }}
         />
+
+        {/* 関連記事セクションを追加 */}
+        {relatedNews && relatedNews.length > 0 && (
+          <section className={styles.relatedSection}>
+            <h2 className={styles.relatedTitle}>関連記事</h2>
+            <div className={styles.relatedList}>
+              {relatedNews.map((news) => (
+                <article key={news.id} className={styles.relatedItem}>
+                  <Link
+                    href={`/news/${news.id}`}
+                    className={styles.relatedLink}
+                  >
+                    {news.thumbnail && (
+                      <div className={styles.relatedImageWrapper}>
+                        <Image
+                          src={news.thumbnail.url}
+                          alt=""
+                          className={styles.relatedImage}
+                          width={200}
+                          height={120}
+                        />
+                      </div>
+                    )}
+                    <div className={styles.relatedContent}>
+                      <h3 className={styles.relatedNewsTitle}>{news.title}</h3>
+                      <p className={styles.relatedDescription}>
+                        {news.description}
+                      </p>
+                      <div className={styles.relatedMeta}>
+                        <Category category={news.category} />
+                        <Date date={news.publishedAt ?? news.createdAt} />
+                      </div>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <Sidebar recentNews={recentNews} categories={categories} tags={tags} />
