@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import type { News } from "@/app/_libs/microcms";
@@ -22,8 +25,20 @@ type Props = {
   tags?: Array<{
     id: string;
     name: string;
-  }>; // タグを追加
-  relatedNews?: News[]; // 関連記事を追加
+  }>;
+  relatedNews?: News[];
+};
+
+type RecentlyViewedItem = {
+  id: string;
+  title: string;
+  publishedAt: string;
+  thumbnail?: {
+    url: string;
+    width: number;
+    height: number;
+  } | null; // サムネイル情報を追加
+  viewedAt: number;
 };
 
 export default function Article({
@@ -33,6 +48,63 @@ export default function Article({
   tags,
   relatedNews,
 }: Props) {
+  const [recentlyViewed, setRecentlyViewed] = useState<RecentlyViewedItem[]>(
+    []
+  );
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // ローカルストレージから読み込み
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("recently-viewed-news");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          setRecentlyViewed(parsed);
+        }
+      } catch (error) {
+        console.error("Failed to load recently viewed items:", error);
+      } finally {
+        setIsLoaded(true);
+      }
+    }
+  }, []);
+
+  // 記事を閲覧履歴に追加
+  useEffect(() => {
+    if (!isLoaded || typeof window === "undefined") return;
+
+    const newItem: RecentlyViewedItem = {
+      id: data.id,
+      title: data.title,
+      publishedAt: data.publishedAt,
+      thumbnail:
+        data.thumbnail &&
+        typeof data.thumbnail.width === "number" &&
+        typeof data.thumbnail.height === "number"
+          ? {
+              url: data.thumbnail.url,
+              width: data.thumbnail.width,
+              height: data.thumbnail.height,
+            }
+          : null, // サムネイル情報を保存
+      viewedAt: window.Date.now(), // window.Date.now() を使用
+    };
+
+    setRecentlyViewed((prev) => {
+      const filtered = prev.filter((item) => item.id !== data.id);
+      const updated = [newItem, ...filtered].slice(0, 5);
+
+      try {
+        localStorage.setItem("recently-viewed-news", JSON.stringify(updated));
+      } catch (error) {
+        console.error("Failed to save recently viewed items:", error);
+      }
+
+      return updated;
+    });
+  }, [data.id, data.publishedAt, data.title, data.thumbnail, isLoaded]);
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -124,7 +196,7 @@ export default function Article({
           }}
         />
 
-        {/* 関連記事セクションを追加 */}
+        {/* 関連記事セクション */}
         {relatedNews && relatedNews.length > 0 && (
           <section className={styles.relatedSection}>
             <h2 className={styles.relatedTitle}>関連記事</h2>
@@ -159,6 +231,55 @@ export default function Article({
                   </Link>
                 </article>
               ))}
+            </div>
+          </section>
+        )}
+
+        {/* 最近閲覧した記事セクション */}
+        {isLoaded && recentlyViewed.length > 1 && (
+          <section className={styles.recentlyViewedSection}>
+            <h2 className={styles.recentlyViewedTitle}>最近閲覧した記事</h2>
+            <div className={styles.recentlyViewedList}>
+              {recentlyViewed
+                .filter((item) => item.id !== data.id)
+                .slice(0, 4)
+                .map((item) => (
+                  <article key={item.id} className={styles.recentlyViewedItem}>
+                    <Link
+                      href={`/news/${item.id}`}
+                      className={styles.recentlyViewedLink}
+                    >
+                      {/* サムネイル表示を追加 */}
+                      {item.thumbnail && (
+                        <div className={styles.recentlyViewedImageWrapper}>
+                          <Image
+                            src={item.thumbnail.url}
+                            alt=""
+                            className={styles.recentlyViewedImage}
+                            width={200}
+                            height={120}
+                          />
+                        </div>
+                      )}
+                      <div className={styles.recentlyViewedContent}>
+                        <h3 className={styles.recentlyViewedNewsTitle}>
+                          {item.title}
+                        </h3>
+                        <div className={styles.recentlyViewedMeta}>
+                          {/* item.publishedAtが存在することを確認してからDateコンポーネントに渡す */}
+                          {item.publishedAt && <Date date={item.publishedAt} />}
+                          <span className={styles.viewedTime}>
+                            {(() => {
+                              const viewedDate = new window.Date(item.viewedAt);
+                              return viewedDate.toLocaleDateString("ja-JP");
+                            })()}{" "}
+                            閲覧
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </article>
+                ))}
             </div>
           </section>
         )}
