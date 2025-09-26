@@ -34,6 +34,7 @@
   z-index: -1;
 }
 
+/* newsセクションのスタイル */
 .news {
   position: relative;
   background-color: #fff;
@@ -53,9 +54,48 @@
   bottom: -40px;
 }
 
+/* blogセクションのスタイル */
+.blog {
+  position: relative;
+  background-color: #fff;
+  width: 840px;
+  margin: 100px auto 0;
+  padding: 24px 40px;
+  border-radius: var(--border-radius);
+  border-color: var(--color-border);
+}
+.blogTitle {
+  font-size: var(--font-size-s-title);
+}
+.blogLink {
+  position: absolute;
+  right: -40px;
+  bottom: -40px;
+}
+
+/* ホバー可能なデバイスでのみhover効果を適用 */
+@media (hover: hover) {
+  .news:hover,
+  .blog:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+/* タッチデバイス用のアクティブ効果 */
+@media (hover: none) {
+  .news:active,
+  .blog:active {
+    opacity: 0.9;
+  }
+}
+
 /* 1250px以下の画面でレスポンシブ対応を追加 */
 @media (max-width: 1250px) {
   .news {
+    width: calc(100% - 80px); /* 1250px以下では画面幅に合わせる */
+  }
+  .blog {
     width: calc(100% - 80px); /* 1250px以下では画面幅に合わせる */
   }
 }
@@ -100,10 +140,26 @@
     bottom: auto;
     margin-top: 16px;
   }
+
+  .blog {
+    width: calc(100% - 32px);
+    padding: 16px 24px;
+  }
+
+  .blogLink {
+    position: absolute;
+    right: auto;
+    bottom: auto;
+    margin-top: 16px;
+  }
 }
 
 @media (max-width: 100px) {
   .news {
+    width: calc(100% - 160px);
+  }
+
+  .blog {
     width: calc(100% - 160px);
   }
 }

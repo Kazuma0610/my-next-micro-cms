@@ -1,0 +1,14 @@
+.date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0.8rem 0;
+  font-size: var(--font-size-base);
+}
+
+/* スマートフォン用 */
+@media (max-width: 480px) {
+  .date {
+    font-size: var(--font-size-sm); /* 14px */
+  }
+}

@@ -30,6 +30,24 @@ export type News = {
   updatedAt: string;
 } & MicroCMSListContent;
 
+export type BlogCategory = {
+  name: string;
+} & MicroCMSListContent;
+
+export type Blog = {
+  id: string;
+  title: string;
+  description: string;
+  content: string;
+  thumbnail?: MicroCMSImage;
+  category: BlogCategory;
+  author?: string;
+  tags?: string[];
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
+} & MicroCMSListContent;
+
 if (!process.env.MICROCMS_SERVICE_DOMAIN) {
   throw new Error("MICROCMS_SERVICE_DOMAIN is required");
 }
@@ -59,6 +77,14 @@ export const getNewsList = async (queries?: MicroCMSQueries) => {
   return listData;
 };
 
+export const getBlogList = async (queries?: MicroCMSQueries) => {
+  const listData = await client.getList<Blog>({
+    endpoint: "blog",
+    queries,
+  });
+  return listData;
+};
+
 // カテゴリー一覧取得
 export const getCategoryList = async (queries?: MicroCMSQueries) => {
   const listData = await client.getList<Category>({
@@ -82,7 +108,7 @@ export const getAllTags = async () => {
   return Array.from(tagSet).map((tag) => ({ id: tag, name: tag }));
 };
 
-// 関連記事を取得
+// 関連記事を取得(NEWS)
 export const getRelatedNews = async (
   currentNewsId: string,
   categoryId: string,
@@ -121,7 +147,7 @@ export const getRelatedNews = async (
   return allRelated.slice(0, limit);
 };
 
-//ニュースページの不正なURL直接入力を防ぐ
+//ニュースページの詳細投稿取得と不正なURL直接入力を防ぐ
 export const getNewsDetail = async (
   contentId: string,
   queries?: MicroCMSQueries
@@ -148,6 +174,24 @@ export const getCategoryDetail = async (
     endpoint: "categories",
     contentId,
     queries,
+  });
+  return detailData;
+};
+
+//ブログページの詳細投稿取得と不正なURL直接入力を防ぐ
+export const getBlogDetail = async (
+  contentId: string,
+  queries?: MicroCMSQueries
+) => {
+  const detailData = await client.getListDetail<Blog>({
+    endpoint: "blog",
+    contentId,
+    queries,
+    customRequestInit: {
+      next: {
+        revalidate: queries?.draftKey === undefined ? 60 : 0,
+      },
+    },
   });
   return detailData;
 };

@@ -1,0 +1,34 @@
+.tag {
+  background-color: var(--color-bg-sub);
+  padding: 4px 12px;
+  border-radius: var(--border-radius);
+  white-space: nowrap;
+  font-size: var(--font-size-base);
+}
+
+.category {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem; /* アイコンとテキストの間隔 */
+  background-color: var(--color-folder-bg);
+  color: var(--color-text-unpainted);
+  font-size: var(--font-size-xs);
+  font-weight: bold;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.25rem;
+  white-space: nowrap;
+}
+
+.categoryIcon {
+  flex-shrink: 0; /* アイコンのサイズを固定 */
+  filter: invert(1); /* 白系 */
+}
+
+/* スマートフォン用 */
+@media (max-width: 640px) {
+  .category {
+    font-size: var(--font-size-xs);
+    padding: 0.3rem 0.6rem;
+    gap: 0.3rem;
+  }
+}
