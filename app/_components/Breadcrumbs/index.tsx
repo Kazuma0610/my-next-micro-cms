@@ -2,6 +2,7 @@
 import styles from "./index.module.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { blob } from "stream/consumers";
 
 const Breadcrumbs: React.FC = () => {
   const pathname = usePathname();
@@ -12,7 +13,7 @@ const Breadcrumbs: React.FC = () => {
   // /news/slug のslug部分（2階層目）だけ除外、/news/category/xxx など三階層目は除外しない
   const pathSegments = pathname.split("/").filter(Boolean);
   if (
-    pathParts[0] === "news" &&
+    (pathParts[0] === "news" || pathParts[0] === "blog") &&
     pathParts.length === 2 &&
     pathSegments.length === 2 &&
     !["category", "p"].includes(pathParts[1])
@@ -25,6 +26,8 @@ const Breadcrumbs: React.FC = () => {
     members: "Members",
     about: "About",
     contact: "Contact",
+    reservation: "Reservation",
+    blog: "Blog",
     // 必要に応じて追加
   };
 

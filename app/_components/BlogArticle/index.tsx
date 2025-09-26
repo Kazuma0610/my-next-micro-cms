@@ -3,6 +3,7 @@ import type { Blog } from "@/app/_libs/microcms";
 import BlogDate from "../BlogDate";
 import BlogCategory from "../BlogCategory";
 import styles from "./index.module.css";
+import Link from "next/link";
 
 type Props = {
   data: Blog;
@@ -14,7 +15,12 @@ export default function Article({ data }: Props) {
       <h1 className={styles.title}>{data.title}</h1>
       <p className={styles.description}>{data.description}</p>
       <div className={styles.meta}>
-        <BlogCategory blogcategory={data.category} />
+        <Link
+          href={`/blog/category/${data.category.id}`}
+          className={styles.categoryLink}
+        >
+          <BlogCategory blogcategory={data.category} />
+        </Link>
         <BlogDate blogdate={data.publishedAt ?? data.createdAt} />
       </div>
       {data.thumbnail && (

@@ -3,6 +3,7 @@ import { getBlogDetail } from "@/app/_libs/microcms";
 import BlogArticle from "@/app/_components/BlogArticle";
 import ButtonLink from "@/app/_components/ButtonLink";
 import styles from "./page.module.css";
+import Breadcrumbs from "@/app/_components/Breadcrumbs";
 
 type Props = {
   params: {
@@ -15,6 +16,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <>
+      <Breadcrumbs />
       <BlogArticle data={blogData} />
       <div className={styles.footer}>
         <ButtonLink href="/blog">ブログ一覧に戻る</ButtonLink>

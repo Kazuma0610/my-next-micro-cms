@@ -196,6 +196,19 @@ export const getBlogDetail = async (
   return detailData;
 };
 
+//ブログページのカテゴリーの不正なURL直接入力を防ぐ
+export const getBlogCategoryDetail = async (
+  contentId: string,
+  queries?: MicroCMSQueries
+) => {
+  const detailData = await client.getListDetail<Category>({
+    endpoint: "blog-category",
+    contentId,
+    queries,
+  });
+  return detailData;
+};
+
 //サイトマップ用にnewsの全件取得
 export const getAllNewsList = async () => {
   const listData = await client.getAllContents<News>({
