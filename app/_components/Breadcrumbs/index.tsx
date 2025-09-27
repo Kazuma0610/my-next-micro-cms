@@ -43,8 +43,13 @@ const Breadcrumbs: React.FC = () => {
     blog: "Blog",
     // カテゴリー名のマッピング
     "press-release": "プレスリリース",
-    tech: "テクノロジー",
-    business: "ビジネス",
+    notice: "お知らせ",
+    important: "重要",
+    marketing: "マーケティング",
+    new_products: "新製品",
+    regional_exchange: "地域交流",
+    reskilling_study: "リスキリング勉強会",
+    seminar_information: "セミナーのご案内",
     // 必要に応じて追加
   };
 
