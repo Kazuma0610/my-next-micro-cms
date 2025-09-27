@@ -1,34 +1,43 @@
-import { getBlogCategoryDetail, getBlogList } from "@/app/_libs/microcms";
 import { notFound } from "next/navigation";
-import Bloglist from "@/app/_components/BlogList";
-import BlogCategory from "@/app/_components/BlogCategory";
-import Breadcrumbs from "@/app/_components/Breadcrumbs";
+import { getBlogCategoryDetail, getBlogList } from "@/app/_libs/microcms";
+import BlogList from "@/app/_components/BlogList";
 import { BLOG_LIST_LIMIT } from "@/app/_constants";
 import BlogPagination from "@/app/_components/BlogPagination";
+import Breadcrumbs from "@/app/_components/Breadcrumbs";
 
 type Props = {
   params: {
     id: string;
+    current: string;
   };
 };
 
 export default async function Page({ params }: Props) {
+  const current = parseInt(params.current, 10);
+
+  if (Number.isNaN(current) || current < 1) {
+    notFound();
+  }
+
   const categoryData = await getBlogCategoryDetail(params.id).catch(notFound);
 
   const { contents: blogs, totalCount } = await getBlogList({
     limit: BLOG_LIST_LIMIT,
+    offset: BLOG_LIST_LIMIT * (current - 1),
     filters: `category[equals]${categoryData.id}`,
   });
+
+  if (blogs.length === 0) {
+    notFound();
+  }
+
   return (
     <>
       <Breadcrumbs />
-      <p>
-        <BlogCategory blogcategory={categoryData} />
-        の一覧
-      </p>
-      <Bloglist blogs={blogs} />
+      <BlogList blogs={blogs} />
       <BlogPagination
         totalCount={totalCount}
+        current={current}
         basePath={`/blog/category/${categoryData.id}`}
       />
     </>
