@@ -19,6 +19,7 @@ export default async function Page({ params }: Props) {
   const { contents: news, totalCount } = await getNewsList({
     limit: NEWS_LIST_LIMIT,
     filters: `category[equals]${category.id}`,
+    offset: 0,
   });
 
   return (
@@ -31,7 +32,8 @@ export default async function Page({ params }: Props) {
       <NewsList news={news} />
       <Pagination
         totalCount={totalCount}
-        basePath={`/news/category/${category.id}`}
+        current={1}
+        basePath={`/news/category/${category.id}/p`}
       />
     </Sheet>
   );

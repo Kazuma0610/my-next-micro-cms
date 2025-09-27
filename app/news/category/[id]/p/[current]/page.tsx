@@ -4,6 +4,7 @@ import NewsList from "@/app/_components/NewsList";
 import Pagination from "@/app/_components/Pagination";
 import { NEWS_LIST_LIMIT } from "@/app/_constants";
 import Breadcrumbs from "@/app/_components/Breadcrumbs";
+import Sheet from "@/app/_components/Sheet";
 
 type Props = {
   params: {
@@ -32,14 +33,14 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <>
+    <Sheet hasSidebar={false}>
       <Breadcrumbs />
       <NewsList news={news} />
       <Pagination
         totalCount={totalCount}
         current={current}
-        basePath={`/news/category/${category.id}`}
+        basePath={`/news/category/${category.id}/p`}
       />
-    </>
+    </Sheet>
   );
 }

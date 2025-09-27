@@ -2,23 +2,36 @@
 import styles from "./index.module.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { blob } from "stream/consumers";
 
 const Breadcrumbs: React.FC = () => {
   const pathname = usePathname();
-  // "p"と"category"を除外したパス配列を作成
-  let pathParts = pathname
-    .split("/")
-    .filter((part) => part && part !== "p" && part !== "category");
-  // /news/slug のslug部分（2階層目）だけ除外、/news/category/xxx など三階層目は除外しない
+
+  // パス解析
   const pathSegments = pathname.split("/").filter(Boolean);
-  if (
-    (pathParts[0] === "news" || pathParts[0] === "blog") &&
-    pathParts.length === 2 &&
+
+  // カテゴリーページかどうかを判定
+  const isCategoryPage =
+    pathSegments.length >= 3 &&
+    pathSegments[1] === "category" &&
+    (pathSegments[0] === "news" || pathSegments[0] === "blog");
+
+  // 記事詳細ページかどうかを判定
+  const isArticleDetail =
     pathSegments.length === 2 &&
-    !["category", "p"].includes(pathParts[1])
-  ) {
-    pathParts = pathParts.slice(0, 1); // "news"だけ残す
+    (pathSegments[0] === "news" || pathSegments[0] === "blog") &&
+    !["category", "p"].includes(pathSegments[1]);
+
+  let pathParts: string[] = [];
+
+  if (isCategoryPage) {
+    // カテゴリーページの場合: ["news", "press-release"]
+    pathParts = [pathSegments[0], pathSegments[2]];
+  } else if (isArticleDetail) {
+    // 記事詳細ページの場合: ["news"]のみ
+    pathParts = [pathSegments[0]];
+  } else {
+    // その他の場合: "p"のみ除外
+    pathParts = pathSegments.filter((part) => part !== "p");
   }
 
   const nameMap: { [key: string]: string } = {
@@ -28,6 +41,10 @@ const Breadcrumbs: React.FC = () => {
     contact: "Contact",
     reservation: "Reservation",
     blog: "Blog",
+    // カテゴリー名のマッピング
+    "press-release": "プレスリリース",
+    tech: "テクノロジー",
+    business: "ビジネス",
     // 必要に応じて追加
   };
 
@@ -38,24 +55,26 @@ const Breadcrumbs: React.FC = () => {
           <Link href="/">Home</Link>
         </li>
         {pathParts.map((part, idx) => {
-          const href = "/" + pathParts.slice(0, idx + 1).join("/");
-          // 記事詳細ページ（/news/スラッグ）だけ特別扱い
-          const isNewsDetail =
-            pathParts[0] === "news" &&
-            pathParts.length === 1 &&
-            pathname.startsWith("/news/") &&
-            pathname.split("/").filter(Boolean).length === 2;
-          // /news/category/xxx や /news/p/2 などは通常通り最後だけisLast
-          const isLast = idx === pathParts.length - 1 && !isNewsDetail;
+          let href: string;
+
+          if (isCategoryPage && idx === 1) {
+            // カテゴリーページの2番目（カテゴリー名）の場合
+            href = `/${pathParts[0]}/category/${part}`;
+          } else {
+            // 通常の場合
+            href = "/" + pathParts.slice(0, idx + 1).join("/");
+          }
+
+          const isLast = idx === pathParts.length - 1;
+          const displayName = nameMap[part] ?? decodeURIComponent(part);
+
           return (
-            <li key={href} style={{ marginLeft: 0 }}>
+            <li key={idx} style={{ marginLeft: 0 }}>
               <span style={{ margin: "0 10px" }}>/</span>
               {isLast ? (
-                <span>{nameMap[part] ?? decodeURIComponent(part)}</span>
+                <span>{displayName}</span>
               ) : (
-                <Link href={href}>
-                  {nameMap[part] ?? decodeURIComponent(part)}
-                </Link>
+                <Link href={href}>{displayName}</Link>
               )}
             </li>
           );
