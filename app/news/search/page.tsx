@@ -13,6 +13,22 @@ type Props = {
   };
 };
 
+export async function generateMetadata({ searchParams }: Props) {
+  const { q } = searchParams;
+
+  if (!q) {
+    return {
+      title: "ニュース検索",
+      description: "ニュース記事を検索できます。",
+    };
+  }
+
+  return {
+    title: `「${q}」の検索結果 - ニュース`,
+    description: `「${q}」に関するニュース記事の検索結果です。`,
+  };
+}
+
 export default async function Page({ searchParams }: Props) {
   const page = Number(searchParams.page) || 1;
   const offset = (page - 1) * NEWS_LIST_LIMIT;

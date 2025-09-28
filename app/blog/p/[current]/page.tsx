@@ -1,35 +1,31 @@
-import { notFound } from "next/navigation";
 import { getBlogList } from "@/app/_libs/microcms";
 import BlogList from "@/app/_components/BlogList";
+import Breadcrumbs from "@/app/_components/Breadcrumbs";
 import { BLOG_LIST_LIMIT } from "@/app/_constants";
 import BlogPagination from "@/app/_components/BlogPagination";
-import Breadcrumbs from "@/app/_components/Breadcrumbs";
+import BlogSearchField from "@/app/_components/BlogSearchField";
 
 type Props = {
-  params: { current: string };
+  searchParams: {
+    page?: string;
+  };
 };
 
-export default async function Page({ params }: Props) {
-  const current = parseInt(params.current, 10);
-
-  if (Number.isNaN(current) || current < 1) {
-    notFound();
-  }
+export default async function BlogPage({ searchParams }: Props) {
+  const page = Number(searchParams.page) || 1;
+  const offset = (page - 1) * BLOG_LIST_LIMIT;
 
   const { contents: blogs, totalCount } = await getBlogList({
     limit: BLOG_LIST_LIMIT,
-    offset: BLOG_LIST_LIMIT * (current - 1),
+    offset,
   });
-
-  if (blogs.length === 0) {
-    notFound();
-  }
 
   return (
     <>
       <Breadcrumbs />
+      <BlogSearchField />
       <BlogList blogs={blogs} />
-      <BlogPagination totalCount={totalCount} current={current} />
+      <BlogPagination totalCount={totalCount} current={page} basePath="/blog" />
     </>
   );
 }
