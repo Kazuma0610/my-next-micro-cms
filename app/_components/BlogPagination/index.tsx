@@ -28,34 +28,29 @@ export default function BlogPagination({
 
           if (basePath === "/blog/search") {
             // ブログ検索ページの場合
-            if (q) {
-              // 検索キーワードがある場合
-              href =
-                p === 1
-                  ? `${basePath}?q=${encodeURIComponent(q)}`
-                  : `${basePath}?page=${p}&q=${encodeURIComponent(q)}`;
-            } else {
-              // 検索キーワードがない場合
-              href = p === 1 ? basePath : `${basePath}?page=${p}`;
-            }
+            href = q
+              ? `${basePath}?page=${p}&q=${encodeURIComponent(q)}`
+              : `${basePath}?page=${p}`;
           } else if (
             basePath.includes("/category/") &&
             basePath.endsWith("/p")
           ) {
-            // カテゴリーページの場合 (/blog/category/xxx/p)
+            // ブログカテゴリーページの場合 (/blog/category/xxx/p)
+            console.log("Using blog category logic for page", p);
             href =
               p === 1
                 ? basePath.slice(0, -2) // 末尾の "/p" を削除
                 : `${basePath}/${p}`;
           } else if (basePath.includes("?")) {
-            // その他のクエリパラメータが既に含まれている場合
+            // クエリパラメータが既に含まれている場合（カテゴリーフィルター）
             href = p === 1 ? basePath : `${basePath}&page=${p}`;
           } else {
-            // 通常のブログ一覧の場合 (/blog?page=2)
+            // 通常のブログ一覧の場合
+            console.log("Using default blog logic");
             href = p === 1 ? basePath : `${basePath}?page=${p}`;
           }
 
-          console.log(`Blog page ${p} href:`, href); // デバッグ用
+          console.log(`Blog page ${p} href:`, href);
 
           return (
             <li className={styles.list} key={p}>

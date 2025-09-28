@@ -94,6 +94,15 @@ export const getCategoryList = async (queries?: MicroCMSQueries) => {
   return listData;
 };
 
+// ブログカテゴリー一覧取得
+export const getBlogCategoryList = async (queries?: MicroCMSQueries) => {
+  const listData = await client.getList<Category>({
+    endpoint: "blog-category", // ブログ用
+    queries,
+  });
+  return listData;
+};
+
 // タグ一覧取得
 export const getAllTags = async () => {
   const { contents } = await getNewsList({ limit: 100 }); // 全記事取得
