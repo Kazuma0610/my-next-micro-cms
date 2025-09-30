@@ -1,5 +1,4 @@
 import Hero from "@/app/_components/Hero";
-import Sheet from "@/app/_components/Sheet";
 
 export const metadata = {
   title: "BLOG",
@@ -16,7 +15,7 @@ export default function BlogLayout({ children }: Props) {
   return (
     <>
       <Hero title="BLOG" sub="最新のブログ" />
-      <Sheet>{children}</Sheet>
+      {children}
     </>
   );
 }

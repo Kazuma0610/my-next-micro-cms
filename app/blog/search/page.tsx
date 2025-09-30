@@ -4,6 +4,7 @@ import BlogList from "@/app/_components/BlogList";
 import BlogPagination from "@/app/_components/BlogPagination";
 import BlogSearchField from "@/app/_components/BlogSearchField";
 import Breadcrumbs from "@/app/_components/Breadcrumbs";
+import Sheet from "@/app/_components/Sheet"; // 追加
 
 type Props = {
   searchParams: {
@@ -39,7 +40,7 @@ export default async function Page({ searchParams }: Props) {
   });
 
   return (
-    <>
+    <Sheet hasSidebar={false}>
       <Breadcrumbs />
       <BlogSearchField />
       <BlogList blogs={blogs} />
@@ -49,6 +50,6 @@ export default async function Page({ searchParams }: Props) {
         current={page}
         basePath="/blog/search"
       />
-    </>
+    </Sheet>
   );
 }

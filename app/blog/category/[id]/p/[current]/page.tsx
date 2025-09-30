@@ -4,6 +4,7 @@ import BlogList from "@/app/_components/BlogList";
 import { BLOG_LIST_LIMIT } from "@/app/_constants";
 import BlogPagination from "@/app/_components/BlogPagination";
 import Breadcrumbs from "@/app/_components/Breadcrumbs";
+import Sheet from "@/app/_components/Sheet";
 
 type Props = {
   params: {
@@ -32,7 +33,7 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <>
+    <Sheet hasSidebar={false}>
       <Breadcrumbs />
       <BlogList blogs={blogs} />
       <BlogPagination
@@ -40,6 +41,6 @@ export default async function Page({ params }: Props) {
         current={current}
         basePath={`/blog/category/${categoryData.id}`}
       />
-    </>
+    </Sheet>
   );
 }

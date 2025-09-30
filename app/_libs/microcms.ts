@@ -103,7 +103,7 @@ export const getBlogCategoryList = async (queries?: MicroCMSQueries) => {
   return listData;
 };
 
-// タグ一覧取得
+// NEWSタグ一覧取得
 export const getAllTags = async () => {
   const { contents } = await getNewsList({ limit: 100 }); // 全記事取得
   const tagSet = new Set<string>();
@@ -111,6 +111,20 @@ export const getAllTags = async () => {
   contents.forEach((news) => {
     if (news.tags) {
       news.tags.forEach((tag) => tagSet.add(tag));
+    }
+  });
+
+  return Array.from(tagSet).map((tag) => ({ id: tag, name: tag }));
+};
+
+// BLOGタグ一覧取得
+export const getAllBlogTags = async () => {
+  const { contents } = await getBlogList({ limit: 100 }); // 全記事取得
+  const tagSet = new Set<string>();
+
+  contents.forEach((blog) => {
+    if (blog.tags) {
+      blog.tags.forEach((tag) => tagSet.add(tag));
     }
   });
 
@@ -138,6 +152,45 @@ export const getRelatedNews = async (
       tagRelated = await getNewsList({
         q: tags[0], // 最初のタグで検索
         filters: `id[not_equals]${currentNewsId}`,
+        limit: 2,
+      });
+    } catch (error) {
+      console.warn("Tag search failed:", error);
+    }
+  }
+
+  // 重複を除去して結合
+  const allRelated = [...categoryRelated.contents];
+  tagRelated.contents.forEach((news) => {
+    if (!allRelated.some((item) => item.id === news.id)) {
+      allRelated.push(news);
+    }
+  });
+
+  return allRelated.slice(0, limit);
+};
+
+// 関連記事を取得(BLOG)
+export const getRelatedBlogs = async (
+  currentBlogId: string,
+  categoryId: string,
+  tags?: string[],
+  limit = 4
+) => {
+  // 1. 同じカテゴリーの記事を取得
+  const categoryRelated = await getBlogList({
+    filters: `category[equals]${categoryId}[and]id[not_equals]${currentBlogId}`,
+    limit: limit,
+  });
+
+  // 2. タグが一致する記事も取得したい場合（オプション）
+  let tagRelated = { contents: [] as Blog[] };
+  if (tags && tags.length > 0) {
+    // タグでフィルタリング（複雑なクエリになるため、シンプルに1つのタグで検索）
+    try {
+      tagRelated = await getBlogList({
+        q: tags[0], // 最初のタグで検索
+        filters: `id[not_equals]${currentBlogId}`,
         limit: 2,
       });
     } catch (error) {

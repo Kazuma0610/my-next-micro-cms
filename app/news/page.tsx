@@ -21,6 +21,7 @@ export default async function Page({ searchParams }: Props) {
   console.log("searchParams:", searchParams);
 
   const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
+  const categoryId = searchParams.category;
 
   // タグフィルターがある場合は全記事を取得、ない場合は通常のクエリ
   const queryParams: any = searchParams.tag
@@ -115,6 +116,34 @@ export default async function Page({ searchParams }: Props) {
       <SearchField />
       <CategoryFilter categories={categories} />
       <TagFilter currentTag={searchParams.tag} />
+
+      {/* フィルター状態の表示 */}
+      {(categoryId || searchParams.tag) && (
+        <div
+          style={{
+            background: "#e3f2fd",
+            padding: "15px",
+            margin: "15px 0",
+            borderRadius: "5px",
+          }}
+        >
+          {categoryId && (
+            <p>
+              選択中のカテゴリー:{" "}
+              <strong>
+                {categories.find((cat) => cat.id === categoryId)?.name ||
+                  categoryId}
+              </strong>
+            </p>
+          )}
+          {searchParams.tag && (
+            <p>
+              選択中のタグ: <strong>#{searchParams.tag}</strong>
+            </p>
+          )}
+          <p>該当記事数: {finalTotalCount}件</p>
+        </div>
+      )}
       <NewsList news={paginatedNews} />
       <Pagination
         totalCount={finalTotalCount}

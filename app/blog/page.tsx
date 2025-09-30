@@ -5,62 +5,126 @@ import { BLOG_LIST_LIMIT } from "@/app/_constants";
 import BlogPagination from "@/app/_components/BlogPagination";
 import BlogSearchField from "@/app/_components/BlogSearchField";
 import BlogCategoryFilter from "@/app/_components/BlogCategoryFilter";
+import Sheet from "@/app/_components/Sheet";
+import BlogTagFilter from "../_components/BlogTagFilter";
 
 type Props = {
   searchParams: {
     page?: string;
     category?: string;
+    tag?: string;
+    q?: string;
   };
 };
 
 export default async function BlogPage({ searchParams }: Props) {
-  const page = Number(searchParams.page) || 1;
-  const offset = (page - 1) * BLOG_LIST_LIMIT;
+  console.log("Blog page searchParams:", searchParams);
+
+  const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
   const categoryId = searchParams.category;
 
-  console.log("Blog page debug:", {
-    categoryId,
-    page,
-    searchParams,
-  });
+  // タグフィルターがある場合は全記事を取得、ない場合は通常のクエリ
+  const queryParams: any = searchParams.tag
+    ? { limit: 100 } // タグフィルター時は全記事取得
+    : { limit: BLOG_LIST_LIMIT };
 
-  // getBlogListの呼び出しパラメータを構築
-  const queryParams: any = {
-    limit: BLOG_LIST_LIMIT,
-    offset,
-  };
+  // microCMSフィルター（タグ以外）
+  const filters: string[] = [];
 
-  // カテゴリーフィルターがある場合のみfiltersを追加
   if (categoryId) {
-    queryParams.filters = `category[equals]${categoryId}`;
-    console.log("カテゴリーフィルター適用:", queryParams.filters);
-  } else {
-    console.log("カテゴリーフィルターなし（全記事取得）");
+    filters.push(`category[equals]${categoryId}`);
+    console.log(
+      "ブログカテゴリーフィルター追加:",
+      `category[equals]${categoryId}`
+    );
   }
 
-  // ブログ記事を取得
-  const { contents: blogs, totalCount } = await getBlogList(queryParams);
+  if (filters.length > 0) {
+    queryParams.filters = filters.join("[and]");
+    console.log("ブログmicroCMSフィルター:", queryParams.filters);
+  }
 
-  console.log("取得結果:", {
-    blogsCount: blogs.length,
-    totalCount,
-    hasFilter: !!categoryId,
-  });
+  if (searchParams.q) {
+    queryParams.q = searchParams.q;
+  }
+
+  // タグフィルターがない場合のみページネーション
+  if (
+    !searchParams.tag &&
+    searchParams.page &&
+    parseInt(searchParams.page) > 1
+  ) {
+    queryParams.offset = (parseInt(searchParams.page) - 1) * BLOG_LIST_LIMIT;
+  }
+
+  console.log("getBlogListに渡すパラメータ:", queryParams);
+
+  const { contents: allBlogs, totalCount } = await getBlogList(queryParams);
+
+  console.log("microCMSから取得したブログ記事数:", allBlogs.length);
+
+  // フロントエンドでタグフィルタリング
+  let filteredBlogs = allBlogs;
+
+  if (searchParams.tag) {
+    console.log("ブログタグフィルタリング開始:", searchParams.tag);
+    filteredBlogs = allBlogs.filter((item) => {
+      const hasTag = item.tags && item.tags.includes(searchParams.tag!);
+      console.log(
+        `ブログ記事「${item.title}」のタグ:`,
+        item.tags,
+        "マッチ:",
+        hasTag
+      );
+      return hasTag;
+    });
+    console.log("ブログタグフィルタリング後の記事数:", filteredBlogs.length);
+  }
+
+  // ページネーション（フロントエンド）
+  let paginatedBlogs = filteredBlogs;
+  let finalTotalCount = filteredBlogs.length;
+
+  if (searchParams.tag) {
+    // タグフィルター時はフロントエンドでページネーション
+    const startIndex = (currentPage - 1) * BLOG_LIST_LIMIT;
+    const endIndex = startIndex + BLOG_LIST_LIMIT;
+    paginatedBlogs = filteredBlogs.slice(startIndex, endIndex);
+  } else {
+    // タグフィルターなしの場合はmicroCMSのtotalCountを使用
+    finalTotalCount = totalCount || 0;
+  }
+
+  console.log("最終表示ブログ記事数:", paginatedBlogs.length);
+  console.log("最終ブログtotalCount:", finalTotalCount);
 
   // ブログカテゴリー一覧を取得
   const { contents: categories } = await getBlogCategoryList();
 
-  // ページネーション用のbasePathにカテゴリー情報を含める
-  const basePath = categoryId ? `/blog?category=${categoryId}` : "/blog";
+  // basePathの構築
+  const basePathParams = new URLSearchParams();
+  if (searchParams.category) {
+    basePathParams.set("category", searchParams.category);
+  }
+  if (searchParams.tag) {
+    basePathParams.set("tag", searchParams.tag);
+  }
+  if (searchParams.q) {
+    basePathParams.set("q", searchParams.q);
+  }
+  const basePath = `/blog${
+    basePathParams.toString() ? `?${basePathParams.toString()}` : ""
+  }`;
 
   return (
-    <>
+    <Sheet hasSidebar={false}>
       <Breadcrumbs />
       <BlogSearchField />
       <BlogCategoryFilter categories={categories} />
+      <BlogTagFilter currentTag={searchParams.tag} />
 
-      {/* カテゴリー選択状態の表示 */}
-      {categoryId && (
+      {/* フィルター状態の表示 */}
+      {(categoryId || searchParams.tag) && (
         <div
           style={{
             background: "#e3f2fd",
@@ -69,29 +133,43 @@ export default async function BlogPage({ searchParams }: Props) {
             borderRadius: "5px",
           }}
         >
-          <p>
-            選択中のカテゴリー:{" "}
-            <strong>
-              {categories.find((cat) => cat.id === categoryId)?.name ||
-                categoryId}
-            </strong>
-          </p>
-          <p>該当記事数: {totalCount}件</p>
+          {categoryId && (
+            <p>
+              選択中のカテゴリー:{" "}
+              <strong>
+                {categories.find((cat) => cat.id === categoryId)?.name ||
+                  categoryId}
+              </strong>
+            </p>
+          )}
+          {searchParams.tag && (
+            <p>
+              選択中のタグ: <strong>#{searchParams.tag}</strong>
+            </p>
+          )}
+          <p>該当記事数: {finalTotalCount}件</p>
         </div>
       )}
 
-      <BlogList blogs={blogs} />
+      <BlogList blogs={paginatedBlogs} />
       <BlogPagination
-        totalCount={totalCount || 0}
-        current={page}
+        totalCount={finalTotalCount}
+        current={currentPage}
         basePath={basePath}
       />
-    </>
+    </Sheet>
   );
 }
 
 export async function generateMetadata({ searchParams }: Props) {
-  const { category } = searchParams;
+  const { category, tag } = searchParams;
+
+  if (tag) {
+    return {
+      title: `#${tag}のブログ記事一覧`,
+      description: `${tag}タグのブログ記事一覧です。`,
+    };
+  }
 
   if (category) {
     try {
