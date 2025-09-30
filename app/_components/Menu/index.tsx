@@ -29,8 +29,13 @@ export default function Menu() {
             </Link>
           </li>
           <li>
+            <Link onClick={toggleHam} href="/blog">
+              ブログ
+            </Link>
+          </li>
+          <li>
             <Link onClick={toggleHam} href="/members">
-              メンバー
+              会社役員
             </Link>
           </li>
           <li>
