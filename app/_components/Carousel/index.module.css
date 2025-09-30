@@ -1,0 +1,349 @@
+.carousel {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.slideContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* フェード効果のスライド */
+.fadeSlide {
+  transition: opacity var(--transition-duration, 600ms) ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+/* トランジション中の状態 */
+.slide.transitioning {
+  transition: opacity calc(var(--transition-duration, 600ms) / 2) ease-out;
+}
+
+.slideImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 画像のスムーズな切り替え */
+  transition: transform 0.8s ease-out;
+}
+
+.slide.active .slideImage {
+  transform: scale(1.02); /* アクティブ時に微妙にズーム */
+}
+
+.slideContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  color: white;
+  padding: 2rem;
+  /* 中央配置のためのFlexbox */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  /* コンテンツの初期状態 */
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-out;
+}
+
+/* アクティブなコンテンツ */
+.slideContent.activeContent {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.slideTitle {
+  font-size: var(--font-size-m-title);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  text-align: center;
+  max-width: 800px; /* 最大幅を設定 */
+  /* タイトルのアニメーション */
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.6s ease-out;
+}
+
+.activeContent .slideTitle {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.2s;
+}
+
+.slideDescription {
+  font-size: var(--font-size-xl);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  text-align: center;
+  /* 説明文のアニメーション */
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: all 0.6s ease-out;
+}
+
+.activeContent .slideDescription {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.4s;
+}
+
+.slideButton {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background-color: #3182ce;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  /* ボタンのアニメーション */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.activeContent .slideButton {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.6s;
+}
+
+.slideButton:hover {
+  background-color: #2c5aa0;
+  transform: translateY(-2px);
+}
+
+/* ナビゲーション矢印 */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.arrow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.arrow:not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prevArrow {
+  left: 1rem;
+}
+
+.nextArrow {
+  right: 1rem;
+}
+
+/* ドットインジケーター */
+/* ドットの位置を調整（中央配置のコンテンツと重ならないように） */
+.dots {
+  position: absolute;
+  bottom: 6rem; /* 位置を上に調整 */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.dot:disabled {
+  cursor: not-allowed;
+}
+
+.dot:not(:disabled):hover,
+.activeDot {
+  background: white;
+  border-color: white;
+  transform: scale(1.2);
+}
+
+/* ローディングオーバーレイ */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+  backdrop-filter: blur(4px); /* ブラー効果を追加 */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.loadingSpinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  background: #f7fafc;
+  color: #718096;
+  border-radius: 8px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .carousel {
+    height: 400px;
+  }
+
+  .slideContent {
+    padding: 1.5rem 1rem;
+  }
+
+  .slideTitle {
+    font-size: var(--font-size-3xl);
+    max-width: 90%;
+  }
+
+  .slideDescription {
+    font-size: var(--font-size-lg);
+    margin-bottom: 1.5rem;
+    max-width: 90%;
+  }
+
+  .arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+  }
+
+  .prevArrow {
+    left: 0.5rem;
+  }
+
+  .nextArrow {
+    right: 0.5rem;
+  }
+
+  .dots {
+    bottom: 1.5rem;
+    bottom: 8rem; /* 位置を上に調整 */
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel {
+    height: 300px;
+  }
+
+  .slideContent {
+    padding: 1rem;
+  }
+
+  .slideTitle {
+    font-size: var(--font-size-xl);
+    margin-bottom: 0.75rem;
+    max-width: 95%;
+  }
+
+  .slideDescription {
+    font-size: var(--font-size-sm);
+    margin-bottom: 1.25rem;
+    max-width: 95%;
+  }
+
+  .slideButton {
+    padding: 0.5rem 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  .arrow {
+    width: 35px;
+    height: 35px;
+    font-size: 1.25rem;
+    background: none;
+    backdrop-filter: none;
+    border: none;
+  }
+
+  .dots {
+    bottom: 1rem;
+    bottom: 7rem; /* 位置を上に調整 */
+  }
+}
