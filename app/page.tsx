@@ -24,7 +24,7 @@ export default async function Home() {
     {
       id: "1",
       title: "テクノロジーの力で世界を変える",
-      description: "私たちは市場をリードしているグローバルテックカンパニーです",
+      description: "私たちは市場をリードしているテックカンパニーです",
       image: "/img-mv.jpg",
       buttonText: "詳しく見る",
       buttonLink: "/about",
