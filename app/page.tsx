@@ -70,7 +70,7 @@ export default async function Home() {
           <ButtonLink href="/news">もっとみる</ButtonLink>
         </div>
       </section>
-      {/* BLOGセクション - StaggeredListを使用 */}
+      {/* BLOGセクション - 左からフェードイン */}
       <ScrollAnimatedSection
         animation="fadeInLeft"
         delay={200}
@@ -79,14 +79,7 @@ export default async function Home() {
         className={styles.blog}
       >
         <h2 className={styles.blogTitle}>BLOG</h2>
-        <StaggeredList animation="fadeInRight" staggerDelay={200}>
-          {data_blog.contents.map((blog, index) => (
-            <div key={blog.id} className={styles.blogItem}>
-              {/* BlogListの各アイテムを個別に表示 */}
-              <BlogList blogs={[blog]} />
-            </div>
-          ))}
-        </StaggeredList>
+        <BlogList blogs={data_blog.contents} />
         <div className={styles.blogLink}>
           <ButtonLink href="/blog">もっとみる</ButtonLink>
         </div>
