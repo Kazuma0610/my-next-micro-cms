@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
+import PageTransition from "./_components/PageTransition";
 
 export const metadata: Metadata = {
   metadataBase: new URL("http://localhost:3000"),
@@ -24,14 +25,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="ja">
       <body>
         <Header />
-        {children}
+        <main>
+          <PageTransition animationType="fade" duration={500}>
+            {children}
+          </PageTransition>
+        </main>
         <Footer />
       </body>
     </html>

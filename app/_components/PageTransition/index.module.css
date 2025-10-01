@@ -1,0 +1,140 @@
+.pageContainer {
+  position: relative;
+  min-height: 100vh;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.transitionContent {
+  text-align: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* フェードアニメーション */
+.fade {
+  background: linear-gradient(135deg, #667eea 0%, #5b7ce6 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.fade.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* スライドアニメーション */
+.slide {
+  background: linear-gradient(45deg, #ff6b6b 0%, #ee5a24 100%);
+  transform: translateY(-100%);
+  transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.slide.active {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* カーテンアニメーション */
+.curtain {
+  background: transparent;
+}
+
+.curtainLeft,
+.curtainRight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.curtainLeft {
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.curtainRight {
+  right: 0;
+  transform: translateX(100%);
+}
+
+.curtain.active .curtainLeft {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.curtain.active .curtainRight {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* 円形拡大アニメーション */
+.circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  transform: scale(0);
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.circle.active .circle {
+  transform: scale(50);
+  pointer-events: auto;
+}
+
+/* コンテンツの表示制御 */
+.content {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.contentVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contentHidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* ロゴアニメーション */
+.logo {
+  animation: logoFloat 2s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .transitionContent {
+    font-size: 1.2rem;
+  }
+
+  .circle {
+    width: 80px;
+    height: 80px;
+  }
+}
