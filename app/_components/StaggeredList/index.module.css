@@ -1,0 +1,83 @@
+.staggeredContainer {
+  width: 100%;
+}
+
+.staggeredItem {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 下からフェードイン */
+.fadeInUp {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fadeInUp.visible {
+  opacity: 1;
+  transform: translateY(0);
+  animation: fadeInUpAnimation 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUpAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 左からフェードイン */
+.fadeInLeft {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fadeInLeft.visible {
+  opacity: 1;
+  transform: translateX(0);
+  animation: fadeInLeftAnimation 0.6s ease-out forwards;
+}
+
+@keyframes fadeInLeftAnimation {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 右からフェードイン */
+.fadeInRight {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.fadeInRight.visible {
+  opacity: 1;
+  transform: translateX(0);
+  animation: fadeInRightAnimation 0.6s ease-out forwards;
+}
+
+@keyframes fadeInRightAnimation {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* visible状態の共通スタイル */
+.visible {
+  opacity: 1 !important;
+}

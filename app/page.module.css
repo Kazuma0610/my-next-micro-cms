@@ -74,6 +74,35 @@
   bottom: -40px;
 }
 
+/* アニメーションの基本スタイル */
+.simpleSection {
+  padding: 4rem 2rem;
+  background: white;
+  text-align: center;
+}
+
+.simpleSection h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.announcement {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.announcement:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+  transition: all 0.3s ease;
+}
 /* ホバー可能なデバイスでのみhover効果を適用 */
 @media (hover: hover) {
   .news:hover,

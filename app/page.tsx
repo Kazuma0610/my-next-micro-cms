@@ -8,6 +8,8 @@ import NewsList from "@/app/_components/NewsList";
 import BlogList from "@/app/_components/BlogList";
 import ButtonLink from "@/app/_components/ButtonLink";
 import Carousel from "./_components/Carousel";
+import ScrollAnimatedSection from "@/app/_components/ScrollAnimatedSection";
+import StaggeredList from "./_components/StaggeredList";
 
 export const revalidate = 60;
 
@@ -25,7 +27,7 @@ export default async function Home() {
       id: "1",
       title: "テクノロジーの力で世界を変える",
       description: "私たちは市場をリードしているテックカンパニーです",
-      image: "/img-mv.jpg",
+      image: "/mv_4.png", //1枚目の画像
       buttonText: "詳しく見る",
       buttonLink: "/about",
     },
@@ -68,12 +70,36 @@ export default async function Home() {
           <ButtonLink href="/news">もっとみる</ButtonLink>
         </div>
       </section>
-      <section className={styles.blog}>
+      {/* BLOGセクション - StaggeredListを使用 */}
+      <ScrollAnimatedSection
+        animation="fadeInLeft"
+        delay={200}
+        duration={800}
+        threshold={0.2}
+        className={styles.blog}
+      >
         <h2 className={styles.blogTitle}>BLOG</h2>
-        <BlogList blogs={data_blog.contents} />
+        <StaggeredList animation="fadeInRight" staggerDelay={200}>
+          {data_blog.contents.map((blog, index) => (
+            <div key={blog.id} className={styles.blogItem}>
+              {/* BlogListの各アイテムを個別に表示 */}
+              <BlogList blogs={[blog]} />
+            </div>
+          ))}
+        </StaggeredList>
         <div className={styles.blogLink}>
           <ButtonLink href="/blog">もっとみる</ButtonLink>
         </div>
+      </ScrollAnimatedSection>
+      {/* シンプルなStaggeredList使用例 */}
+      <section className={styles.simpleSection}>
+        <h2>お知らせ</h2>
+        <StaggeredList animation="fadeInLeft" staggerDelay={100}>
+          <div className={styles.announcement}>重要なお知らせ1</div>
+          <div className={styles.announcement}>重要なお知らせ2</div>
+          <div className={styles.announcement}>重要なお知らせ3</div>
+          <div className={styles.announcement}>重要なお知らせ4</div>
+        </StaggeredList>
       </section>
     </>
   );
