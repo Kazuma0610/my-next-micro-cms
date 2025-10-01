@@ -4,65 +4,74 @@ import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import styles from "./index.module.css";
 
-type AnimationType = "fade" | "slide" | "curtain" | "circle";
-
 type Props = {
   children: React.ReactNode;
-  animationType?: AnimationType;
+  animationType?: "fade" | "slide" | "curtain";
   duration?: number;
+  onlyFirstLoad?: boolean; // 初回読み込み時のみアニメーション
 };
 
-export default function AdvancedPageTransition({
+export default function PageTransition({
   children,
   animationType = "fade",
-  duration = 600,
+  duration = 500,
+  onlyFirstLoad = false,
 }: Props) {
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // 初回は true
   const [displayChildren, setDisplayChildren] = useState(children);
+  const [hasLoaded, setHasLoaded] = useState(false); // 初回読み込み完了フラグ
   const pathname = usePathname();
 
   useEffect(() => {
-    setIsTransitioning(true);
+    // 初回読み込み時のアニメーション
+    if (!hasLoaded) {
+      const timer = setTimeout(() => {
+        setDisplayChildren(children);
+        setIsLoading(false);
+        setHasLoaded(true); // 初回読み込み完了をマーク
+      }, duration);
 
-    const timer = setTimeout(() => {
+      return () => clearTimeout(timer);
+    } else if (onlyFirstLoad) {
+      // 初回読み込み後はアニメーションなしで即座に更新
       setDisplayChildren(children);
-    }, duration / 2);
+      return;
+    } else {
+      // 通常のページ遷移アニメーション
+      setIsLoading(true);
 
-    const completeTimer = setTimeout(() => {
-      setIsTransitioning(false);
-    }, duration);
+      const timer = setTimeout(() => {
+        setDisplayChildren(children);
+        setIsLoading(false);
+      }, duration);
 
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(completeTimer);
-    };
-  }, [pathname, children, duration]);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname, children, duration, hasLoaded, onlyFirstLoad]);
+
+  // 初回読み込み後でonlyFirstLoadが有効な場合、アニメーションなしで表示
+  if (hasLoaded && onlyFirstLoad) {
+    return <div className={styles.content}>{children}</div>;
+  }
 
   return (
-    <div className={styles.pageContainer}>
-      {/* アニメーション用オーバーレイ */}
+    <div className={styles.pageTransition}>
+      {/* ローディングオーバーレイ */}
       <div
-        className={`${styles.overlay} ${styles[animationType]} ${
-          isTransitioning ? styles.active : ""
+        className={`${styles.loadingOverlay} ${styles[animationType]} ${
+          isLoading ? styles.active : ""
         }`}
-        style={{ animationDuration: `${duration}ms` }}
       >
-        {animationType === "circle" && <div className={styles.circle} />}
-        {animationType === "curtain" && (
-          <>
-            <div className={styles.curtainLeft} />
-            <div className={styles.curtainRight} />
-          </>
-        )}
-        <div className={styles.transitionContent}>
-          <div className={styles.logo}>Loading...</div>
+        <div className={styles.loadingContent}>
+          <div className={styles.spinner}></div>
+          <p className={styles.loadingText}>読み込み中...</p>
         </div>
       </div>
 
       {/* メインコンテンツ */}
       <div
         className={`${styles.content} ${
-          isTransitioning ? styles.contentHidden : styles.contentVisible
+          isLoading ? styles.fadeOut : styles.fadeIn
         }`}
       >
         {displayChildren}

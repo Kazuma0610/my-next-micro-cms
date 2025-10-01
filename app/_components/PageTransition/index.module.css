@@ -1,140 +1,128 @@
-.pageContainer {
+.pageTransition {
   position: relative;
   min-height: 100vh;
 }
 
-.overlay {
+/* ローディングオーバーレイ - より高いz-indexと確実な配置 */
+.loadingOverlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 99999; /* より高いz-index */
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
   pointer-events: none;
 }
 
-.transitionContent {
-  text-align: center;
-  color: white;
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-/* フェードアニメーション */
-.fade {
-  background: linear-gradient(135deg, #667eea 0%, #5b7ce6 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-}
-
-.fade.active {
+.loadingOverlay.active {
   opacity: 1;
-  pointer-events: auto;
+  visibility: visible;
+  pointer-events: all;
 }
 
 /* スライドアニメーション */
 .slide {
-  background: linear-gradient(45deg, #ff6b6b 0%, #ee5a24 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   transform: translateY(-100%);
-  transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.3s ease;
 }
 
 .slide.active {
   transform: translateY(0);
-  pointer-events: auto;
+}
+
+/* フェードアニメーション */
+.fade {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 /* カーテンアニメーション */
 .curtain {
-  background: transparent;
-}
-
-.curtainLeft,
-.curtainRight {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.3s ease;
 }
 
-.curtainLeft {
-  left: 0;
-  transform: translateX(-100%);
+.curtain.active {
+  transform: scaleX(1);
 }
 
-.curtainRight {
-  right: 0;
-  transform: translateX(100%);
+.loadingContent {
+  text-align: center;
+  color: white;
+  z-index: 100000;
+  position: relative;
 }
 
-.curtain.active .curtainLeft {
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
-.curtain.active .curtainRight {
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
-/* 円形拡大アニメーション */
-.circle {
-  width: 100px;
-  height: 100px;
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid white;
   border-radius: 50%;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  transform: scale(0);
-  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
 }
 
-.circle.active .circle {
-  transform: scale(50);
-  pointer-events: auto;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-/* コンテンツの表示制御 */
+.loadingText {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* コンテンツのフェード効果 */
 .content {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-.contentVisible {
+.fadeIn {
   opacity: 1;
   transform: translateY(0);
 }
 
-.contentHidden {
+.fadeOut {
   opacity: 0;
   transform: translateY(20px);
 }
 
-/* ロゴアニメーション */
-.logo {
-  animation: logoFloat 2s ease-in-out infinite;
-}
-
-@keyframes logoFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
-  .transitionContent {
-    font-size: 1.2rem;
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
   }
 
-  .circle {
-    width: 80px;
-    height: 80px;
+  .loadingText {
+    font-size: 1rem;
   }
 }
