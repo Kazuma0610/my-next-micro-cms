@@ -33,54 +33,34 @@ export default function PageTransition({
   const pathname = usePathname();
 
   useEffect(() => {
+    // 初回読み込み時のみアニメーション実行
     if (!hasShownInitialAnimation && pathname === "/") {
+      // フェーズ1: オーバーレイ表示期間 (0 ~ duration*0.6)
       const overlayDisplayTime = duration * 0.6;
 
-      // フェーズ1: ロゴフェードアウト
-      const logoFadeTimer = setTimeout(() => {
-        const logoElement = document.querySelector(`.${styles.loadingLogo}`);
-        if (logoElement) {
-          logoElement.classList.add("fadeOut");
-        }
-      }, duration * 0.5);
-
-      // フェーズ2: オーバーレイフェードアウト（段階的）
-      const overlayFadeTimer = setTimeout(() => {
+      // フェーズ2: オーバーレイフェードアウト開始 (duration*0.6)
+      const fadeOutTimer = setTimeout(() => {
         setOverlayPhase("fadeOut");
-
-        // 段階1: 0.3まで下げる
-        const overlayElement = document.querySelector(
-          `.${styles.overlayFadeOut}`
-        );
-        if (overlayElement) {
-          overlayElement.classList.add("fadeStage1");
-
-          // 段階2: 完全フェードアウト
-          setTimeout(() => {
-            overlayElement.classList.remove("fadeStage1");
-            overlayElement.classList.add("fadeStage2");
-          }, 560); // 0.56秒後
-        }
       }, overlayDisplayTime);
 
-      // フェーズ3: メインコンテンツフェードイン
+      // フェーズ3: メインコンテンツフェードイン開始 (duration*0.7)
       const contentFadeInTimer = setTimeout(() => {
         setContentVisible(true);
       }, duration * 0.7);
 
-      // フェーズ4: 完全終了
+      // フェーズ4: オーバーレイ完全削除 (duration*1.0)
       const completeTimer = setTimeout(() => {
         setOverlayVisible(false);
         hasShownInitialAnimation = true;
       }, duration);
 
       return () => {
-        clearTimeout(logoFadeTimer);
-        clearTimeout(overlayFadeTimer);
+        clearTimeout(fadeOutTimer);
         clearTimeout(contentFadeInTimer);
         clearTimeout(completeTimer);
       };
     } else if (hasShownInitialAnimation || pathname !== "/") {
+      // 初回以降またはTOPページ以外は即座に表示
       setContentVisible(true);
       setOverlayVisible(false);
     }
