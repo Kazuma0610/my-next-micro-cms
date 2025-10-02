@@ -24,12 +24,26 @@
   visibility: visible;
 }
 
-/* visibilityも制御したい場合 */
+/* すぐにフェードアウト開始 */
 .overlayFadeOut {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    visibility 0s linear 0.8s;
+  opacity: 1;
+  visibility: visible;
+  animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;
+}
+
+@keyframes overlayFadeOutAnimation {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
 }
 
 /* フェードアニメーション */
@@ -348,15 +362,29 @@
 /* 超軽量フェードイン - サムネ影響最小化 */
 .content {
   width: 100%;
-  transition: opacity 0.4s linear; /* より軽量なイージング */
 }
 
 .contentHidden {
-  opacity: 0.1; /* 完全に0にしない */
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .contentFadeIn {
-  opacity: 1;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: simpleContentFadeIn 0.8s ease-out forwards;
+}
+
+/* シンプルで滑らかなフェードインアニメーション */
+@keyframes simpleContentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* レスポンシブ対応 */
