@@ -339,7 +339,7 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-*/
+
 
 .loadingText {
   font-size: 1.1rem;
@@ -356,7 +356,7 @@
   50% {
     opacity: 1;
   }
-}
+}*/
 
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
@@ -420,33 +420,6 @@
   /* animation: simpleContentFadeIn 0.8s ease-out forwards; コメントアウト */
 }
 
-/* GPU アクセラレーション最適化 */
-.content,
-.contentFadeIn,
-.contentHidden {
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-}
-
-/* アニメーション完了後のクリーンアップ */
-.contentFadeIn.animation-complete {
-  will-change: auto;
-  animation: none;
-}
-
-/* レスポンシブ対応 */
-@media (max-width: 768px) {
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border-width: 3px;
-  }
-
-  .loadingText {
-    font-size: 1rem;
-  }
-}
-
 /* アニメーション無効設定への配慮 */
 @media (prefers-reduced-motion: reduce) {
   .overlayFadeOut,
@@ -499,44 +472,8 @@
 
 /* モバイル向け - ブラーなしの軽量アニメーション */
 @media (max-width: 768px) {
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border-width: 3px;
-  }
-
-  .loadingText {
-    font-size: 1rem;
-  }
-
   .loadingLogo {
     max-width: 400px;
     height: auto;
-  }
-}
-
-/* アニメーション無効設定への配慮 */
-@media (prefers-reduced-motion: reduce) {
-  .overlayFadeOut,
-  .slide.overlayFadeOut,
-  .curtain.overlayFadeOut {
-    animation: none;
-    transition: opacity 0.3s ease;
-  }
-
-  .contentFadeIn {
-    animation: none;
-    transition: all 0.5s ease;
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-
-  .loadingContent {
-    animation: none;
-  }
-
-  .spinner {
-    animation: spin 1s linear infinite; /* スピナーのみ維持 */
   }
 }
