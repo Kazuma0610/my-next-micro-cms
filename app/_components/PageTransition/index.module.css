@@ -407,29 +407,21 @@
 /* メインコンテンツのフェード効果 - シンプル版 */
 .content {
   width: 100%;
+  --content-opacity: 1;
+  --content-transform: translateY(0);
+  opacity: var(--content-opacity);
+  transform: var(--content-transform);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .contentHidden {
-  opacity: 1; /* 0から1に変更 */
-  transform: translateY(0); /* 20pxから0に変更 */
+  --content-opacity: 0;
+  --content-transform: translateY(20px);
 }
 
 .contentFadeIn {
-  opacity: 1; /* 0から1に変更 */
-  transform: translateY(0); /* 20pxから0に変更 */
-  /* animation: simpleContentFadeIn 0.8s ease-out forwards; コメントアウト */
-}
-
-/* シンプルで滑らかなフェードインアニメーション */
-@keyframes simpleContentFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  --content-opacity: 1;
+  --content-transform: translateY(0);
 }
 
 /* GPU アクセラレーション最適化 */
@@ -458,20 +450,23 @@
     font-size: 1rem;
   }
 
-  .contentHidden,
-  .contentFadeIn {
-    transform: translateY(15px);
+  .content {
+    --content-opacity: 1;
+    --content-transform: translateY(0);
+    opacity: var(--content-opacity);
+    transform: var(--content-transform);
+    transition: opacity 0.4s ease-out;
+    /* transformのtransitionを除外してさらに軽量化 */
   }
 
-  @keyframes simpleContentFadeIn {
-    0% {
-      opacity: 0;
-      transform: translateY(15px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .contentHidden {
+    --content-opacity: 0;
+    --content-transform: translateY(0); /* モバイルではtransformなし */
+  }
+
+  .contentFadeIn {
+    --content-opacity: 1;
+    --content-transform: translateY(0);
   }
 }
 
@@ -547,39 +542,6 @@
   .loadingLogo {
     max-width: 400px;
     height: auto;
-  }
-
-  /* モバイル用のより軽量なコンテンツアニメーション */
-  .contentHidden {
-    opacity: 0;
-    transform: translateY(15px); /* より小さな移動 */
-  }
-
-  .contentFadeIn {
-    opacity: 0;
-    transform: translateY(15px);
-    /*animation: mobileContentFadeIn 0.5s ease-out forwards; /* より短時間 */
-  }
-
-  @keyframes mobileContentFadeIn {
-    0% {
-      opacity: 0;
-      transform: translateY(15px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  .contentFadeIn img {
-    will-change: auto !important;
-    transform: none !important;
-    filter: none !important;
-    transition: none !important;
-  }
-
-  .contentFadeIn.animation-complete img {
-    transition: unset !important;
   }
 }
 
