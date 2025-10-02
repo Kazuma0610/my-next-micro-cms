@@ -360,37 +360,15 @@
 
 .content {
   width: 100%;
-  opacity: 1;
-  transform: none;
-  transition: none;
-  animation: none;
+  transition: opacity 0.6s ease-out;
 }
 
 .contentHidden {
-  opacity: 1;
-  transform: none;
+  opacity: 0;
 }
 
 .contentFadeIn {
   opacity: 1;
-  transform: none;
-}
-
-/* 強制的に無効化 */
-.pageTransition * {
-  opacity: 1 !important;
-  transform: none !important;
-  transition: none !important;
-  animation: none !important;
-}
-
-/* ただしローディングオーバーレイは除外 */
-.loadingOverlay,
-.loadingOverlay * {
-  opacity: unset !important;
-  transform: unset !important;
-  transition: unset !important;
-  animation: unset !important;
 }
 
 /* レスポンシブ対応 */
