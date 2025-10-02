@@ -387,6 +387,27 @@
   }
 }
 
+/* NewsListの画像保護 - 推奨版 */
+.pageTransition img,
+.pageTransition [role="img"],
+.pageTransition picture img {
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
+  will-change: auto !important;
+  backface-visibility: visible !important;
+}
+
+/* アニメーション中の特別保護 */
+.overlayFadeOut ~ * img,
+.contentFadeIn img {
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .loadingLogo {
@@ -472,5 +493,8 @@
   .loadingLogo {
     max-width: 400px;
     height: auto;
+  }
+  .pageTransition img {
+    transform: translateZ(0) !important;
   }
 }
