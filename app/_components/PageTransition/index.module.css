@@ -1,47 +1,3 @@
-/* 緊急修正: 全てのtransformを強制無効化 */
-.loadingOverlay,
-.loadingOverlay * {
-  transform: none !important;
-}
-
-/* アニメーション中もtransformを無効化 */
-@keyframes logoSwingAndFade {
-  0%,
-  10%,
-  20%,
-  30%,
-  40%,
-  50%,
-  60%,
-  80%,
-  90%,
-  100% {
-    transform: none !important;
-  }
-}
-
-@keyframes slideOut {
-  0%,
-  50%,
-  100% {
-    transform: none !important;
-  }
-}
-
-@keyframes slideContentIn {
-  from,
-  to {
-    transform: none !important;
-  }
-}
-
-@keyframes curtainContentIn {
-  from,
-  to {
-    transform: none !important;
-  }
-}
-
 .pageTransition {
   position: relative;
   min-height: 100vh;
@@ -68,26 +24,12 @@
   visibility: visible;
 }
 
+/* visibilityも制御したい場合 */
 .overlayFadeOut {
-  opacity: 1;
-  visibility: visible;
-  animation: isolatedFadeOut 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-@keyframes isolatedFadeOut {
-  0% {
-    opacity: 1;
-  }
-  70% {
-    opacity: 0.3;
-  }
-  99% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-    visibility: hidden;
-  }
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    visibility 0s linear 0.8s;
 }
 
 /* フェードアニメーション */
