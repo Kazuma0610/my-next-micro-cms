@@ -449,25 +449,6 @@
   .loadingText {
     font-size: 1rem;
   }
-
-  .content {
-    --content-opacity: 1;
-    --content-transform: translateY(0);
-    opacity: var(--content-opacity);
-    transform: var(--content-transform);
-    transition: opacity 0.4s ease-out;
-    /* transformのtransitionを除外してさらに軽量化 */
-  }
-
-  .contentHidden {
-    --content-opacity: 0;
-    --content-transform: translateY(0); /* モバイルではtransformなし */
-  }
-
-  .contentFadeIn {
-    --content-opacity: 1;
-    --content-transform: translateY(0);
-  }
 }
 
 /* アニメーション無効設定への配慮 */
@@ -477,13 +458,6 @@
   .curtain.overlayFadeOut {
     animation: none;
     transition: opacity 0.3s ease;
-  }
-
-  .contentFadeIn {
-    animation: none;
-    transition: all 0.3s ease;
-    opacity: 1;
-    transform: translateY(0);
   }
 
   .loadingContent {
