@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import styles from "./index.module.css";
+import Image from "next/image";
 
 type Props = {
   children: React.ReactNode;
@@ -86,8 +87,15 @@ export default function PageTransition({
           `}
         >
           <div className={styles.loadingContent}>
-            <div className={styles.spinner}></div>
-            <p className={styles.loadingText}>読み込み中...</p>
+            {/* <div className={styles.spinner}></div> */}
+            {/* <p className={styles.loadingText}>読み込み中...</p> */}
+            <Image
+              src="/demo_logo.png"
+              alt="Loading..."
+              className={`${styles.loadingLogo} ${styles.dynamic}`}
+              width={400}
+              height={400}
+            />
           </div>
         </div>
       )}
