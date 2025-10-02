@@ -529,6 +529,17 @@
 
 /* モバイル向け - ブラーなしの軽量アニメーション */
 @media (max-width: 768px) {
+  .content {
+    transition: opacity 0.4s ease-out;
+  }
+
+  .contentHidden {
+    opacity: 0;
+  }
+
+  .contentFadeIn {
+    opacity: 1;
+  }
   .spinner {
     width: 40px;
     height: 40px;
