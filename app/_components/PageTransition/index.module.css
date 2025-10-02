@@ -1,3 +1,47 @@
+/* 緊急修正: 全てのtransformを強制無効化 */
+.loadingOverlay,
+.loadingOverlay * {
+  transform: none !important;
+}
+
+/* アニメーション中もtransformを無効化 */
+@keyframes logoSwingAndFade {
+  0%,
+  10%,
+  20%,
+  30%,
+  40%,
+  50%,
+  60%,
+  80%,
+  90%,
+  100% {
+    transform: none !important;
+  }
+}
+
+@keyframes slideOut {
+  0%,
+  50%,
+  100% {
+    transform: none !important;
+  }
+}
+
+@keyframes slideContentIn {
+  from,
+  to {
+    transform: none !important;
+  }
+}
+
+@keyframes curtainContentIn {
+  from,
+  to {
+    transform: none !important;
+  }
+}
+
 .pageTransition {
   position: relative;
   min-height: 100vh;
