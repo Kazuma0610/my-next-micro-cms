@@ -27,7 +27,12 @@
 .overlayFadeOut {
   opacity: 1;
   visibility: visible;
-  /*animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;*/
+  transition: opacity 0.8s ease-in-out, visibility 0s linear 0.8s;
+}
+
+.overlayFadeOut.fade-start {
+  opacity: 0;
+  visibility: hidden;
 }
 
 @keyframes overlayFadeOutAnimation {
