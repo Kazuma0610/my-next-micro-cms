@@ -3,7 +3,7 @@
   min-height: 100vh;
 }
 
-/* ローディングオーバーレイ - より高いz-indexと確実な配置 */
+/* ローディングオーバーレイ */
 .loadingOverlay {
   position: fixed;
   top: 0;
@@ -15,28 +15,34 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 99999; /* より高いz-index */
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease-in-out;
-  pointer-events: none;
+  z-index: 99999;
 }
 
-.loadingOverlay.active {
+/* オーバーレイの状態管理 */
+.overlayVisible {
   opacity: 1;
   visibility: visible;
-  pointer-events: all;
 }
 
-/* スライドアニメーション */
-.slide {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  transform: translateY(-100%);
-  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.3s ease;
+.overlayFadeOut {
+  opacity: 1;
+  visibility: visible;
+  animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;
 }
 
-.slide.active {
-  transform: translateY(0);
+@keyframes overlayFadeOutAnimation {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
 }
 
 /* フェードアニメーション */
@@ -44,23 +50,99 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
+/* スライドアニメーション */
+.slide {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+}
+
+.slide.overlayVisible {
+  transform: translateY(0);
+  animation: slideIn 0.5s ease-out;
+}
+
+.slide.overlayFadeOut {
+  animation: slideOut 0.8s ease-in-out forwards,
+    overlayFadeOutAnimation 0.8s ease-in-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
 /* カーテンアニメーション */
 .curtain {
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.3s ease;
 }
 
-.curtain.active {
+.curtain.overlayVisible {
   transform: scaleX(1);
+  animation: curtainOpen 0.5s ease-out;
 }
 
+.curtain.overlayFadeOut {
+  animation: curtainClose 0.8s ease-in-out forwards,
+    overlayFadeOutAnimation 0.8s ease-in-out forwards;
+}
+
+@keyframes curtainOpen {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+@keyframes curtainClose {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(1.05);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+/* ローディングコンテンツ */
 .loadingContent {
   text-align: center;
   color: white;
   z-index: 100000;
   position: relative;
+  /*animation: loadingFloat 2s ease-in-out infinite;*/
+}
+
+@keyframes loadingFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .spinner {
@@ -86,10 +168,10 @@
   font-size: 1.1rem;
   font-weight: 500;
   margin: 0;
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: textPulse 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
+@keyframes textPulse {
   0%,
   100% {
     opacity: 0.7;
@@ -99,19 +181,46 @@
   }
 }
 
-/* コンテンツのフェード効果 */
+/* メインコンテンツのフェード効果 - シンプル版 */
 .content {
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  width: 100%;
 }
 
-.fadeIn {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.fadeOut {
+.contentHidden {
   opacity: 0;
   transform: translateY(20px);
+}
+
+.contentFadeIn {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: simpleContentFadeIn 0.8s ease-out forwards;
+}
+
+/* シンプルで滑らかなフェードインアニメーション */
+@keyframes simpleContentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* GPU アクセラレーション最適化 */
+.content,
+.contentFadeIn,
+.contentHidden {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* アニメーション完了後のクリーンアップ */
+.contentFadeIn.animation-complete {
+  will-change: auto;
+  animation: none;
 }
 
 /* レスポンシブ対応 */
@@ -124,5 +233,154 @@
 
   .loadingText {
     font-size: 1rem;
+  }
+
+  .contentHidden,
+  .contentFadeIn {
+    transform: translateY(15px);
+  }
+
+  @keyframes simpleContentFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* アニメーション無効設定への配慮 */
+@media (prefers-reduced-motion: reduce) {
+  .overlayFadeOut,
+  .slide.overlayFadeOut,
+  .curtain.overlayFadeOut {
+    animation: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .contentFadeIn {
+    animation: none;
+    transition: all 0.3s ease;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .loadingContent {
+    animation: none;
+  }
+
+  .spinner {
+    animation: spin 1s linear infinite; /* スピナーのみ維持 */
+  }
+}
+
+/* 特別なスライドアニメーション効果 */
+.slide.overlayVisible .loadingContent {
+  animation: slideContentIn 0.5s ease-out 0.3s both;
+}
+
+@keyframes slideContentIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 特別なカーテンアニメーション効果 */
+.curtain.overlayVisible .loadingContent {
+  animation: curtainContentIn 0.5s ease-out 0.3s both;
+}
+
+@keyframes curtainContentIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border-width: 3px;
+  }
+
+  .loadingText {
+    font-size: 1rem;
+  }
+
+  .contentHidden,
+  .contentFadeIn {
+    transform: translateY(20px) scale(0.98);
+    filter: blur(5px);
+  }
+
+  @keyframes mainContentFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      filter: blur(5px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0px);
+    }
+  }
+
+  @keyframes mainContentFadeInSmooth {
+    0% {
+      opacity: 0;
+      transform: translateY(25px) scale(0.95);
+      filter: blur(6px) brightness(0.9);
+    }
+    50% {
+      opacity: 0.6;
+      transform: translateY(12px) scale(0.98);
+      filter: blur(2px) brightness(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0px) brightness(1);
+    }
+  }
+}
+
+/* アニメーション無効設定への配慮 */
+@media (prefers-reduced-motion: reduce) {
+  .overlayFadeOut,
+  .slide.overlayFadeOut,
+  .curtain.overlayFadeOut {
+    animation: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .contentFadeIn {
+    animation: none;
+    transition: all 0.5s ease;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .loadingContent {
+    animation: none;
+  }
+
+  .spinner {
+    animation: spin 1s linear infinite; /* スピナーのみ維持 */
   }
 }

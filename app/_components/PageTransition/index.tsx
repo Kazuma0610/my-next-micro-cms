@@ -8,73 +8,98 @@ type Props = {
   children: React.ReactNode;
   animationType?: "fade" | "slide" | "curtain";
   duration?: number;
-  onlyFirstLoad?: boolean; // 初回読み込み時のみアニメーション
+  onlyFirstLoad?: boolean;
 };
+
+// グローバルな初回読み込みフラグ
+let hasShownInitialAnimation = false;
 
 export default function PageTransition({
   children,
   animationType = "fade",
-  duration = 500,
-  onlyFirstLoad = false,
+  duration = 1500,
+  onlyFirstLoad = true,
 }: Props) {
-  const [isLoading, setIsLoading] = useState(true); // 初回は true
-  const [displayChildren, setDisplayChildren] = useState(children);
-  const [hasLoaded, setHasLoaded] = useState(false); // 初回読み込み完了フラグ
+  const [overlayVisible, setOverlayVisible] = useState(
+    !hasShownInitialAnimation
+  );
+  const [overlayPhase, setOverlayPhase] = useState<"show" | "fadeOut">(
+    !hasShownInitialAnimation ? "show" : "fadeOut"
+  );
+  const [contentVisible, setContentVisible] = useState(
+    hasShownInitialAnimation
+  );
   const pathname = usePathname();
 
   useEffect(() => {
-    // 初回読み込み時のアニメーション
-    if (!hasLoaded) {
-      const timer = setTimeout(() => {
-        setDisplayChildren(children);
-        setIsLoading(false);
-        setHasLoaded(true); // 初回読み込み完了をマーク
+    // 初回読み込み時のみアニメーション実行
+    if (!hasShownInitialAnimation && pathname === "/") {
+      // フェーズ1: オーバーレイ表示期間 (0 ~ duration*0.6)
+      const overlayDisplayTime = duration * 0.6;
+
+      // フェーズ2: オーバーレイフェードアウト開始 (duration*0.6)
+      const fadeOutTimer = setTimeout(() => {
+        setOverlayPhase("fadeOut");
+      }, overlayDisplayTime);
+
+      // フェーズ3: メインコンテンツフェードイン開始 (duration*0.7)
+      const contentFadeInTimer = setTimeout(() => {
+        setContentVisible(true);
+      }, duration * 0.7);
+
+      // フェーズ4: オーバーレイ完全削除 (duration*1.0)
+      const completeTimer = setTimeout(() => {
+        setOverlayVisible(false);
+        hasShownInitialAnimation = true;
       }, duration);
 
-      return () => clearTimeout(timer);
-    } else if (onlyFirstLoad) {
-      // 初回読み込み後はアニメーションなしで即座に更新
-      setDisplayChildren(children);
-      return;
-    } else {
-      // 通常のページ遷移アニメーション
-      setIsLoading(true);
-
-      const timer = setTimeout(() => {
-        setDisplayChildren(children);
-        setIsLoading(false);
-      }, duration);
-
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(fadeOutTimer);
+        clearTimeout(contentFadeInTimer);
+        clearTimeout(completeTimer);
+      };
+    } else if (hasShownInitialAnimation || pathname !== "/") {
+      // 初回以降またはTOPページ以外は即座に表示
+      setContentVisible(true);
+      setOverlayVisible(false);
     }
-  }, [pathname, children, duration, hasLoaded, onlyFirstLoad]);
+  }, [pathname, duration]);
 
-  // 初回読み込み後でonlyFirstLoadが有効な場合、アニメーションなしで表示
-  if (hasLoaded && onlyFirstLoad) {
-    return <div className={styles.content}>{children}</div>;
+  // 初回読み込み完了後は通常表示
+  if (hasShownInitialAnimation && onlyFirstLoad) {
+    return <>{children}</>;
   }
 
   return (
     <div className={styles.pageTransition}>
       {/* ローディングオーバーレイ */}
-      <div
-        className={`${styles.loadingOverlay} ${styles[animationType]} ${
-          isLoading ? styles.active : ""
-        }`}
-      >
-        <div className={styles.loadingContent}>
-          <div className={styles.spinner}></div>
-          <p className={styles.loadingText}>読み込み中...</p>
+      {overlayVisible && (
+        <div
+          className={`
+            ${styles.loadingOverlay} 
+            ${styles[animationType]}
+            ${
+              overlayPhase === "fadeOut"
+                ? styles.overlayFadeOut
+                : styles.overlayVisible
+            }
+          `}
+        >
+          <div className={styles.loadingContent}>
+            <div className={styles.spinner}></div>
+            <p className={styles.loadingText}>読み込み中...</p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* メインコンテンツ */}
       <div
-        className={`${styles.content} ${
-          isLoading ? styles.fadeOut : styles.fadeIn
-        }`}
+        className={`
+          ${styles.content} 
+          ${contentVisible ? styles.contentFadeIn : styles.contentHidden}
+        `}
       >
-        {displayChildren}
+        {children}
       </div>
     </div>
   );
