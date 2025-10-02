@@ -18,6 +18,12 @@
   border-radius: var(--border-radius);
 }
 
+.image:hover {
+  /* ホバー効果が自動発火している可能性 */
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
 .title {
   font-size: var(--font-size-news-title);
   font-weight: bold;
@@ -31,11 +37,6 @@
 }
 
 @media (max-width: 640px) {
-  .news-item:hover img {
-    /* ホバー効果が自動発火している可能性 */
-    transform: scale(1.05);
-    filter: brightness(1.1);
-  }
   .link {
     display: block;
     padding: 16px 0;
