@@ -358,6 +358,41 @@
   }
 }*/
 
+.content {
+  width: 100%;
+  opacity: 1;
+  transform: none;
+  transition: none;
+  animation: none;
+}
+
+.contentHidden {
+  opacity: 1;
+  transform: none;
+}
+
+.contentFadeIn {
+  opacity: 1;
+  transform: none;
+}
+
+/* 強制的に無効化 */
+.pageTransition * {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+/* ただしローディングオーバーレイは除外 */
+.loadingOverlay,
+.loadingOverlay * {
+  opacity: unset !important;
+  transform: unset !important;
+  transition: unset !important;
+  animation: unset !important;
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .loadingLogo {
@@ -405,38 +440,6 @@
 }
 
 /* メインコンテンツのフェード効果 - シンプル版 */
-.content {
-  width: 100%;
-}
-
-.contentHidden {
-  opacity: 1; /* 0から1に変更 */
-  transform: translateY(0); /* 20pxから0に変更 */
-}
-
-.contentFadeIn {
-  opacity: 1; /* 0から1に変更 */
-  transform: translateY(0); /* 20pxから0に変更 */
-  /* animation: simpleContentFadeIn 0.8s ease-out forwards; コメントアウト */
-}
-
-/* アニメーション無効設定への配慮 */
-@media (prefers-reduced-motion: reduce) {
-  .overlayFadeOut,
-  .slide.overlayFadeOut,
-  .curtain.overlayFadeOut {
-    animation: none;
-    transition: opacity 0.3s ease;
-  }
-
-  .loadingContent {
-    animation: none;
-  }
-
-  .spinner {
-    animation: spin 1s linear infinite; /* スピナーのみ維持 */
-  }
-}
 
 /* 特別なスライドアニメーション効果 */
 .slide.overlayVisible .loadingContent {
