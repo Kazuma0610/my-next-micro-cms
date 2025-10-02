@@ -16,36 +16,6 @@
   width: 200px;
   height: auto;
   border-radius: var(--border-radius);
-  /* デスクトップのみでtransition設定 */
-  transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-/* デスクトップのみでhover効果を適用 */
-@media (hover: hover) and (pointer: fine) {
-  .image:hover {
-    transform: scale(1.05);
-    filter: brightness(1.1);
-  }
-}
-
-/* スマホ・タブレットではhover効果を完全無効化 */
-@media (max-width: 768px), (hover: none), (pointer: coarse) {
-  .image {
-    transition: none !important;
-    transform: none !important;
-    filter: none !important;
-  }
-
-  .image:hover {
-    transform: none !important;
-    filter: none !important;
-  }
-
-  /* タッチ時のハイライトも無効化 */
-  .link {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-  }
 }
 
 .title {
@@ -71,10 +41,6 @@
     width: 100%;
     margin: 0 auto;
     margin-bottom: 30px;
-    /* 念のため再度無効化 */
-    transition: none !important;
-    transform: none !important;
-    filter: none !important;
   }
 
   .title {

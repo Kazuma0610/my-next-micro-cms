@@ -410,14 +410,14 @@
 }
 
 .contentHidden {
-  opacity: 0;
-  transform: translateY(20px);
+  opacity: 1; /* 0から1に変更 */
+  transform: translateY(0); /* 20pxから0に変更 */
 }
 
 .contentFadeIn {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: simpleContentFadeIn 0.8s ease-out forwards;
+  opacity: 1; /* 0から1に変更 */
+  transform: translateY(0); /* 20pxから0に変更 */
+  /* animation: simpleContentFadeIn 0.8s ease-out forwards; コメントアウト */
 }
 
 /* シンプルで滑らかなフェードインアニメーション */
@@ -534,12 +534,6 @@
 
 /* モバイル向け - ブラーなしの軽量アニメーション */
 @media (max-width: 768px) {
-  .content,
-  .contentFadeIn,
-  .contentHidden {
-    will-change: opacity; /* transformを除外してより軽量に */
-  }
-
   .spinner {
     width: 40px;
     height: 40px;
@@ -564,7 +558,7 @@
   .contentFadeIn {
     opacity: 0;
     transform: translateY(15px);
-    animation: mobileContentFadeIn 0.5s ease-out forwards; /* より短時間 */
+    /*animation: mobileContentFadeIn 0.5s ease-out forwards; /* より短時間 */
   }
 
   @keyframes mobileContentFadeIn {
