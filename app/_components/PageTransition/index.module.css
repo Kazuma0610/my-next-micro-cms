@@ -28,7 +28,7 @@
 .overlayFadeOut {
   opacity: 1;
   visibility: visible;
-  /*animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;*/
+  animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;
   /* アニメーションのスコープを自身のみに限定 */
   contain: layout style paint;
   will-change: opacity;
@@ -472,5 +472,42 @@
   .loadingLogo {
     max-width: 400px;
     height: auto;
+  }
+  .overlayFadeOut {
+    opacity: 1;
+    visibility: visible;
+    /* animationを使わない */
+    transition: opacity 0.8s ease-out, visibility 0s linear 0.8s;
+  }
+
+  /* スマホではanimationを完全無効化 */
+  .overlayFadeOut.mobile-fade {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* ロゴアニメーションもモバイルでは簡素化 */
+  .loadingLogo {
+    /* animation: logoSwingAndFade 2.5s ease-in-out forwards; */
+    opacity: 1;
+    transition: opacity 2s ease-out;
+  }
+
+  .loadingLogo.mobile-fade-out {
+    opacity: 0;
+  }
+  /* transformを使う全アニメーションを無効化 */
+  .slide.overlayVisible,
+  .slide.overlayFadeOut,
+  .curtain.overlayVisible,
+  .curtain.overlayFadeOut {
+    transform: none !important;
+    animation: none !important;
+  }
+
+  .contentFadeIn {
+    transform: none !important;
+    animation: none !important;
+    transition: opacity 0.6s ease-out;
   }
 }
