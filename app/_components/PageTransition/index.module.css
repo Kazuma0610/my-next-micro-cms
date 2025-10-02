@@ -28,7 +28,7 @@
 .overlayFadeOut {
   opacity: 1;
   visibility: visible;
-  animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;
+  /*animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;*/
   /* アニメーションのスコープを自身のみに限定 */
   contain: layout style paint;
   will-change: opacity;

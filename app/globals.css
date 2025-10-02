@@ -84,36 +84,3 @@ ol,
 ul {
   list-style: none;
 }
-
-/* NewsListの画像保護 */
-img {
-  transition: none !important;
-  transform: none !important;
-  filter: none !important;
-  animation: none !important;
-  will-change: auto !important;
-}
-
-/* より具体的な保護 */
-[class*="news"] img,
-[class*="News"] img,
-[class*="article"] img,
-[class*="blog"] img {
-  transition: none !important;
-  transform: none !important;
-  filter: none !important;
-  animation: none !important;
-  will-change: auto !important;
-  backface-visibility: visible !important;
-}
-
-/* モバイル専用保護 */
-@media (max-width: 768px) {
-  img {
-    transition: none !important;
-    transform: none !important;
-    filter: none !important;
-    animation: none !important;
-    will-change: auto !important;
-  }
-}
