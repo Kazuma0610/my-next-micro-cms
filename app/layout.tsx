@@ -34,7 +34,7 @@ export default function RootLayout({
         <Header />
         <main>
           <PageTransition
-            animationType="curtain"
+            animationType="fade"
             duration={3000}
             onlyFirstLoad={true}
           >

@@ -27,7 +27,7 @@
 .overlayFadeOut {
   opacity: 1;
   visibility: visible;
-  animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;
+  /*animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;*/
 }
 
 @keyframes overlayFadeOutAnimation {
@@ -358,32 +358,18 @@
   }
 }*/
 
-/* NewsListの画像を保護 */
-.contentFadeIn img {
-  transition: none !important;
-  transform: none !important;
-  filter: none !important;
-  will-change: auto !important;
+/* 超軽量フェードイン - サムネ影響最小化 */
+.content {
+  width: 100%;
+  transition: opacity 0.4s linear; /* より軽量なイージング */
 }
 
-/* NewsListコンポーネントを特別に保護 */
-.contentFadeIn [class*="NewsList"] img,
-.contentFadeIn [class*="newsList"] img,
-.contentFadeIn [class*="news-list"] img {
-  transition: none !important;
-  transform: none !important;
-  filter: none !important;
-  animation: none !important;
-  will-change: auto !important;
+.contentHidden {
+  opacity: 0.1; /* 完全に0にしない */
 }
 
-/* より確実な保護 - data属性でも */
-.contentFadeIn [data-component="news-list"] img,
-.contentFadeIn [data-testid*="news"] img {
-  transition: none !important;
-  transform: none !important;
-  filter: none !important;
-  animation: none !important;
+.contentFadeIn {
+  opacity: 1;
 }
 
 /* レスポンシブ対応 */
@@ -471,16 +457,5 @@
   .loadingLogo {
     max-width: 400px;
     height: auto;
-  }
-  .contentFadeIn img {
-    backface-visibility: visible !important;
-    transform: translateZ(0) !important; /* GPU最適化を解除 */
-  }
-  /* フェードイン中の画像は完全に静的にする */
-  .content img {
-    transition: none !important;
-    transform: none !important;
-    filter: none !important;
-    will-change: auto !important;
   }
 }
