@@ -532,7 +532,7 @@
   }
 }
 
-/* レスポンシブ対応 */
+/* モバイル向け - ブラーなしの軽量アニメーション */
 @media (max-width: 768px) {
   .spinner {
     width: 40px;
@@ -544,40 +544,31 @@
     font-size: 1rem;
   }
 
-  .contentHidden,
+  .loadingLogo {
+    max-width: 400px;
+    height: auto;
+  }
+
+  /* モバイル用のより軽量なコンテンツアニメーション */
+  .contentHidden {
+    opacity: 0;
+    transform: translateY(15px); /* より小さな移動 */
+  }
+
   .contentFadeIn {
-    transform: translateY(20px) scale(0.98);
-    filter: blur(5px);
+    opacity: 0;
+    transform: translateY(15px);
+    animation: mobileContentFadeIn 0.5s ease-out forwards; /* より短時間 */
   }
 
-  @keyframes mainContentFadeIn {
+  @keyframes mobileContentFadeIn {
     0% {
       opacity: 0;
-      transform: translateY(20px) scale(0.98);
-      filter: blur(5px);
+      transform: translateY(15px);
     }
     100% {
       opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0px);
-    }
-  }
-
-  @keyframes mainContentFadeInSmooth {
-    0% {
-      opacity: 0;
-      transform: translateY(25px) scale(0.95);
-      filter: blur(6px) brightness(0.9);
-    }
-    50% {
-      opacity: 0.6;
-      transform: translateY(12px) scale(0.98);
-      filter: blur(2px) brightness(0.95);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      filter: blur(0px) brightness(1);
+      transform: translateY(0);
     }
   }
 }
