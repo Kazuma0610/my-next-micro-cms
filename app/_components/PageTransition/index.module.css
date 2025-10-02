@@ -530,7 +530,7 @@
 /* モバイル向け - ブラーなしの軽量アニメーション */
 @media (max-width: 768px) {
   .content {
-    /* transition: opacity 0.4s ease-out; */
+    transition: unset; /* トランジションを無効化 */
   }
 
   .contentHidden {
