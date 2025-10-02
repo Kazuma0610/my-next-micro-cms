@@ -41,14 +41,6 @@ export default function PageTransition({
       // フェーズ2: オーバーレイフェードアウト開始 (duration*0.6)
       const fadeOutTimer = setTimeout(() => {
         setOverlayPhase("fadeOut");
-
-        // transition開始のトリガー
-        setTimeout(() => {
-          const overlay = document.querySelector(`.${styles.overlayFadeOut}`);
-          if (overlay) {
-            overlay.classList.add("fade-start");
-          }
-        }, 50); // 小さな遅延でスムーズに
       }, overlayDisplayTime);
 
       // フェーズ3: メインコンテンツフェードイン開始 (duration*0.7)

@@ -27,26 +27,22 @@
 .overlayFadeOut {
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.8s ease-in-out, visibility 0s linear 0.8s;
+  animation: beautifulFadeOut 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-.overlayFadeOut.fade-start {
-  opacity: 0;
-  visibility: hidden;
-}
-
-@keyframes overlayFadeOutAnimation {
+@keyframes beautifulFadeOut {
   0% {
     opacity: 1;
     transform: scale(1);
   }
   50% {
     opacity: 0.5;
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
   100% {
     opacity: 0;
-    transform: scale(0.95);
+    visibility: hidden;
+    transform: scale(0.94);
   }
 }
 
