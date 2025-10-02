@@ -16,6 +16,7 @@
   align-items: center;
   justify-content: center;
   z-index: 99999;
+  transition: opacity 0.8s ease-out, visibility 0s linear 0.8s;
 }
 
 /* オーバーレイの状態管理 */
@@ -26,24 +27,8 @@
 
 /* すぐにフェードアウト開始 */
 .overlayFadeOut {
-  opacity: 1;
-  visibility: visible;
-  animation: overlayFadeOutAnimation 0.8s ease-in-out forwards;
-}
-
-@keyframes overlayFadeOutAnimation {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.98);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.95);
-  }
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* フェードアニメーション */
@@ -54,77 +39,33 @@
 /* スライドアニメーション */
 .slide {
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  transition: opacity 0.8s ease-out, visibility 0s linear 0.8s;
 }
 
 .slide.overlayVisible {
-  transform: translateY(0);
-  animation: slideIn 0.5s ease-out;
+  opacity: 1;
+  visibility: visible;
 }
 
 .slide.overlayFadeOut {
-  animation: slideOut 0.8s ease-in-out forwards,
-    overlayFadeOutAnimation 0.8s ease-in-out forwards;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideOut {
-  0% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-  100% {
-    transform: translateY(-100%);
-  }
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* カーテンアニメーション */
 .curtain {
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  transition: opacity 0.8s ease-out, visibility 0s linear 0.8s;
 }
 
 .curtain.overlayVisible {
-  transform: scaleX(1);
-  animation: curtainOpen 0.5s ease-out;
+  opacity: 1;
+  visibility: visible;
 }
 
 .curtain.overlayFadeOut {
-  animation: curtainClose 0.8s ease-in-out forwards,
-    overlayFadeOutAnimation 0.8s ease-in-out forwards;
-}
-
-@keyframes curtainOpen {
-  from {
-    transform: scaleX(0);
-    opacity: 0;
-  }
-  to {
-    transform: scaleX(1);
-    opacity: 1;
-  }
-}
-
-@keyframes curtainClose {
-  0% {
-    transform: scaleX(1);
-  }
-  50% {
-    transform: scaleX(1.05);
-  }
-  100% {
-    transform: scaleX(0);
-  }
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* ローディングコンテンツ */
@@ -133,19 +74,10 @@
   color: white;
   z-index: 100000;
   position: relative;
-  /*animation: loadingFloat 2s ease-in-out infinite;*/
+  transition: opacity 0.5s ease-out;
 }
 
-@keyframes loadingFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
+/* スピナー - アニメーション完全削除 */
 .spinner {
   width: 50px;
   height: 50px;
@@ -153,259 +85,59 @@
   border-top: 4px solid white;
   border-radius: 50%;
   margin: 0 auto 1rem;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 .loadingText {
   font-size: 1.1rem;
   font-weight: 500;
   margin: 0;
-  animation: textPulse 1.5s ease-in-out infinite;
+  transition: opacity 0.5s ease-in-out;
 }
 
-@keyframes textPulse {
-  0%,
-  100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-/* ロゴのアニメーション */
+/* ロゴ - animationなし */
 .loadingLogo {
   display: block;
   margin: 0 auto;
-  animation: logoSwingAndFade 2.5s ease-in-out forwards;
+  opacity: 1;
+  transition: opacity 2s ease-in-out;
 }
 
-@keyframes logoSwingAndFade {
-  /* フェーズ1: 左右スイング (0-60%) */
-  0% {
-    opacity: 0;
-    transform: translateX(-30px) scale(0.8);
-  }
-  10% {
-    opacity: 1;
-    transform: translateX(-20px) scale(0.9);
-  }
-  20% {
-    transform: translateX(15px) scale(0.95);
-  }
-  30% {
-    transform: translateX(-10px) scale(1);
-  }
-  40% {
-    transform: translateX(5px) scale(1.05);
-  }
-  50% {
-    transform: translateX(-2px) scale(1);
-  }
-  60% {
-    transform: translateX(0) scale(1);
-  }
-  /* フェーズ2: 安定表示 (60-80%) */
-  80% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  /* フェーズ3: フェードアウト (80-100%) */
-  90% {
-    opacity: 0.5;
-    transform: translateX(0) scale(0.95);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(0) scale(0.9);
-  }
+/* ロゴフェードアウト用クラス */
+.loadingLogo.fadeOut {
+  opacity: 0;
 }
 
-/* より動的なバリエーション */
+/* 動的・バウンス効果削除（クラスは残すがアニメーションなし） */
 .loadingLogo.dynamic {
-  animation: logoDynamicSwingAndFade 3s ease-in-out forwards;
+  opacity: 1;
+  transition: opacity 2.5s ease-in-out;
 }
 
-@keyframes logoDynamicSwingAndFade {
-  0% {
-    opacity: 0;
-    transform: translateX(-50px) rotate(-10deg) scale(0.7);
-  }
-  8% {
-    opacity: 0.8;
-    transform: translateX(-30px) rotate(-5deg) scale(0.85);
-  }
-  16% {
-    transform: translateX(25px) rotate(8deg) scale(0.95);
-  }
-  24% {
-    transform: translateX(-20px) rotate(-6deg) scale(1);
-  }
-  32% {
-    transform: translateX(15px) rotate(4deg) scale(1.02);
-  }
-  40% {
-    transform: translateX(-10px) rotate(-3deg) scale(1);
-  }
-  48% {
-    transform: translateX(5px) rotate(2deg) scale(1);
-  }
-  56% {
-    transform: translateX(-2px) rotate(-1deg) scale(1);
-  }
-  64% {
-    transform: translateX(0) rotate(0deg) scale(1);
-  }
-  /* 安定期間 */
-  75% {
-    opacity: 1;
-    transform: translateX(0) rotate(0deg) scale(1);
-  }
-  /* フェードアウト */
-  85% {
-    opacity: 0.7;
-    transform: translateX(0) rotate(0deg) scale(0.98);
-  }
-  95% {
-    opacity: 0.2;
-    transform: translateX(0) rotate(0deg) scale(0.95);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(0) rotate(0deg) scale(0.9);
-  }
+.loadingLogo.dynamic.fadeOut {
+  opacity: 0;
 }
 
-/* 跳ねるような効果 */
 .loadingLogo.bounce {
-  animation: logoBounceAndFade 2.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)
-    forwards;
+  opacity: 1;
+  transition: opacity 2.8s ease-in-out;
 }
 
-@keyframes logoBounceAndFade {
-  0% {
-    opacity: 0;
-    transform: translateX(-40px) translateY(-20px) scale(0.8);
-  }
-  15% {
-    opacity: 1;
-    transform: translateX(20px) translateY(10px) scale(0.9);
-  }
-  30% {
-    transform: translateX(-15px) translateY(-5px) scale(1.1);
-  }
-  45% {
-    transform: translateX(8px) translateY(3px) scale(0.95);
-  }
-  60% {
-    transform: translateX(-3px) translateY(-1px) scale(1.02);
-  }
-  75% {
-    transform: translateX(0) translateY(0) scale(1);
-    opacity: 1;
-  }
-  /* フェードアウト */
-  90% {
-    opacity: 0.4;
-    transform: translateX(0) translateY(0) scale(0.96);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(0) translateY(0) scale(0.92);
-  }
+.loadingLogo.bounce.fadeOut {
+  opacity: 0;
 }
 
-/* 旧スピナー関連は削除またはコメントアウト */
-/*
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.2);
-  border-top: 4px solid white;
-  border-radius: 50%;
-  margin: 0 auto 1rem;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-
-.loadingText {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin: 0;
-  animation: textPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes textPulse {
-  0%,
-  100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
-}*/
-
-/* 超軽量フェードイン - サムネ影響最小化 */
+/* メインコンテンツ - animationなし */
 .content {
   width: 100%;
+  transition: opacity 0.6s ease-out;
 }
 
 .contentHidden {
   opacity: 0;
-  transform: translateY(20px);
 }
 
 .contentFadeIn {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: simpleContentFadeIn 0.8s ease-out forwards;
-}
-
-/* シンプルで滑らかなフェードインアニメーション */
-@keyframes simpleContentFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* NewsListの画像保護 - 推奨版 */
-.pageTransition img,
-.pageTransition [role="img"],
-.pageTransition picture img {
-  transition: none !important;
-  transform: none !important;
-  filter: none !important;
-  animation: none !important;
-  will-change: auto !important;
-  backface-visibility: visible !important;
-}
-
-/* アニメーション中の特別保護 */
-.overlayFadeOut ~ * img,
-.contentFadeIn img {
-  transition: none !important;
-  transform: none !important;
-  filter: none !important;
-  animation: none !important;
+  opacity: 1;
 }
 
 /* レスポンシブ対応 */
@@ -415,86 +147,80 @@
     height: auto;
   }
 
-  @keyframes logoSwingAndFade {
-    0% {
-      opacity: 0;
-      transform: translateX(-20px) scale(0.8);
-    }
-    10% {
-      opacity: 1;
-      transform: translateX(-15px) scale(0.9);
-    }
-    20% {
-      transform: translateX(10px) scale(0.95);
-    }
-    30% {
-      transform: translateX(-8px) scale(1);
-    }
-    40% {
-      transform: translateX(4px) scale(1.02);
-    }
-    50% {
-      transform: translateX(-1px) scale(1);
-    }
-    60% {
-      transform: translateX(0) scale(1);
-    }
-    80% {
-      opacity: 1;
-      transform: translateX(0) scale(1);
-    }
-    90% {
-      opacity: 0.5;
-      transform: translateX(0) scale(0.95);
-    }
-    100% {
-      opacity: 0;
-      transform: translateX(0) scale(0.9);
-    }
+  /* モバイルではさらに軽量化 */
+  .loadingOverlay {
+    transition: opacity 0.6s linear, visibility 0s linear 0.6s;
+  }
+
+  .slide,
+  .curtain {
+    transition: opacity 0.6s linear, visibility 0s linear 0.6s;
+  }
+
+  .loadingContent {
+    transition: opacity 0.3s ease-out;
+  }
+
+  .content {
+    transition: opacity 0.4s ease-out;
   }
 }
 
-/* メインコンテンツのフェード効果 - シンプル版 */
-
-/* 特別なスライドアニメーション効果 */
+/* 特別なコンテンツ効果も削除 */
 .slide.overlayVisible .loadingContent {
-  animation: slideContentIn 0.5s ease-out 0.3s both;
+  opacity: 1;
+  transition: opacity 0.5s ease-out 0.3s;
 }
 
-@keyframes slideContentIn {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 特別なカーテンアニメーション効果 */
 .curtain.overlayVisible .loadingContent {
-  animation: curtainContentIn 0.5s ease-out 0.3s both;
+  opacity: 1;
+  transition: opacity 0.5s ease-out 0.3s;
 }
 
-@keyframes curtainContentIn {
-  from {
-    opacity: 0;
-    transform: scaleY(0);
+/* アニメーション無効設定への配慮 - CSS Modules対応版 */
+@media (prefers-reduced-motion: reduce) {
+  .pageTransition,
+  .loadingOverlay,
+  .overlayVisible,
+  .overlayFadeOut,
+  .fade,
+  .slide,
+  .curtain,
+  .loadingContent,
+  .spinner,
+  .loadingText,
+  .loadingLogo,
+  .content,
+  .contentHidden,
+  .contentFadeIn {
+    transition: none !important;
   }
-  to {
-    opacity: 1;
-    transform: scaleY(1);
+
+  .spinner {
+    border: 4px solid white;
+    border-radius: 50%;
   }
 }
 
-/* モバイル向け - ブラーなしの軽量アニメーション */
-@media (max-width: 768px) {
-  .loadingLogo {
-    max-width: 400px;
-    height: auto;
-  }
-  .pageTransition img {
-    transform: translateZ(0) !important;
-  }
+/* 段階的フェード用のヘルパークラス */
+.loadingContent.fadeMiddle {
+  opacity: 0.3;
+  transition: opacity 0.56s ease-out;
+}
+
+.loadingContent.fadeFinal {
+  opacity: 0;
+  transition: opacity 0.24s ease-out;
+}
+
+/* オーバーレイ段階制御用 */
+.overlayFadeOut.fadeStage1 {
+  opacity: 0.3;
+  transition: opacity 0.56s ease-out;
+}
+
+.overlayFadeOut.fadeStage2 {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.24s ease-out, visibility 0s linear 0.24s;
 }
