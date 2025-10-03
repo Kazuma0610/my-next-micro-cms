@@ -13,13 +13,7 @@ import StaggeredList from "./_components/StaggeredList";
 
 export const revalidate = 60;
 
-// page.tsx
-interface PageProps {
-  sectionsVisible?: boolean;
-}
-
-export default async function Home({ sectionsVisible = true }: PageProps) {
-  console.log("Home component rendered with sectionsVisible:", sectionsVisible); // デバッグ用
+export default async function Home() {
   const data = await getNewsList({
     limit: TOP_NEWS_LIMIT,
   });
@@ -69,13 +63,7 @@ export default async function Home({ sectionsVisible = true }: PageProps) {
           transitionDuration={800} // 遷移時間を800msに設定
         />
       </section>
-      {/* NEWSセクション - フェードイン効果付き */}
-      <section
-        className={`
-          ${styles.news}
-          ${sectionsVisible ? styles.sectionFadeIn : styles.sectionHidden}
-        `}
-      >
+      <section className={styles.news}>
         <h2 className={styles.newsTitle}>NEWS</h2>
         <NewsList news={data.contents} />
         <div className={styles.newsLink}>

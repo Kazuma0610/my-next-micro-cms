@@ -18,7 +18,7 @@ let hasShownInitialAnimation = false;
 export default function PageTransition({
   children,
   animationType = "fade",
-  duration = 4500,
+  duration = 1500,
   onlyFirstLoad = true,
 }: Props) {
   const [overlayVisible, setOverlayVisible] = useState(
@@ -27,68 +27,42 @@ export default function PageTransition({
   const [overlayPhase, setOverlayPhase] = useState<"show" | "fadeOut">(
     !hasShownInitialAnimation ? "show" : "fadeOut"
   );
-
-  // 新しい状態を追加
-  const [screenLoading, setScreenLoading] = useState(false); // 画面全体ローディング
   const [contentVisible, setContentVisible] = useState(
     hasShownInitialAnimation
   );
-  const [mainContentReady, setMainContentReady] = useState(
-    hasShownInitialAnimation
-  ); // メイン全体表示フラグ
-
   const pathname = usePathname();
 
   useEffect(() => {
     // 初回読み込み時のみアニメーション実行
     if (!hasShownInitialAnimation && pathname === "/") {
-      // フェーズ1: オーバーレイ表示期間 (0 ~ duration*0.5)
-      const overlayDisplayTime = duration * 0.5;
+      // フェーズ1: オーバーレイ表示期間 (0 ~ duration*0.6)
+      const overlayDisplayTime = duration * 0.6;
 
-      // フェーズ2: オーバーレイフェードアウト開始 (duration*0.5)
+      // フェーズ2: オーバーレイフェードアウト開始 (duration*0.6)
       const fadeOutTimer = setTimeout(() => {
         setOverlayPhase("fadeOut");
       }, overlayDisplayTime);
 
-      // フェーズ3: オーバーレイ終了 → 画面全体ローディング開始 (duration*0.6)
-      const overlayEndTimer = setTimeout(() => {
-        setOverlayVisible(false);
-        setScreenLoading(true); // 画面全体ローディング開始
-        console.log("Screen loading started"); // デバッグ用
-      }, duration * 0.6);
-
-      // フェーズ4: 画面全体ローディング期間 (duration*0.6 ~ duration*0.8)
-      const screenLoadingEndTimer = setTimeout(() => {
-        setScreenLoading(false);
+      // フェーズ3: メインコンテンツフェードイン開始 (duration*0.7)
+      const contentFadeInTimer = setTimeout(() => {
         setContentVisible(true);
-        console.log("Screen loading ended, content becoming visible"); // デバッグ用
-      }, duration * 0.8);
+      }, duration * 0.7);
 
-      // フェーズ5: メイン全体フェードイン開始 (duration*0.85)
-      const mainContentTimer = setTimeout(() => {
-        setMainContentReady(true);
-        console.log("Main content ready for fade-in"); // デバッグ用
-      }, duration * 0.85);
-
-      // フェーズ6: 完全終了 (duration*1.2)
+      // フェーズ4: オーバーレイ完全削除 (duration*1.0)
       const completeTimer = setTimeout(() => {
+        setOverlayVisible(false);
         hasShownInitialAnimation = true;
-        console.log("All animations completed"); // デバッグ用
-      }, duration * 1.2);
+      }, duration);
 
       return () => {
         clearTimeout(fadeOutTimer);
-        clearTimeout(overlayEndTimer);
-        clearTimeout(screenLoadingEndTimer);
-        clearTimeout(mainContentTimer);
+        clearTimeout(contentFadeInTimer);
         clearTimeout(completeTimer);
       };
     } else if (hasShownInitialAnimation || pathname !== "/") {
       // 初回以降またはTOPページ以外は即座に表示
       setContentVisible(true);
-      setMainContentReady(true);
       setOverlayVisible(false);
-      setScreenLoading(false);
     }
   }, [pathname, duration]);
 
@@ -99,7 +73,7 @@ export default function PageTransition({
 
   return (
     <div className={styles.pageTransition}>
-      {/* 初回オーバーレイ */}
+      {/* ローディングオーバーレイ */}
       {overlayVisible && (
         <div
           className={`
@@ -113,6 +87,8 @@ export default function PageTransition({
           `}
         >
           <div className={styles.loadingContent}>
+            {/* <div className={styles.spinner}></div> */}
+            {/* <p className={styles.loadingText}>読み込み中...</p> */}
             <Image
               src="/demo_logo.png"
               alt="Loading..."
@@ -124,31 +100,15 @@ export default function PageTransition({
         </div>
       )}
 
-      {/* 画面全体ローディング（オーバーレイ終了後） */}
-      {screenLoading && (
-        <div className={styles.screenLoadingOverlay}>
-          <div className={styles.screenLoadingContent}>
-            <div className={styles.screenLoadingSpinner}></div>
-            <p className={styles.screenLoadingText}>コンテンツを準備中...</p>
-          </div>
-        </div>
-      )}
-
       {/* メインコンテンツ */}
-      {contentVisible && (
-        <div
-          className={`
-            ${styles.mainContent}
-            ${
-              mainContentReady
-                ? styles.mainContentFadeIn
-                : styles.mainContentHidden
-            }
-          `}
-        >
-          {children}
-        </div>
-      )}
+      <div
+        className={`
+          ${styles.content} 
+          ${contentVisible ? styles.contentFadeIn : styles.contentHidden}
+        `}
+      >
+        {children}
+      </div>
     </div>
   );
 }
