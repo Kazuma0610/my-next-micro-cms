@@ -64,6 +64,29 @@ body {
   overflow-wrap: break-word;
 }
 
+body.loading-screen-active header,
+body.loading-screen-active .header,
+body.loading-screen-active nav,
+body.loading-screen-active .navigation,
+body.loading-screen-active .hamburger,
+body.loading-screen-active .menu-button,
+body.loading-screen-active [class*="header"],
+body.loading-screen-active [class*="nav"],
+body.loading-screen-active [class*="hamburger"],
+body.loading-screen-active [class*="menu"] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  z-index: -1 !important;
+  transform: translateY(-100px) !important;
+}
+
+/* より強力な非表示 - ヘッダー全体 */
+body.loading-screen-active > header,
+body.loading-screen-active header {
+  display: none !important;
+}
+
 @media (max-width: 76.8rem) {
   /* 768px */
   body {

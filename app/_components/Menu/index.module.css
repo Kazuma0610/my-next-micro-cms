@@ -36,7 +36,13 @@
     gap: 24px;
   }
 
+  /* デフォルトは非表示 */
   .button {
+    display: none;
+  }
+
+  /* オーバーレイ終了後に表示するクラス */
+  .button.visible {
     display: flex;
     position: fixed;
     top: 20px;
@@ -44,6 +50,19 @@
     background: none;
     border: none;
     cursor: pointer;
+    opacity: 0;
+    animation: menuButtonFadeIn 0.5s ease-out forwards;
+  }
+
+  @keyframes menuButtonFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .close {
