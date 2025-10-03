@@ -39,7 +39,7 @@
   position: relative;
   background-color: #fff;
   width: 840px;
-  margin: 0px auto 0;
+  margin: -40px auto 0;
   padding: 24px 40px;
   border-radius: var(--border-radius);
   z-index: 999;
@@ -53,6 +53,36 @@
   position: absolute;
   right: -40px;
   bottom: -40px;
+}
+
+/* セクションのフェードイン効果 */
+.sectionHidden {
+  opacity: 0 !important;
+  transform: translateY(40px) !important;
+  visibility: hidden;
+  transition: none;
+}
+
+.sectionFadeIn {
+  opacity: 0;
+  transform: translateY(40px);
+  visibility: visible;
+  animation: sectionSlideUp 1.2s ease-out forwards;
+}
+
+@keyframes sectionSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* blogセクションのスタイル */
@@ -167,6 +197,21 @@
   .news {
     width: calc(100% - 32px);
     padding: 16px 24px;
+  }
+
+  .sectionFadeIn {
+    animation: sectionSlideUpMobile 0.8s ease-out forwards;
+  }
+
+  @keyframes sectionSlideUpMobile {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .newsLink {
