@@ -63,23 +63,13 @@ export default async function Home() {
           transitionDuration={800} // 遷移時間を800msに設定
         />
       </section>
-      {/* シンプルなStaggeredList使用例 */}
-      <section className={styles.simpleSection}>
-        <h2>お知らせ</h2>
-        <StaggeredList animation="fadeInLeft" staggerDelay={100}>
-          <div className={styles.announcement}>重要なお知らせ1</div>
-          <div className={styles.announcement}>重要なお知らせ2</div>
-          <div className={styles.announcement}>重要なお知らせ3</div>
-          <div className={styles.announcement}>重要なお知らせ4</div>
-        </StaggeredList>
-      </section>
-      {/*<section className={styles.news}>
+      <section className={styles.news}>
         <h2 className={styles.newsTitle}>NEWS</h2>
         <NewsList news={data.contents} />
         <div className={styles.newsLink}>
           <ButtonLink href="/news">もっとみる</ButtonLink>
         </div>
-      </section>*/}
+      </section>
       {/* BLOGセクション - 左からフェードイン */}
       <ScrollAnimatedSection
         animation="fadeInLeft"
@@ -94,6 +84,16 @@ export default async function Home() {
           <ButtonLink href="/blog">もっとみる</ButtonLink>
         </div>
       </ScrollAnimatedSection>
+      {/* シンプルなStaggeredList使用例 */}
+      <section className={styles.simpleSection}>
+        <h2>お知らせ</h2>
+        <StaggeredList animation="fadeInLeft" staggerDelay={100}>
+          <div className={styles.announcement}>重要なお知らせ1</div>
+          <div className={styles.announcement}>重要なお知らせ2</div>
+          <div className={styles.announcement}>重要なお知らせ3</div>
+          <div className={styles.announcement}>重要なお知らせ4</div>
+        </StaggeredList>
+      </section>
     </>
   );
 }
