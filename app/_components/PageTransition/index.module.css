@@ -571,4 +571,8 @@
     contain: layout style paint;
     will-change: opacity;
   }
+  .slide.overlayFadeOut {
+    animation: slideOut 0.8s ease-in-out forwards;
+    /*overlayFadeOutAnimation 0.8s ease-in-out forwards;*/
+  }
 }

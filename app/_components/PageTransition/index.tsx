@@ -93,8 +93,8 @@ export default function PageTransition({
               src="/demo_logo.png"
               alt="Loading..."
               className={`${styles.loadingLogo} ${styles.dynamic}`}
-              width={400}
-              height={400}
+              width={300}
+              height={300}
             />
           </div>
         </div>
