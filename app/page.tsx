@@ -63,13 +63,13 @@ export default async function Home() {
           transitionDuration={800} // 遷移時間を800msに設定
         />
       </section>
-      <section className={styles.news}>
+      {/*<section className={styles.news}>
         <h2 className={styles.newsTitle}>NEWS</h2>
         <NewsList news={data.contents} />
         <div className={styles.newsLink}>
           <ButtonLink href="/news">もっとみる</ButtonLink>
         </div>
-      </section>
+      </section>*/}
       {/* BLOGセクション - 左からフェードイン */}
       <ScrollAnimatedSection
         animation="fadeInLeft"
