@@ -71,8 +71,9 @@
   text-align: center;
   /* コンテンツの初期状態 */
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease-out;
+  /*backgroundの固定の為に*/
+  /*transform: translateY(30px);
+  transition: all 0.8s ease-out;*/
 }
 
 /* アクティブなコンテンツ */

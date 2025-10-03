@@ -101,10 +101,13 @@
 
 /* ホバー可能なデバイスでのみhover効果を適用 */
 @media (hover: hover) {
-  .news:hover,
-  .blog:hover {
+  .news:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
+  }
+  .blog:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px) !important;
   }
   .announcement:hover {
     background: #e9ecef;

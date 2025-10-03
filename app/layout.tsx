@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
 import PageTransition from "./_components/PageTransition";
+import ScrollToTopButton from "@/app/_components/ScrollToTopButton";
 
 export const metadata: Metadata = {
   metadataBase: new URL("http://localhost:3000"),
@@ -41,6 +42,8 @@ export default function RootLayout({
             {children}
           </PageTransition>
         </main>
+        {/* スクロールトップボタン */}
+        <ScrollToTopButton showThreshold={400} smooth={true} />
         <Footer />
       </body>
     </html>

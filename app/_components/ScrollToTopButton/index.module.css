@@ -1,0 +1,131 @@
+/* app/_components/ScrollToTopButton/index.module.css */
+.scrollToTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* 表示・非表示のアニメーション */
+.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.8);
+}
+
+/* ホバー効果 */
+.scrollToTop:hover {
+  background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+/* クリック時の効果 */
+.scrollToTop:active {
+  transform: translateY(0) scale(0.95);
+}
+
+/* スクロール中のアニメーション */
+.scrolling {
+  animation: pulse 0.6s ease-in-out;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* アイコンのスタイル */
+.icon {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 2px;
+  transition: transform 0.3s ease;
+}
+
+.scrollToTop:hover .icon {
+  transform: translateY(-2px);
+}
+
+/* テキストのスタイル */
+.text {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .scrollToTop {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .text {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scrollToTop {
+    bottom: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+  }
+
+  .icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .text {
+    font-size: 8px;
+  }
+}
+
+/* ダークモード対応（オプション） */
+@media (prefers-color-scheme: dark) {
+  .scrollToTop {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  }
+
+  .scrollToTop:hover {
+    background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+  }
+}
