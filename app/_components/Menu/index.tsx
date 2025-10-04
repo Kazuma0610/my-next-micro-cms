@@ -8,28 +8,49 @@ import cx from "classnames";
 import styles from "./index.module.css";
 
 export default function Menu() {
-  //ハンバーガーの開閉やナビの出し入れ//
   const [isOpen, setOpen] = useState<boolean>(false);
-  const [isMenuVisible, setIsMenuVisible] = useState(false); // 初期状態を false に固定
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
 
   const toggleHam = () => {
     setOpen(!isOpen);
   };
-  //ここまで//
 
-  // カスタムイベントでメニュー表示を制御
+  // デバイス判定
   useEffect(() => {
-    // TOPページ以外では即座に表示
+    const checkDevice = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+
+      // PCの場合はメニューを強制的に閉じる
+      if (!mobile) {
+        setOpen(false);
+        setIsMenuVisible(false);
+      }
+    };
+
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+
+    return () => {
+      window.removeEventListener("resize", checkDevice);
+    };
+  }, []);
+
+  // モバイル時のメニュー制御（既存ロジック）
+  useEffect(() => {
+    // PCの場合は何もしない
+    if (!isMobile) return;
+
     if (pathname !== "/") {
-      console.log("Non-top page - showing menu immediately");
+      console.log("Non-top page (mobile) - showing menu immediately");
       setIsMenuVisible(true);
       return;
     }
 
-    // TOPページの場合は必ずイベント制御
-    console.log("TOP page detected - waiting for events");
-    setIsMenuVisible(false); // 確実に非表示から開始
+    console.log("TOP page detected (mobile) - waiting for events");
+    setIsMenuVisible(false);
 
     const handleHideMenu = () => {
       console.log("Received hide menu event - hiding menu");
@@ -41,13 +62,11 @@ export default function Menu() {
       setIsMenuVisible(true);
     };
 
-    // イベントリスナーを追加
     window.addEventListener("hideMenuButton", handleHideMenu);
     window.addEventListener("showMenuButton", handleShowMenu);
 
     console.log("Menu event listeners registered for TOP page");
 
-    // フォールバック: 8秒後に強制表示
     const fallbackTimer = setTimeout(() => {
       console.log("FALLBACK: Menu button shown by fallback timer");
       setIsMenuVisible(true);
@@ -59,15 +78,16 @@ export default function Menu() {
       window.removeEventListener("showMenuButton", handleShowMenu);
       clearTimeout(fallbackTimer);
     };
-  }, [pathname]);
+  }, [pathname, isMobile]);
 
-  // デバッグ用: メニューの可視状態をログ出力
-  useEffect(() => {
-    console.log(`Menu visibility changed: ${isMenuVisible}`);
-  }, [isMenuVisible]);
+  // モバイル以外では何も表示しない
+  if (!isMobile) {
+    return null;
+  }
 
   return (
     <div>
+      {/* 通常ナビゲーション */}
       <nav className={cx(styles.nav, isOpen && styles.open)}>
         <ul className={styles.items}>
           <li>
@@ -103,23 +123,19 @@ export default function Menu() {
         </ul>
       </nav>
 
-      {/* メニューボタン - 確実にイベント制御 */}
-      <button
-        className={cx(styles.button, isMenuVisible && styles.visible)}
-        onClick={toggleHam}
-        style={{
-          // CSSとJavaScriptで二重制御
-          display: isMenuVisible ? "flex" : "none",
-          visibility: isMenuVisible ? "visible" : "hidden",
-          opacity: isMenuVisible ? 1 : 0,
-        }}
-      >
-        <div className={cx(styles.openbtn, isOpen && styles.open)}>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </button>
+      {/* ハンバーガーメニューボタン - モバイルのみ */}
+      {isMenuVisible && (
+        <button
+          className={cx(styles.button, styles.visible)}
+          onClick={toggleHam}
+        >
+          <div className={cx(styles.openbtn, isOpen && styles.open)}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      )}
     </div>
   );
 }

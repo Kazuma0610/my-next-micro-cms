@@ -4,16 +4,166 @@
   gap: 40px;
 }
 
-/* PC用のメディアクエリで確実に非表示 */
+/* ==============================================
+   PC用スタイル (769px以上)
+   ============================================== */
 @media (min-width: 769px) {
+  /* 通常ナビゲーション */
+  .nav {
+    display: flex;
+    transition: all 0.3s ease;
+  }
+
+  /* スクロール時に通常ナビを非表示 */
+  .nav.navHidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+  }
+
+  /* PCでは初期状態でハンバーガーボタン非表示 */
   .button {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
   }
+
+  /* PCでスクロール時のハンバーガーボタン表示 */
+  .button.scrollVisible {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(170, 187, 204, 0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    z-index: 1000;
+    animation: pcHamburgerFadeIn 0.4s ease-out;
+  }
+
+  @keyframes pcHamburgerFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* PCでのスライドアウトナビ（ハンバーガーメニュー開いた時） */
+  .nav.open {
+    display: block !important;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 320px;
+    height: 100vh;
+    background-color: var(--color-bg-painted);
+    color: var(--color-text-unpainted);
+    padding: 80px 32px 32px;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    z-index: 999;
+  }
+
+  .nav.open .items {
+    flex-direction: column;
+    gap: 32px;
+    font-size: 1.1rem;
+  }
+
+  /* PCでのハンバーガーボタンスタイル */
+  .button.scrollVisible .openbtn {
+    position: relative;
+    background: transparent;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+  }
+
+  .button.scrollVisible .openbtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .button.scrollVisible .openbtn span {
+    display: inline-block;
+    transition: all 0.4s ease;
+    position: absolute;
+    left: 14px;
+    height: 2px;
+    border-radius: 2px;
+    background: #333;
+    width: 45%;
+  }
+
+  .button.scrollVisible .openbtn span:nth-of-type(1) {
+    top: 13px;
+  }
+
+  .button.scrollVisible .openbtn span:nth-of-type(2) {
+    top: 19px;
+  }
+
+  .button.scrollVisible .openbtn span:nth-of-type(3) {
+    top: 25px;
+  }
+
+  .button.scrollVisible .openbtn span:nth-of-type(3)::after {
+    content: "Menu";
+    position: absolute;
+    top: 8px;
+    left: -2px;
+    color: #333;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* PCでのハンバーガーアクティブ状態 */
+  .button.scrollVisible .openbtn.open span:nth-of-type(1) {
+    top: 14px;
+    left: 18px;
+    transform: translateY(6px) rotate(-45deg);
+    width: 30%;
+  }
+
+  .button.scrollVisible .openbtn.open span:nth-of-type(2) {
+    opacity: 0;
+  }
+
+  .button.scrollVisible .openbtn.open span:nth-of-type(3) {
+    top: 26px;
+    left: 18px;
+    transform: translateY(-6px) rotate(45deg);
+    width: 30%;
+  }
+
+  .button.scrollVisible .openbtn.open span:nth-of-type(3)::after {
+    content: "Close";
+    transform: translateY(0) rotate(-45deg);
+    top: 8px;
+    left: 4px;
+  }
 }
 
+/* ==============================================
+   モバイル・タブレット用スタイル (768px以下)
+   ============================================== */
 @media (max-width: 768px) {
   .nav {
     display: none;
@@ -49,7 +199,7 @@
 
   /* モバイルでオーバーレイ終了後に表示するクラス */
   .button.visible {
-    display: flex !important; /* モバイルの表示は!importantで確実に */
+    display: flex !important;
     position: fixed;
     top: 20px;
     right: 10px;
@@ -78,7 +228,6 @@
   }
 
   .openbtn {
-    /*ボタン内側の基点となるためrelativeを指定。追従するナビゲーションの場合はfixed＋top、rightといった位置をセットで指定*/
     position: relative;
     background: #aabbcc;
     cursor: pointer;
@@ -87,10 +236,9 @@
     border-radius: 5px;
   }
 
-  /*ボタン内側*/
   .openbtn span {
     display: inline-block;
-    transition: all 0.4s; /*アニメーションの設定*/
+    transition: all 0.4s;
     position: absolute;
     left: 14px;
     height: 2px;
@@ -112,7 +260,7 @@
   }
 
   .openbtn span:nth-of-type(3)::after {
-    content: "Menu"; /*3つ目の要素のafterにMenu表示を指定*/
+    content: "Menu";
     position: absolute;
     top: 5px;
     left: -2px;
@@ -121,7 +269,6 @@
     text-transform: uppercase;
   }
 
-  /*activeクラスが付与されると線が回転して×になり、Menu⇒Closeに変更*/
   .openbtn.open span:nth-of-type(1) {
     top: 14px;
     left: 18px;
@@ -141,9 +288,35 @@
   }
 
   .openbtn.open span:nth-of-type(3)::after {
-    content: "Close"; /*3つ目の要素のafterにClose表示を指定*/
+    content: "Close";
     transform: translateY(0) rotate(-45deg);
     top: 5px;
     left: 4px;
+  }
+}
+
+/* ==============================================
+   共通のオーバーレイ（メニュー開いた時の背景）
+   ============================================== */
+@media (min-width: 769px) {
+  .nav.open::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    animation: overlayFadeIn 0.3s ease-out;
+  }
+
+  @keyframes overlayFadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }

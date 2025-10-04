@@ -35,12 +35,12 @@ const Breadcrumbs: React.FC = () => {
   }
 
   const nameMap: { [key: string]: string } = {
-    news: "News",
-    members: "Members",
+    news: "ニュース",
+    members: "会社役員",
     about: "About",
-    contact: "Contact",
-    reservation: "Reservation",
-    blog: "Blog",
+    contact: "お問合せ",
+    reservation: "セミナー予約",
+    blog: "ブログ",
     // カテゴリー名のマッピング
     "press-release": "プレスリリース",
     notice: "お知らせ",
