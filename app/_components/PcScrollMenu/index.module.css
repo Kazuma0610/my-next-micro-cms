@@ -13,18 +13,67 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
   opacity: 0;
-  transform: translateY(-10px) scale(0.9);
-  transition: all 0.3s ease;
+  transform: translateY(-20px) scale(0.8);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hamburgerButton.visible {
   opacity: 1;
   transform: translateY(0) scale(1);
+  animation: hamburgerFadeIn 0.6s ease-out;
+}
+
+/* フェードアウト用のクラス */
+.hamburgerButton.fadeOut {
+  opacity: 0;
+  transform: translateY(-30px) scale(0.7);
+  animation: hamburgerFadeOut 0.5s ease-in;
 }
 
 .hamburgerButton:hover {
   background: rgba(255, 255, 255, 1);
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* ハンバーガーボタンのフェードインアニメーション */
+@keyframes hamburgerFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.7) rotate(-10deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(-5px) scale(1.1) rotate(2deg);
+  }
+  80% {
+    opacity: 0.9;
+    transform: translateY(2px) scale(0.98) rotate(-1deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+/* ハンバーガーボタンのフェードアウトアニメーション */
+@keyframes hamburgerFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  30% {
+    opacity: 0.7;
+    transform: translateY(-10px) scale(0.95) rotate(5deg);
+  }
+  70% {
+    opacity: 0.3;
+    transform: translateY(-20px) scale(0.8) rotate(-3deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.7) rotate(10deg);
+  }
 }
 
 /* ハンバーガーアイコン */
@@ -43,34 +92,87 @@
   height: 2px;
   background: #333;
   border-radius: 1px;
-  transition: all 0.3s ease;
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hamburgerIcon span:nth-child(1) {
   top: 0;
+  animation: iconLineSlideIn 0.4s ease-out 0.2s both;
 }
 
 .hamburgerIcon span:nth-child(2) {
   top: 8px;
+  animation: iconLineSlideIn 0.4s ease-out 0.3s both;
 }
 
 .hamburgerIcon span:nth-child(3) {
   top: 16px;
+  animation: iconLineSlideIn 0.4s ease-out 0.4s both;
+}
+
+/* フェードアウト時のアイコンアニメーション */
+.hamburgerButton.fadeOut .hamburgerIcon span:nth-child(1) {
+  animation: iconLineSlideOut 0.3s ease-in 0s both;
+}
+
+.hamburgerButton.fadeOut .hamburgerIcon span:nth-child(2) {
+  animation: iconLineSlideOut 0.3s ease-in 0.1s both;
+}
+
+.hamburgerButton.fadeOut .hamburgerIcon span:nth-child(3) {
+  animation: iconLineSlideOut 0.3s ease-in 0.2s both;
+}
+
+/* アイコン線のスライドインアニメーション */
+@keyframes iconLineSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-15px) scaleX(0.5);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateX(2px) scaleX(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scaleX(1);
+  }
+}
+
+/* アイコン線のスライドアウトアニメーション */
+@keyframes iconLineSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scaleX(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(10px) scaleX(0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(20px) scaleX(0.3);
+  }
 }
 
 /* ハンバーガーアイコン - アクティブ状態 */
 .hamburgerIcon.open span:nth-child(1) {
   top: 8px;
   transform: rotate(45deg);
+  animation: none; /* アクティブ時はアニメーション無効 */
 }
 
 .hamburgerIcon.open span:nth-child(2) {
   opacity: 0;
+  animation: none;
 }
 
 .hamburgerIcon.open span:nth-child(3) {
   top: 8px;
   transform: rotate(-45deg);
+  animation: none;
 }
 
 /* スライドアウトメニュー */
@@ -90,6 +192,45 @@
 
 .slideMenu.open {
   transform: translateX(0);
+  animation: menuSlideIn 0.5s ease-out;
+}
+
+/* メニューのフェードアウト */
+.slideMenu.fadeOut {
+  transform: translateX(100%);
+  animation: menuSlideOut 0.4s ease-in;
+}
+
+/* メニューのスライドインアニメーション */
+@keyframes menuSlideIn {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(-10px);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* メニューのスライドアウトアニメーション */
+@keyframes menuSlideOut {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  40% {
+    transform: translateX(20px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
 }
 
 /* メニューヘッダー */
@@ -100,6 +241,35 @@
   padding: 24px 32px;
   border-bottom: 1px solid #e5e5e5;
   background: #f8f9fa;
+  opacity: 0;
+  animation: headerFadeIn 0.4s ease-out 0.2s forwards;
+}
+
+/* フェードアウト時のヘッダー */
+.slideMenu.fadeOut .menuHeader {
+  animation: headerFadeOut 0.3s ease-in;
+}
+
+@keyframes headerFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes headerFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
 
 .menuHeader h3 {
@@ -121,12 +291,13 @@
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .closeButton:hover {
   background: #e9ecef;
   color: #333;
+  transform: rotate(90deg);
 }
 
 /* メニューアイテム */
@@ -138,6 +309,80 @@
 
 .menuItems li {
   border-bottom: 1px solid #f0f0f0;
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+/* メニューアイテムの順次フェードイン */
+.slideMenu.open .menuItems li:nth-child(1) {
+  animation: menuItemSlideIn 0.4s ease-out 0.3s forwards;
+}
+
+.slideMenu.open .menuItems li:nth-child(2) {
+  animation: menuItemSlideIn 0.4s ease-out 0.4s forwards;
+}
+
+.slideMenu.open .menuItems li:nth-child(3) {
+  animation: menuItemSlideIn 0.4s ease-out 0.5s forwards;
+}
+
+.slideMenu.open .menuItems li:nth-child(4) {
+  animation: menuItemSlideIn 0.4s ease-out 0.6s forwards;
+}
+
+.slideMenu.open .menuItems li:nth-child(5) {
+  animation: menuItemSlideIn 0.4s ease-out 0.7s forwards;
+}
+
+.slideMenu.open .menuItems li:nth-child(6) {
+  animation: menuItemSlideIn 0.4s ease-out 0.8s forwards;
+}
+
+/* メニューアイテムのフェードアウト */
+.slideMenu.fadeOut .menuItems li:nth-child(1) {
+  animation: menuItemSlideOut 0.3s ease-in 0s both;
+}
+
+.slideMenu.fadeOut .menuItems li:nth-child(2) {
+  animation: menuItemSlideOut 0.3s ease-in 0.05s both;
+}
+
+.slideMenu.fadeOut .menuItems li:nth-child(3) {
+  animation: menuItemSlideOut 0.3s ease-in 0.1s both;
+}
+
+.slideMenu.fadeOut .menuItems li:nth-child(4) {
+  animation: menuItemSlideOut 0.3s ease-in 0.15s both;
+}
+
+.slideMenu.fadeOut .menuItems li:nth-child(5) {
+  animation: menuItemSlideOut 0.3s ease-in 0.2s both;
+}
+
+.slideMenu.fadeOut .menuItems li:nth-child(6) {
+  animation: menuItemSlideOut 0.3s ease-in 0.25s both;
+}
+
+@keyframes menuItemSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes menuItemSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
 }
 
 .menuItems li:last-child {
@@ -151,7 +396,7 @@
   text-decoration: none;
   font-size: 1rem;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
@@ -159,6 +404,7 @@
   background: #f8f9fa;
   color: #0066cc;
   padding-left: 40px;
+  transform: translateX(5px);
 }
 
 .menuItems a:hover::before {
@@ -169,6 +415,18 @@
   bottom: 0;
   width: 4px;
   background: #0066cc;
+  animation: accentSlideIn 0.3s ease-out;
+}
+
+@keyframes accentSlideIn {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    width: 4px;
+    opacity: 1;
+  }
 }
 
 /* オーバーレイ */
@@ -180,15 +438,35 @@
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
-  animation: overlayFadeIn 0.3s ease;
+  opacity: 0;
+  animation: overlayFadeIn 0.4s ease-out forwards;
+  backdrop-filter: blur(2px);
+}
+
+/* オーバーレイのフェードアウト */
+.overlay.fadeOut {
+  animation: overlayFadeOut 0.3s ease-in forwards;
 }
 
 @keyframes overlayFadeIn {
   0% {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
   100% {
     opacity: 1;
+    backdrop-filter: blur(2px);
+  }
+}
+
+@keyframes overlayFadeOut {
+  0% {
+    opacity: 1;
+    backdrop-filter: blur(2px);
+  }
+  100% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
   }
 }
 
@@ -198,6 +476,18 @@
   .slideMenu,
   .overlay {
     display: none !important;
+  }
+}
+
+/* パフォーマンス向上のためのアニメーション制御 */
+@media (prefers-reduced-motion: reduce) {
+  .hamburgerButton,
+  .hamburgerIcon span,
+  .slideMenu,
+  .menuItems li,
+  .overlay {
+    animation: none !important;
+    transition: opacity 0.2s ease !important;
   }
 }
 

@@ -1,119 +1,182 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import cx from "classnames";
 import styles from "./index.module.css";
+
+// カスタムフック：PC判定とマウント状態
+const useClientSide = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  const [isPC, setIsPC] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+
+    const checkDevice = () => {
+      setIsPC(window.innerWidth > 768);
+    };
+
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+
+    return () => window.removeEventListener("resize", checkDevice);
+  }, []);
+
+  return { isMounted, isPC };
+};
 
 export default function PCScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  const { isMounted, isPC } = useClientSide();
+
+  const handleCloseMenu = useCallback(() => {
+    setIsClosing(true);
+
+    setTimeout(() => {
+      setIsOpen(false);
+      setIsClosing(false);
+
+      // 非表示状態の場合は要素も削除
+      const currentScrollY = window.scrollY;
+      if (currentScrollY <= 100) {
+        setTimeout(() => {
+          setShouldRender(false);
+        }, 100);
+      }
+    }, 400);
+  }, []);
 
   useEffect(() => {
+    if (!isMounted || !isPC) {
+      // PC以外または未マウントの場合は状態リセット
+      setIsVisible(false);
+      setIsOpen(false);
+      setShouldRender(false);
+      return;
+    }
+
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const shouldShow = scrollY > 100;
 
-      setIsVisible(shouldShow);
+      if (shouldShow && !isVisible) {
+        setIsVisible(true);
+        setShouldRender(true);
+      } else if (!shouldShow && isVisible) {
+        setIsVisible(false);
 
-      // スクロール上部に戻ったらメニューを閉じる
-      if (!shouldShow && isOpen) {
-        setIsOpen(false);
+        if (isOpen) {
+          handleCloseMenu();
+        } else {
+          setTimeout(() => {
+            setShouldRender(false);
+          }, 500);
+        }
       }
     };
 
-    // 初回チェック
     handleScroll();
-
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [isOpen]);
+  }, [isOpen, isVisible, isMounted, isPC, handleCloseMenu]);
 
   const toggleMenu = () => {
+    if (isClosing) return;
     setIsOpen(!isOpen);
   };
 
   const closeMenu = () => {
-    setIsOpen(false);
+    handleCloseMenu();
   };
 
-  // PCでない場合は何も表示しない
-  if (typeof window !== "undefined" && window.innerWidth <= 768) {
+  // 表示条件をチェック
+  if (!isMounted || !isPC || !shouldRender) {
     return null;
   }
 
   return (
     <>
-      {/* ハンバーガーボタン */}
-      {isVisible && (
-        <button
-          className={cx(styles.hamburgerButton, isVisible && styles.visible)}
-          onClick={toggleMenu}
-          aria-label="メニュー"
-        >
-          <div className={cx(styles.hamburgerIcon, isOpen && styles.open)}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </button>
-      )}
+      <button
+        className={cx(
+          styles.hamburgerButton,
+          isVisible && styles.visible,
+          !isVisible && styles.fadeOut
+        )}
+        onClick={toggleMenu}
+        aria-label="メニュー"
+      >
+        <div className={cx(styles.hamburgerIcon, isOpen && styles.open)}>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
 
-      {/* スライドアウトメニュー */}
-      {isVisible && (
-        <nav className={cx(styles.slideMenu, isOpen && styles.open)}>
-          <div className={styles.menuHeader}>
-            <h3>メニュー</h3>
-            <button
-              className={styles.closeButton}
-              onClick={closeMenu}
-              aria-label="メニューを閉じる"
-            >
-              ×
-            </button>
-          </div>
+      <nav
+        className={cx(
+          styles.slideMenu,
+          isOpen && styles.open,
+          isClosing && styles.fadeOut
+        )}
+      >
+        <div className={styles.menuHeader}>
+          <h3>メニュー</h3>
+          <button
+            className={styles.closeButton}
+            onClick={closeMenu}
+            aria-label="メニューを閉じる"
+          >
+            ×
+          </button>
+        </div>
 
-          <ul className={styles.menuItems}>
-            <li>
-              <Link href="/" onClick={closeMenu}>
-                TOP
-              </Link>
-            </li>
-            <li>
-              <Link href="/news" onClick={closeMenu}>
-                ニュース
-              </Link>
-            </li>
-            <li>
-              <Link href="/blog" onClick={closeMenu}>
-                ブログ
-              </Link>
-            </li>
-            <li>
-              <Link href="/members" onClick={closeMenu}>
-                会社役員
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" onClick={closeMenu}>
-                お問合せ
-              </Link>
-            </li>
-            <li>
-              <Link href="/reservation" onClick={closeMenu}>
-                セミナー予約
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      )}
+        <ul className={styles.menuItems}>
+          <li>
+            <Link href="/" onClick={closeMenu}>
+              TOP
+            </Link>
+          </li>
+          <li>
+            <Link href="/news" onClick={closeMenu}>
+              ニュース
+            </Link>
+          </li>
+          <li>
+            <Link href="/blog" onClick={closeMenu}>
+              ブログ
+            </Link>
+          </li>
+          <li>
+            <Link href="/members" onClick={closeMenu}>
+              会社役員
+            </Link>
+          </li>
+          <li>
+            <Link href="/contact" onClick={closeMenu}>
+              お問合せ
+            </Link>
+          </li>
+          <li>
+            <Link href="/reservation" onClick={closeMenu}>
+              セミナー予約
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
-      {/* オーバーレイ */}
-      {isVisible && isOpen && (
-        <div className={styles.overlay} onClick={closeMenu} />
+      {(isOpen || isClosing) && (
+        <div
+          className={cx(styles.overlay, isClosing && styles.fadeOut)}
+          onClick={closeMenu}
+        />
       )}
     </>
   );
