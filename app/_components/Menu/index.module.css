@@ -4,8 +4,14 @@
   gap: 40px;
 }
 
-.button {
-  display: none;
+/* PC用のメディアクエリで確実に非表示 */
+@media (min-width: 769px) {
+  .button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -36,14 +42,14 @@
     gap: 24px;
   }
 
-  /* デフォルトは非表示 */
+  /* モバイルでは初期非表示 */
   .button {
     display: none;
   }
 
-  /* オーバーレイ終了後に表示するクラス */
+  /* モバイルでオーバーレイ終了後に表示するクラス */
   .button.visible {
-    display: flex;
+    display: flex !important; /* モバイルの表示は!importantで確実に */
     position: fixed;
     top: 20px;
     right: 10px;
