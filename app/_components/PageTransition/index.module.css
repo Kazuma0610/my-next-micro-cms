@@ -549,7 +549,7 @@
 /* ==============================================
    高性能デバイス用強化エフェクト
    ============================================== */
-@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+/*@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   .mainContentFadeIn {
     animation: mainContentSlideUpEnhanced 1.8s
       cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -577,7 +577,7 @@
   .screenLoadingOverlay {
     backdrop-filter: blur(15px);
   }
-}
+}*/
 
 /* ==============================================
    ダークテーマ対応
