@@ -36,7 +36,7 @@ export default function RootLayout({
         <main>
           <PageTransition
             animationType="slide"
-            duration={3500}
+            duration={4000}
             onlyFirstLoad={true}
           >
             {children}

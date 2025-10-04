@@ -14,6 +14,8 @@ type Props = {
 
 // グローバルな初回読み込みフラグ
 let hasShownInitialAnimation = false;
+// メニュー制御のグローバルフラグを追加
+let isInitialLoadInProgress = false;
 
 export default function PageTransition({
   children,
@@ -42,39 +44,55 @@ export default function PageTransition({
   useEffect(() => {
     // 初回読み込み時のみアニメーション実行
     if (!hasShownInitialAnimation && pathname === "/") {
+      // ローディング開始フラグを設定
+      isInitialLoadInProgress = true;
+
+      // 即座にメニューボタンを非表示にする
+      const hideMenuEvent = new CustomEvent("hideMenuButton");
+      window.dispatchEvent(hideMenuEvent);
+      console.log("Hide menu event dispatched IMMEDIATELY");
+
       // フェーズ1: オーバーレイ表示期間 (0 ~ duration*0.5)
       const overlayDisplayTime = duration * 0.5;
 
       // フェーズ2: オーバーレイフェードアウト開始 (duration*0.5)
       const fadeOutTimer = setTimeout(() => {
         setOverlayPhase("fadeOut");
+        console.log("Overlay fade out started");
       }, overlayDisplayTime);
 
       // フェーズ3: オーバーレイ終了 → 画面全体ローディング開始 (duration*0.6)
       const overlayEndTimer = setTimeout(() => {
         setOverlayVisible(false);
-        setScreenLoading(true); // 画面全体ローディング開始
-        // この時点ではcontentVisibleをfalseのまま維持
-        console.log("Screen loading started"); // デバッグ用
+        setScreenLoading(true);
+        console.log("Screen loading started");
       }, duration * 0.6);
 
       // フェーズ4: 画面全体ローディング終了 → メインコンテンツ表示準備 (duration*0.8)
       const screenLoadingEndTimer = setTimeout(() => {
         setScreenLoading(false);
-        setContentVisible(true); // メインコンテンツを表示可能にする
-        console.log("Screen loading ended, content becoming visible"); // デバッグ用
+        setContentVisible(true);
+        console.log("Screen loading ended, content becoming visible");
       }, duration * 0.8);
 
       // フェーズ5: メイン全体フェードイン開始 (duration*0.85)
       const mainContentTimer = setTimeout(() => {
         setMainContentReady(true);
-        console.log("Main content ready for fade-in"); // デバッグ用
+        console.log("Main content ready for fade-in");
       }, duration * 0.85);
+
+      // フェーズ5.5: メニューボタン表示（メインコンテンツ表示後） (duration*0.88)
+      const menuShowTimer = setTimeout(() => {
+        const showMenuEvent = new CustomEvent("showMenuButton");
+        window.dispatchEvent(showMenuEvent);
+        console.log("Show menu event dispatched - PERFECT TIMING");
+      }, duration * 0.88);
 
       // フェーズ6: 完全終了 (duration*1.2)
       const completeTimer = setTimeout(() => {
         hasShownInitialAnimation = true;
-        console.log("All animations completed"); // デバッグ用
+        isInitialLoadInProgress = false; // ローディング終了
+        console.log("All animations completed");
       }, duration * 1.2);
 
       return () => {
@@ -82,10 +100,15 @@ export default function PageTransition({
         clearTimeout(overlayEndTimer);
         clearTimeout(screenLoadingEndTimer);
         clearTimeout(mainContentTimer);
+        clearTimeout(menuShowTimer);
         clearTimeout(completeTimer);
       };
     } else if (hasShownInitialAnimation || pathname !== "/") {
       // 初回以降またはTOPページ以外は即座に表示
+      const showMenuEvent = new CustomEvent("showMenuButton");
+      window.dispatchEvent(showMenuEvent);
+      console.log("Show menu event dispatched (non-first load)");
+
       setContentVisible(true);
       setMainContentReady(true);
       setOverlayVisible(false);
@@ -130,7 +153,7 @@ export default function PageTransition({
         <div className={styles.screenLoadingOverlay}>
           <div className={styles.screenLoadingContent}>
             <div className={styles.screenLoadingSpinner}></div>
-            <p className={styles.screenLoadingText}>コンテンツを準備中...</p>
+            {/*<p className={styles.screenLoadingText}>コンテンツを準備中...</p>*/}
           </div>
         </div>
       )}
@@ -153,3 +176,6 @@ export default function PageTransition({
     </div>
   );
 }
+
+// グローバルフラグをエクスポート
+export { isInitialLoadInProgress };
