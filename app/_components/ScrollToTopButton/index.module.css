@@ -120,12 +120,12 @@
 /* ダークモード対応（オプション） */
 @media (prefers-color-scheme: dark) {
   .scrollToTop {
-    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
   }
 
   .scrollToTop:hover {
-    background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
   }
 }
