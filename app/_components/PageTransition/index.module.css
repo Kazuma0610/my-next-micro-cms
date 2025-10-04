@@ -127,6 +127,61 @@
   }
 }
 
+/* ローディングコンテンツ */
+.loadingContent {
+  text-align: center;
+  color: white;
+  z-index: 100000;
+  position: relative;
+  /*animation: loadingFloat 2s ease-in-out infinite;*/
+}
+
+@keyframes loadingFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingText {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+  animation: textPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 /* ロゴのアニメーション */
 .loadingLogo {
   display: block;
@@ -269,6 +324,57 @@
   }
 }
 
+/* 旧スピナー関連は削除またはコメントアウト */
+/*
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+.loadingText {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+  animation: textPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}*/
+
+/* 超軽量フェードイン - サムネ影響最小化 */
+.content {
+  width: 100%;
+}
+
+.contentHidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.contentFadeIn {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: simpleContentFadeIn 0.8s ease-out forwards;
+}
+
 /* シンプルで滑らかなフェードインアニメーション */
 @keyframes simpleContentFadeIn {
   0% {
@@ -361,6 +467,22 @@
   }
 }
 
+/* モバイル向け - ブラーなしの軽量アニメーション */
+@media (max-width: 768px) {
+  .loadingLogo {
+    max-width: 400px;
+    height: auto;
+  }
+  .overlayFadeOut {
+    opacity: 1;
+    visibility: visible;
+    animation: unset;
+    /* アニメーションのスコープを自身のみに限定 */
+    contain: layout style paint;
+    will-change: opacity;
+  }
+}
+
 /* 画面全体ローディング（オーバーレイ終了後）- 新規追加 */
 .screenLoadingOverlay {
   position: fixed;
@@ -418,41 +540,40 @@
 }
 
 /* メインコンテンツ全体のフェードイン - 新規追加 */
-/* 最高パフォーマンス設定 */
 .mainContent {
-  will-change: transform, opacity, filter;
-  transform: translateZ(0); /* ハードウェア加速を強制 */
-  backface-visibility: hidden;
-  perspective: 1000px;
+  min-height: 100vh;
+  width: 100%;
 }
 
 .mainContentHidden {
   opacity: 0;
-  transform: translate3d(0, 8px, 0) scale3d(0.97, 0.97, 1);
-  filter: blur(0.8px);
+  transform: translateY(30px);
+  visibility: hidden;
 }
 
 .mainContentFadeIn {
-  opacity: 1;
-  transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
-  filter: blur(0px);
-  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 1.4s cubic-bezier(0.4, 0, 0.2, 1),
-    filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+  visibility: visible;
+  animation: mainContentSlideUp 1.5s ease-out forwards;
 }
 
-/* アニメーション完了後にwill-changeをリセット */
-.mainContentFadeIn {
-  animation: resetWillChange 1.5s forwards;
-}
-
-@keyframes resetWillChange {
-  to {
-    will-change: auto;
+@keyframes mainContentSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* レスポンシブ対応 */
+/* レスポンシブ対応（既存のメディアクエリに追加） */
 @media (max-width: 768px) {
   .loadingLogo {
     max-width: 300px;
@@ -522,18 +643,52 @@
       transform: translateX(0) scale(0.9);
     }
   }
-  /* モバイル向け - ブラーなしの軽量アニメーション */
-  .loadingLogo {
-    max-width: 400px;
-    height: auto;
+}
+
+/* ダークテーマ対応 - 新規追加 */
+@media (prefers-color-scheme: dark) {
+  .screenLoadingOverlay {
+    background: rgba(17, 24, 39, 0.95);
   }
-  .overlayFadeOut {
-    opacity: 1;
-    visibility: visible;
-    animation: unset;
-    /* アニメーションのスコープを自身のみに限定 */
-    contain: layout style paint;
-    will-change: opacity;
+
+  .screenLoadingText {
+    color: #e5e7eb;
+  }
+
+  .screenLoadingSpinner {
+    border-color: #374151;
+    border-top-color: #667eea;
+  }
+}
+
+/* 高性能デバイス用の強化エフェクト - 新規追加 */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .mainContentFadeIn {
+    animation: mainContentSlideUpEnhanced 1.8s
+      cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  @keyframes mainContentSlideUpEnhanced {
+    0% {
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+    }
+    30% {
+      opacity: 0.4;
+      transform: translateY(20px) scale(0.99);
+    }
+    60% {
+      opacity: 0.8;
+      transform: translateY(5px) scale(1);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .screenLoadingOverlay {
+    backdrop-filter: blur(15px);
   }
 }
 
@@ -556,97 +711,3 @@
     animation: none;
   }
 }
-
-/*非表示部分*/
-/* 以下のコードをすべてコメントアウト */
-
-/*
-非表示部分
-.loadingText {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin: 0;
-  animation: textPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes textPulse {
-  0%,
-  100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-ローディングコンテンツ
-.loadingContent {
-  text-align: center;
-  color: white;
-  z-index: 100000;
-  position: relative;
-  animation: loadingFloat 2s ease-in-out infinite;
-}
-
-@keyframes loadingFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.2);
-  border-top: 4px solid white;
-  border-radius: 50%;
-  margin: 0 auto 1rem;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-旧スピナー関連は削除またはコメントアウト
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255, 255, 255, 0.2);
-  border-top: 4px solid white;
-  border-radius: 50%;
-  margin: 0 auto 1rem;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loadingText {
-  font-size: 1.1rem;
-  font-weight: 500;
-  margin: 0;
-  animation: textPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes textPulse {
-  0%,
-  100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-*/
