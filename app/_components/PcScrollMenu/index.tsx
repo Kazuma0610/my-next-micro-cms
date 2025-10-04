@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import cx from "classnames";
 import styles from "./index.module.css";
 
@@ -33,6 +34,7 @@ export default function PCScrollMenu() {
   const [shouldRender, setShouldRender] = useState(false);
 
   const { isMounted, isPC } = useClientSide();
+  const router = useRouter();
 
   const handleCloseMenu = useCallback(() => {
     setIsClosing(true);
@@ -50,6 +52,33 @@ export default function PCScrollMenu() {
       }
     }, 400);
   }, []);
+
+  // スムーズスクロール関数
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  // メニューアイテムクリック時の処理
+  const handleMenuItemClick = useCallback(
+    (href: string) => {
+      // メニューを閉じる
+      handleCloseMenu();
+
+      // 少し遅延してからナビゲーションとスクロール
+      setTimeout(() => {
+        router.push(href);
+
+        // ナビゲーション後にスクロールを先頭に
+        setTimeout(() => {
+          scrollToTop();
+        }, 100);
+      }, 200);
+    },
+    [handleCloseMenu, router, scrollToTop]
+  );
 
   useEffect(() => {
     if (!isMounted || !isPC) {
@@ -140,34 +169,52 @@ export default function PCScrollMenu() {
 
         <ul className={styles.menuItems}>
           <li>
-            <Link href="/" onClick={closeMenu}>
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/")}
+            >
               TOP
-            </Link>
+            </button>
           </li>
           <li>
-            <Link href="/news" onClick={closeMenu}>
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/news")}
+            >
               ニュース
-            </Link>
+            </button>
           </li>
           <li>
-            <Link href="/blog" onClick={closeMenu}>
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/blog")}
+            >
               ブログ
-            </Link>
+            </button>
           </li>
           <li>
-            <Link href="/members" onClick={closeMenu}>
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/members")}
+            >
               会社役員
-            </Link>
+            </button>
           </li>
           <li>
-            <Link href="/contact" onClick={closeMenu}>
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/contact")}
+            >
               お問合せ
-            </Link>
+            </button>
           </li>
           <li>
-            <Link href="/reservation" onClick={closeMenu}>
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/reservation")}
+            >
               セミナー予約
-            </Link>
+            </button>
           </li>
         </ul>
       </nav>
