@@ -4,166 +4,16 @@
   gap: 40px;
 }
 
-/* ==============================================
-   PC用スタイル (769px以上)
-   ============================================== */
+/* PC用のメディアクエリで確実に非表示 */
 @media (min-width: 769px) {
-  /* 通常ナビゲーション */
-  .nav {
-    display: flex;
-    transition: all 0.3s ease;
-  }
-
-  /* スクロール時に通常ナビを非表示 */
-  .nav.navHidden {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-20px);
-  }
-
-  /* PCでは初期状態でハンバーガーボタン非表示 */
   .button {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
   }
-
-  /* PCでスクロール時のハンバーガーボタン表示 */
-  .button.scrollVisible {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: rgba(170, 187, 204, 0.95);
-    backdrop-filter: blur(10px);
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    z-index: 1000;
-    animation: pcHamburgerFadeIn 0.4s ease-out;
-  }
-
-  @keyframes pcHamburgerFadeIn {
-    0% {
-      opacity: 0;
-      transform: translateY(-10px) scale(0.9);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  /* PCでのスライドアウトナビ（ハンバーガーメニュー開いた時） */
-  .nav.open {
-    display: block !important;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 320px;
-    height: 100vh;
-    background-color: var(--color-bg-painted);
-    color: var(--color-text-unpainted);
-    padding: 80px 32px 32px;
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
-    transform: translateX(0);
-    opacity: 1;
-    visibility: visible;
-    z-index: 999;
-  }
-
-  .nav.open .items {
-    flex-direction: column;
-    gap: 32px;
-    font-size: 1.1rem;
-  }
-
-  /* PCでのハンバーガーボタンスタイル */
-  .button.scrollVisible .openbtn {
-    position: relative;
-    background: transparent;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
-
-  .button.scrollVisible .openbtn:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .button.scrollVisible .openbtn span {
-    display: inline-block;
-    transition: all 0.4s ease;
-    position: absolute;
-    left: 14px;
-    height: 2px;
-    border-radius: 2px;
-    background: #333;
-    width: 45%;
-  }
-
-  .button.scrollVisible .openbtn span:nth-of-type(1) {
-    top: 13px;
-  }
-
-  .button.scrollVisible .openbtn span:nth-of-type(2) {
-    top: 19px;
-  }
-
-  .button.scrollVisible .openbtn span:nth-of-type(3) {
-    top: 25px;
-  }
-
-  .button.scrollVisible .openbtn span:nth-of-type(3)::after {
-    content: "Menu";
-    position: absolute;
-    top: 8px;
-    left: -2px;
-    color: #333;
-    font-size: 0.8rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  /* PCでのハンバーガーアクティブ状態 */
-  .button.scrollVisible .openbtn.open span:nth-of-type(1) {
-    top: 14px;
-    left: 18px;
-    transform: translateY(6px) rotate(-45deg);
-    width: 30%;
-  }
-
-  .button.scrollVisible .openbtn.open span:nth-of-type(2) {
-    opacity: 0;
-  }
-
-  .button.scrollVisible .openbtn.open span:nth-of-type(3) {
-    top: 26px;
-    left: 18px;
-    transform: translateY(-6px) rotate(45deg);
-    width: 30%;
-  }
-
-  .button.scrollVisible .openbtn.open span:nth-of-type(3)::after {
-    content: "Close";
-    transform: translateY(0) rotate(-45deg);
-    top: 8px;
-    left: 4px;
-  }
 }
 
-/* ==============================================
-   モバイル・タブレット用スタイル (768px以下)
-   ============================================== */
 @media (max-width: 768px) {
   .nav {
     display: none;
@@ -175,21 +25,201 @@
     top: 0;
     right: -120%;
     bottom: 0;
-    width: 100%;
+    width: 280px; /* 固定幅に変更 */
     height: 100vh;
-    background-color: var(--color-bg-painted);
-    color: var(--color-text-unpainted);
-    padding: 24px 16px;
-    transition: all 0.6s;
+    background: linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #c8eeff 100%
+    ); /* グラデーション背景 */
+    color: var(--color-text-main);
+    padding: 0; /* パディングをリセット */
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    overflow-y: auto; /* スクロール対応 */
   }
 
   .nav.open {
     right: 0;
   }
 
+  /* ナビゲーションのフェードアウト */
+  .nav.fadeOut {
+    animation: navSlideOut 0.3s ease-in forwards;
+  }
+
+  @keyframes navSlideOut {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  /* メニューヘッダー（PCと同じスタイル） */
+  .menuHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 32px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .menuHeader h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    letter-spacing: 0.5px;
+  }
+
+  .closeButton {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    line-height: 1;
+  }
+
+  .closeButton:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+
+  .closeButton:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+  }
+
   .items {
     flex-direction: column;
-    gap: 24px;
+    gap: 0;
+    padding: 16px 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  /* メニューリンク（PCと統一したスタイル） */
+  .menuLink {
+    display: block;
+    width: 100%;
+    padding: 20px 32px;
+    color: var(--color-text-main);
+    text-decoration: none;
+    font-size: var(--font-size-xs); /* 1.2rem = 12px */
+    font-weight: 500;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .menuLink:last-child {
+    border-bottom: none;
+  }
+
+  .menuLink:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding-left: 40px;
+    transform: translateX(5px);
+  }
+
+  .menuLink:hover::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #fff;
+    animation: accentSlideIn 0.3s ease-out;
+  }
+
+  .menuLink:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: -2px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  @keyframes accentSlideIn {
+    0% {
+      width: 0;
+      opacity: 0;
+    }
+    100% {
+      width: 4px;
+      opacity: 1;
+    }
+  }
+
+  /* 既存のaタグスタイルを無効化 */
+  .items a {
+    display: none;
+  }
+
+  /* オーバーレイ */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    animation: overlayFadeIn 0.3s ease-out forwards;
+    backdrop-filter: blur(2px);
+    touch-action: none;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  .overlay.fadeOut {
+    animation: overlayFadeOut 0.3s ease-in forwards;
+  }
+
+  @keyframes overlayFadeIn {
+    0% {
+      opacity: 0;
+      backdrop-filter: blur(0px);
+    }
+    100% {
+      opacity: 1;
+      backdrop-filter: blur(2px);
+    }
+  }
+
+  @keyframes overlayFadeOut {
+    0% {
+      opacity: 1;
+      backdrop-filter: blur(2px);
+    }
+    100% {
+      opacity: 0;
+      backdrop-filter: blur(0px);
+    }
   }
 
   /* モバイルでは初期非表示 */
@@ -208,6 +238,7 @@
     cursor: pointer;
     opacity: 0;
     animation: menuButtonFadeIn 0.5s ease-out forwards;
+    z-index: 1000;
   }
 
   @keyframes menuButtonFadeIn {
@@ -229,13 +260,25 @@
 
   .openbtn {
     position: relative;
-    background: #aabbcc;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     cursor: pointer;
     width: 50px;
     height: 50px;
     border-radius: 5px;
+    transition: all 0.3s ease;
   }
 
+  .openbtn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: scale(1.05);
+  }
+
+  .openbtn:active {
+    transform: scale(0.95);
+  }
+
+  /*ボタン内側*/
   .openbtn span {
     display: inline-block;
     transition: all 0.4s;
@@ -243,7 +286,7 @@
     left: 14px;
     height: 2px;
     border-radius: 5px;
-    background: #fff;
+    background: #333;
     width: 45%;
   }
 
@@ -264,11 +307,13 @@
     position: absolute;
     top: 5px;
     left: -2px;
-    color: #fff;
+    color: #333;
     font-size: 0.96rem;
     text-transform: uppercase;
+    transition: all 0.3s ease;
   }
 
+  /*activeクラスが付与されると線が回転して×になり、Menu⇒Closeに変更*/
   .openbtn.open span:nth-of-type(1) {
     top: 14px;
     left: 18px;
@@ -293,30 +338,54 @@
     top: 5px;
     left: 4px;
   }
-}
 
-/* ==============================================
-   共通のオーバーレイ（メニュー開いた時の背景）
-   ============================================== */
-@media (min-width: 769px) {
-  .nav.open::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-    animation: overlayFadeIn 0.3s ease-out;
+  /* レスポンシブ対応 */
+  @media (max-width: 480px) {
+    .nav {
+      width: 85vw; /* スマートフォンでは画面幅に対応 */
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .button.visible {
+      top: 15px;
+      right: 15px;
+    }
+
+    .menuHeader {
+      padding: 20px 24px;
+    }
+
+    .menuLink {
+      padding: 16px 24px;
+    }
   }
 
-  @keyframes overlayFadeIn {
-    0% {
-      opacity: 0;
+  /* アクセシビリティ対応 */
+  @media (prefers-reduced-motion: reduce) {
+    .overlay,
+    .nav.fadeOut,
+    .button.visible,
+    .openbtn,
+    .openbtn span,
+    .openbtn span::after,
+    .menuLink,
+    .closeButton {
+      animation: none !important;
+      transition: opacity 0.2s ease !important;
     }
-    100% {
-      opacity: 1;
+  }
+
+  /* ダークモード対応 */
+  @media (prefers-color-scheme: dark) {
+    .nav {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.7);
     }
   }
 }

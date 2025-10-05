@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import cx from "classnames";
 import styles from "./index.module.css";
 
@@ -11,11 +11,87 @@ export default function Menu() {
   const [isOpen, setOpen] = useState<boolean>(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   const toggleHam = () => {
+    if (isClosing) return; // アニメーション中は操作無効
     setOpen(!isOpen);
   };
+
+  // メニューを閉じる処理（アニメーション付き）
+  const handleCloseMenu = useCallback(() => {
+    setIsClosing(true);
+
+    setTimeout(() => {
+      setOpen(false);
+      setIsClosing(false);
+    }, 300); // アニメーション時間
+  }, []);
+
+  const closeMenu = () => {
+    handleCloseMenu();
+  };
+
+  // スムーズスクロール関数
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  // メニューアイテムクリック時の処理
+  const handleMenuItemClick = useCallback(
+    (href: string) => {
+      // メニューを閉じる
+      handleCloseMenu();
+
+      // 少し遅延してからナビゲーションとスクロール
+      setTimeout(() => {
+        router.push(href);
+
+        // ナビゲーション後にスクロールを先頭に
+        setTimeout(() => {
+          scrollToTop();
+        }, 100);
+      }, 200);
+    },
+    [handleCloseMenu, router, scrollToTop]
+  );
+
+  // スクロール制御
+  useEffect(() => {
+    if (isOpen) {
+      // メニューが開いている時はボディのスクロールを無効化
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+    } else {
+      // メニューが閉じている時はスクロールを復活
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+
+      // スクロール位置を復元
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
+    }
+
+    // クリーンアップ
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   // デバイス判定
   useEffect(() => {
@@ -27,6 +103,7 @@ export default function Menu() {
       if (!mobile) {
         setOpen(false);
         setIsMenuVisible(false);
+        setIsClosing(false);
       }
     };
 
@@ -88,46 +165,91 @@ export default function Menu() {
   return (
     <div>
       {/* 通常ナビゲーション */}
-      <nav className={cx(styles.nav, isOpen && styles.open)}>
+      <nav
+        className={cx(
+          styles.nav,
+          isOpen && styles.open,
+          isClosing && styles.fadeOut
+        )}
+      >
+        {/* メニューヘッダー */}
+        <div className={styles.menuHeader}>
+          <h3>メニュー</h3>
+          <button
+            className={styles.closeButton}
+            onClick={closeMenu}
+            aria-label="メニューを閉じる"
+          >
+            ×
+          </button>
+        </div>
+
         <ul className={styles.items}>
           <li>
-            <Link onClick={toggleHam} href="/">
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/")}
+            >
               TOP
-            </Link>
+            </button>
           </li>
           <li>
-            <Link onClick={toggleHam} href="/news">
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/news")}
+            >
               ニュース
-            </Link>
+            </button>
           </li>
           <li>
-            <Link onClick={toggleHam} href="/blog">
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/blog")}
+            >
               ブログ
-            </Link>
+            </button>
           </li>
           <li>
-            <Link onClick={toggleHam} href="/members">
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/members")}
+            >
               会社役員
-            </Link>
+            </button>
           </li>
           <li>
-            <Link onClick={toggleHam} href="/contact">
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/contact")}
+            >
               お問合せ
-            </Link>
+            </button>
           </li>
           <li>
-            <Link onClick={toggleHam} href="/reservation">
+            <button
+              className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/reservation")}
+            >
               セミナー予約
-            </Link>
+            </button>
           </li>
         </ul>
       </nav>
+
+      {/* オーバーレイ */}
+      {(isOpen || isClosing) && (
+        <div
+          className={cx(styles.overlay, isClosing && styles.fadeOut)}
+          onClick={closeMenu}
+        />
+      )}
 
       {/* ハンバーガーメニューボタン - モバイルのみ */}
       {isMenuVisible && (
         <button
           className={cx(styles.button, styles.visible)}
           onClick={toggleHam}
+          aria-label="メニュー"
         >
           <div className={cx(styles.openbtn, isOpen && styles.open)}>
             <span></span>

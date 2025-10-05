@@ -1,40 +1,23 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import cx from "classnames";
 import styles from "./index.module.css";
-
-// カスタムフック：PC判定とマウント状態
-const useClientSide = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const [isPC, setIsPC] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-
-    const checkDevice = () => {
-      setIsPC(window.innerWidth > 768);
-    };
-
-    checkDevice();
-    window.addEventListener("resize", checkDevice);
-
-    return () => window.removeEventListener("resize", checkDevice);
-  }, []);
-
-  return { isMounted, isPC };
-};
 
 export default function PCScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const { isMounted, isPC } = useClientSide();
   const router = useRouter();
+
+  // SSR対策
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleCloseMenu = useCallback(() => {
     setIsClosing(true);
@@ -43,15 +26,14 @@ export default function PCScrollMenu() {
       setIsOpen(false);
       setIsClosing(false);
 
-      // 非表示状態の場合は要素も削除
-      const currentScrollY = window.scrollY;
-      if (currentScrollY <= 100) {
+      // スクロール位置もチェックして要素を削除するか判定
+      if (!isVisible) {
         setTimeout(() => {
           setShouldRender(false);
         }, 100);
       }
     }, 400);
-  }, []);
+  }, [isVisible]);
 
   // スムーズスクロール関数
   const scrollToTop = useCallback(() => {
@@ -81,41 +63,56 @@ export default function PCScrollMenu() {
   );
 
   useEffect(() => {
-    if (!isMounted || !isPC) {
-      // PC以外または未マウントの場合は状態リセット
-      setIsVisible(false);
-      setIsOpen(false);
-      setShouldRender(false);
-      return;
-    }
+    if (!isMounted) return;
 
     const handleScroll = () => {
+      // PC判定
+      const isPC = window.innerWidth > 768;
+      if (!isPC) {
+        setIsVisible(false);
+        setIsOpen(false);
+        setShouldRender(false);
+        return;
+      }
+
       const scrollY = window.scrollY;
       const shouldShow = scrollY > 100;
 
       if (shouldShow && !isVisible) {
+        // 表示開始
+        console.log("PCScrollMenu: Showing");
         setIsVisible(true);
         setShouldRender(true);
       } else if (!shouldShow && isVisible) {
+        // 非表示開始（フェードアウト）
+        console.log("PCScrollMenu: Hiding");
         setIsVisible(false);
 
         if (isOpen) {
+          // メニューが開いている場合はクローズアニメーション
           handleCloseMenu();
         } else {
+          // ハンバーガーボタンのフェードアウト
           setTimeout(() => {
             setShouldRender(false);
-          }, 500);
+          }, 500); // フェードアウト時間
         }
       }
     };
 
+    const handleResize = () => {
+      handleScroll();
+    };
+
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
     };
-  }, [isOpen, isVisible, isMounted, isPC, handleCloseMenu]);
+  }, [isOpen, isVisible, isMounted, handleCloseMenu]);
 
   const toggleMenu = () => {
     if (isClosing) return;
@@ -126,13 +123,24 @@ export default function PCScrollMenu() {
     handleCloseMenu();
   };
 
-  // 表示条件をチェック
-  if (!isMounted || !isPC || !shouldRender) {
+  // マウント前またはPC以外では何も表示しない
+  if (!isMounted) {
+    return null;
+  }
+
+  // PC判定（マウント後のみ）
+  if (typeof window !== "undefined" && window.innerWidth <= 768) {
+    return null;
+  }
+
+  // 要素をレンダリングしない場合
+  if (!shouldRender) {
     return null;
   }
 
   return (
     <>
+      {/* ハンバーガーボタン */}
       <button
         className={cx(
           styles.hamburgerButton,
@@ -149,6 +157,7 @@ export default function PCScrollMenu() {
         </div>
       </button>
 
+      {/* スライドアウトメニュー */}
       <nav
         className={cx(
           styles.slideMenu,
@@ -219,6 +228,7 @@ export default function PCScrollMenu() {
         </ul>
       </nav>
 
+      {/* オーバーレイ */}
       {(isOpen || isClosing) && (
         <div
           className={cx(styles.overlay, isClosing && styles.fadeOut)}
