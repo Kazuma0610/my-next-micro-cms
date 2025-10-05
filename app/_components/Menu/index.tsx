@@ -12,27 +12,28 @@ export default function Menu() {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
   const toggleHam = () => {
-    if (isClosing) return; // アニメーション中は操作無効
+    if (isClosing || isProcessing) return;
     setOpen(!isOpen);
   };
 
   // メニューを閉じる処理（アニメーション付き）
   const handleCloseMenu = useCallback(() => {
+    if (isClosing || isProcessing) return;
+
+    setIsProcessing(true);
     setIsClosing(true);
 
     setTimeout(() => {
       setOpen(false);
       setIsClosing(false);
-    }, 300); // アニメーション時間
-  }, []);
-
-  const closeMenu = () => {
-    handleCloseMenu();
-  };
+      setIsProcessing(false);
+    }, 300);
+  }, [isClosing, isProcessing]);
 
   // スムーズスクロール関数
   const scrollToTop = useCallback(() => {
@@ -44,47 +45,49 @@ export default function Menu() {
 
   // メニューアイテムクリック時の処理
   const handleMenuItemClick = useCallback(
-    (href: string) => {
-      // メニューを閉じる
-      handleCloseMenu();
+    (href: string, event: React.MouseEvent) => {
+      event.stopPropagation();
 
-      // 少し遅延してからナビゲーションとスクロール
+      if (isProcessing || isClosing) return;
+
+      // すぐにメニューを閉じる
+      setOpen(false);
+
+      // 少し遅延してナビゲーション
       setTimeout(() => {
         router.push(href);
-
-        // ナビゲーション後にスクロールを先頭に
-        setTimeout(() => {
-          scrollToTop();
-        }, 100);
-      }, 200);
+      }, 100);
     },
-    [handleCloseMenu, router, scrollToTop]
+    [router, isProcessing, isClosing]
   );
+
+  // オーバーレイクリック処理
+  const handleOverlayClick = useCallback(() => {
+    if (!isProcessing) {
+      setOpen(false);
+    }
+  }, [isProcessing]);
 
   // スクロール制御
   useEffect(() => {
     if (isOpen) {
-      // メニューが開いている時はボディのスクロールを無効化
       const scrollY = window.scrollY;
       document.body.style.position = "fixed";
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = "100%";
       document.body.style.overflow = "hidden";
     } else {
-      // メニューが閉じている時はスクロールを復活
       const scrollY = document.body.style.top;
       document.body.style.position = "";
       document.body.style.top = "";
       document.body.style.width = "";
       document.body.style.overflow = "";
 
-      // スクロール位置を復元
       if (scrollY) {
         window.scrollTo(0, parseInt(scrollY || "0") * -1);
       }
     }
 
-    // クリーンアップ
     return () => {
       document.body.style.position = "";
       document.body.style.top = "";
@@ -99,11 +102,11 @@ export default function Menu() {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
 
-      // PCの場合はメニューを強制的に閉じる
       if (!mobile) {
         setOpen(false);
         setIsMenuVisible(false);
         setIsClosing(false);
+        setIsProcessing(false);
       }
     };
 
@@ -115,49 +118,39 @@ export default function Menu() {
     };
   }, []);
 
-  // モバイル時のメニュー制御（既存ロジック）
+  // モバイル時のメニュー制御
   useEffect(() => {
-    // PCの場合は何もしない
     if (!isMobile) return;
 
     if (pathname !== "/") {
-      console.log("Non-top page (mobile) - showing menu immediately");
       setIsMenuVisible(true);
       return;
     }
 
-    console.log("TOP page detected (mobile) - waiting for events");
     setIsMenuVisible(false);
 
     const handleHideMenu = () => {
-      console.log("Received hide menu event - hiding menu");
       setIsMenuVisible(false);
     };
 
     const handleShowMenu = () => {
-      console.log("Received show menu event - showing menu NOW");
       setIsMenuVisible(true);
     };
 
     window.addEventListener("hideMenuButton", handleHideMenu);
     window.addEventListener("showMenuButton", handleShowMenu);
 
-    console.log("Menu event listeners registered for TOP page");
-
     const fallbackTimer = setTimeout(() => {
-      console.log("FALLBACK: Menu button shown by fallback timer");
       setIsMenuVisible(true);
     }, 8000);
 
     return () => {
-      console.log("Cleaning up menu event listeners");
       window.removeEventListener("hideMenuButton", handleHideMenu);
       window.removeEventListener("showMenuButton", handleShowMenu);
       clearTimeout(fallbackTimer);
     };
   }, [pathname, isMobile]);
 
-  // モバイル以外では何も表示しない
   if (!isMobile) {
     return null;
   }
@@ -171,13 +164,14 @@ export default function Menu() {
           isOpen && styles.open,
           isClosing && styles.fadeOut
         )}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* メニューヘッダー */}
         <div className={styles.menuHeader}>
           <h3>メニュー</h3>
           <button
             className={styles.closeButton}
-            onClick={closeMenu}
+            onClick={() => setOpen(false)}
             aria-label="メニューを閉じる"
           >
             ×
@@ -188,7 +182,7 @@ export default function Menu() {
           <li>
             <button
               className={styles.menuLink}
-              onClick={() => handleMenuItemClick("/")}
+              onClick={(e) => handleMenuItemClick("/", e)}
             >
               TOP
             </button>
@@ -196,7 +190,7 @@ export default function Menu() {
           <li>
             <button
               className={styles.menuLink}
-              onClick={() => handleMenuItemClick("/news")}
+              onClick={(e) => handleMenuItemClick("/news", e)}
             >
               ニュース
             </button>
@@ -204,7 +198,7 @@ export default function Menu() {
           <li>
             <button
               className={styles.menuLink}
-              onClick={() => handleMenuItemClick("/blog")}
+              onClick={(e) => handleMenuItemClick("/blog", e)}
             >
               ブログ
             </button>
@@ -212,7 +206,7 @@ export default function Menu() {
           <li>
             <button
               className={styles.menuLink}
-              onClick={() => handleMenuItemClick("/members")}
+              onClick={(e) => handleMenuItemClick("/members", e)}
             >
               会社役員
             </button>
@@ -220,7 +214,7 @@ export default function Menu() {
           <li>
             <button
               className={styles.menuLink}
-              onClick={() => handleMenuItemClick("/contact")}
+              onClick={(e) => handleMenuItemClick("/contact", e)}
             >
               お問合せ
             </button>
@@ -228,7 +222,7 @@ export default function Menu() {
           <li>
             <button
               className={styles.menuLink}
-              onClick={() => handleMenuItemClick("/reservation")}
+              onClick={(e) => handleMenuItemClick("/reservation", e)}
             >
               セミナー予約
             </button>
@@ -240,11 +234,11 @@ export default function Menu() {
       {(isOpen || isClosing) && (
         <div
           className={cx(styles.overlay, isClosing && styles.fadeOut)}
-          onClick={closeMenu}
+          onClick={handleOverlayClick}
         />
       )}
 
-      {/* ハンバーガーメニューボタン - モバイルのみ */}
+      {/* ハンバーガーメニューボタン */}
       {isMenuVisible && (
         <button
           className={cx(styles.button, styles.visible)}
