@@ -4,7 +4,7 @@
 import Link from "next/link";
 import ServiceCard, { Service } from "../../_components/ServiceCard";
 import styles from "./index.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface ServicesListProps {
   showMoreButton?: boolean;
@@ -112,9 +112,20 @@ export default function ServicesList({
   const [currentBreakpoint, setCurrentBreakpoint] = useState<
     "desktop" | "tablet" | "mobile"
   >("desktop");
+  const [isMounted, setIsMounted] = useState(false);
+
+  // セクション要素への参照
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // クライアントサイドでのマウント確認
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // レスポンシブブレークポイントの監視
   useEffect(() => {
+    if (!isMounted) return;
+
     const updateBreakpoint = () => {
       const width = window.innerWidth;
       let newBreakpoint: "desktop" | "tablet" | "mobile";
@@ -150,7 +161,13 @@ export default function ServicesList({
     window.addEventListener("resize", updateBreakpoint);
 
     return () => window.removeEventListener("resize", updateBreakpoint);
-  }, [desktopDisplayCount, tabletDisplayCount, mobileDisplayCount, isExpanded]);
+  }, [
+    desktopDisplayCount,
+    tabletDisplayCount,
+    mobileDisplayCount,
+    isExpanded,
+    isMounted,
+  ]);
 
   const displayedServices = servicesData.slice(0, displayCount);
   const hasMoreServices = displayCount < servicesData.length;
@@ -178,17 +195,55 @@ export default function ServicesList({
     setDisplayCount(initialCount);
     setIsExpanded(false);
 
-    // スムーズにスクロールしてセクションの上部に移動
-    const section = document.querySelector(`.${styles.servicesSection}`);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
+    // より確実なスクロール処理
+    setTimeout(() => {
+      if (sectionRef.current) {
+        // 複数の方法でスクロールを試行
+        try {
+          sectionRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        } catch (error) {
+          // fallback: window.scrollTo を使用
+          const rect = sectionRef.current.getBoundingClientRect();
+          const scrollTop = window.pageYOffset + rect.top;
+          window.scrollTo({
+            top: scrollTop,
+            behavior: "smooth",
+          });
+        }
+      }
+    }, 100); // 少し遅延させてDOM更新を確実に待つ
   };
 
   const currentInitialCount = getCurrentInitialCount();
 
+  // SSR時は初期状態で表示
+  if (!isMounted) {
+    return (
+      <section className={styles.servicesSection} ref={sectionRef}>
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <h2 className={styles.title}>サービス一覧</h2>
+            <p className={styles.subtitle}>
+              お客様のニーズに合わせた多様なサービスをご提供しています
+            </p>
+          </div>
+          <div className={styles.grid}>
+            {servicesData.slice(0, desktopDisplayCount).map((service) => (
+              <div key={service.id} className={styles.serviceItem}>
+                <ServiceCard service={service} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className={styles.servicesSection}>
+    <section className={styles.servicesSection} ref={sectionRef}>
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>サービス一覧</h2>
