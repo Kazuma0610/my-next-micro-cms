@@ -42,6 +42,7 @@
   margin: -40px auto 0;
   padding: 24px 40px;
   border-radius: var(--border-radius);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 999;
 }
 
@@ -64,6 +65,7 @@
   padding: 24px 40px;
   border-radius: var(--border-radius);
   border-color: var(--color-border);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .blogTitle {
   font-size: var(--font-size-s-title);
@@ -102,11 +104,9 @@
 /* ホバー可能なデバイスでのみhover効果を適用 */
 @media (hover: hover) {
   .news:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px);
   }
   .blog:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transform: translateY(-2px) !important;
   }
   .announcement:hover {
@@ -132,6 +132,12 @@
   }
   .blog {
     width: calc(100% - 80px); /* 1250px以下では画面幅に合わせる */
+  }
+  .newsLink {
+    right: -20px;
+  }
+  .blogLink {
+    right: -20px;
   }
 }
 
@@ -186,8 +192,8 @@
 
   .newsLink {
     position: absolute;
-    right: auto;
-    bottom: auto;
+    right: 0;
+    bottom: -40px;
     margin-top: 16px;
   }
 
@@ -198,8 +204,8 @@
 
   .blogLink {
     position: absolute;
-    right: auto;
-    bottom: auto;
+    right: 0;
+    bottom: -40px;
     margin-top: 16px;
   }
 }
