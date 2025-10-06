@@ -103,12 +103,6 @@
 
 /* ホバー可能なデバイスでのみhover効果を適用 */
 @media (hover: hover) {
-  .news:hover {
-    transform: translateY(-2px);
-  }
-  .blog:hover {
-    transform: translateY(-2px) !important;
-  }
   .announcement:hover {
     background: #e9ecef;
     transform: translateX(5px);

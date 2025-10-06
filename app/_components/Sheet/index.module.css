@@ -7,6 +7,7 @@
   border-radius: 8px;
   /* z-indexが適切に設定されているか */
   z-index: 1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 1250px以下の画面でレスポンシブ対応を追加 */

@@ -30,6 +30,22 @@
   gap: 16px;
 }
 
+/* ホバー可能なデバイスでのみhover効果を適用 */
+@media (hover: hover) {
+  .list:hover {
+    background: #f9f9f9;
+    transition: background 0.3s ease;
+    transform: translateY(-2px);
+  }
+}
+
+/* タッチデバイス用のアクティブ効果 */
+@media (hover: none) {
+  .list:hover {
+    opacity: 0.9;
+  }
+}
+
 @media (max-width: 640px) {
   .link {
     display: block;
