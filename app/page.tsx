@@ -10,6 +10,7 @@ import ButtonLink from "@/app/_components/ButtonLink";
 import Carousel from "./_components/Carousel";
 import ScrollAnimatedSection from "@/app/_components/ScrollAnimatedSection";
 import StaggeredList from "./_components/StaggeredList";
+import ServicesList from "./_components/ServicesList";
 
 export const revalidate = 60;
 
@@ -70,6 +71,8 @@ export default async function Home() {
           <ButtonLink href="/news">もっとみる</ButtonLink>
         </div>
       </section>
+      {/* サービス一覧セクション */}
+      <ServicesList showMoreButton={true} maxItems={6} />
       {/* BLOGセクション - 左からフェードイン */}
       <ScrollAnimatedSection
         animation="fadeInLeft"
