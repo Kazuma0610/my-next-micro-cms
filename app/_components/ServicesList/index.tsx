@@ -1,11 +1,17 @@
 // app/_components/ServicesList/index.tsx
+"use client";
+
 import Link from "next/link";
 import ServiceCard, { Service } from "../../_components/ServiceCard";
 import styles from "./index.module.css";
+import { useState, useEffect } from "react";
 
 interface ServicesListProps {
   showMoreButton?: boolean;
   maxItems?: number;
+  desktopDisplayCount?: number;
+  tabletDisplayCount?: number;
+  mobileDisplayCount?: number;
 }
 
 // サービスデータを直接定義
@@ -97,10 +103,89 @@ const servicesData: Service[] = [
 ];
 
 export default function ServicesList({
-  showMoreButton = true,
-  maxItems = 6,
+  desktopDisplayCount = 3,
+  tabletDisplayCount = 2,
+  mobileDisplayCount = 1,
 }: ServicesListProps) {
-  const displayedServices = servicesData.slice(0, maxItems);
+  const [displayCount, setDisplayCount] = useState(desktopDisplayCount);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [currentBreakpoint, setCurrentBreakpoint] = useState<
+    "desktop" | "tablet" | "mobile"
+  >("desktop");
+
+  // レスポンシブブレークポイントの監視
+  useEffect(() => {
+    const updateBreakpoint = () => {
+      const width = window.innerWidth;
+      let newBreakpoint: "desktop" | "tablet" | "mobile";
+
+      if (width <= 768) {
+        newBreakpoint = "mobile";
+      } else if (width <= 1024) {
+        newBreakpoint = "tablet";
+      } else {
+        newBreakpoint = "desktop";
+      }
+
+      setCurrentBreakpoint(newBreakpoint);
+
+      // 展開されていない場合のみ表示数を更新
+      if (!isExpanded) {
+        switch (newBreakpoint) {
+          case "mobile":
+            setDisplayCount(mobileDisplayCount);
+            break;
+          case "tablet":
+            setDisplayCount(tabletDisplayCount);
+            break;
+          case "desktop":
+          default:
+            setDisplayCount(desktopDisplayCount);
+            break;
+        }
+      }
+    };
+
+    updateBreakpoint();
+    window.addEventListener("resize", updateBreakpoint);
+
+    return () => window.removeEventListener("resize", updateBreakpoint);
+  }, [desktopDisplayCount, tabletDisplayCount, mobileDisplayCount, isExpanded]);
+
+  const displayedServices = servicesData.slice(0, displayCount);
+  const hasMoreServices = displayCount < servicesData.length;
+
+  // 現在のブレークポイントに応じた初期表示数を取得
+  const getCurrentInitialCount = () => {
+    switch (currentBreakpoint) {
+      case "mobile":
+        return mobileDisplayCount;
+      case "tablet":
+        return tabletDisplayCount;
+      case "desktop":
+      default:
+        return desktopDisplayCount;
+    }
+  };
+
+  const handleShowMore = () => {
+    setDisplayCount(servicesData.length);
+    setIsExpanded(true);
+  };
+
+  const handleShowLess = () => {
+    const initialCount = getCurrentInitialCount();
+    setDisplayCount(initialCount);
+    setIsExpanded(false);
+
+    // スムーズにスクロールしてセクションの上部に移動
+    const section = document.querySelector(`.${styles.servicesSection}`);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const currentInitialCount = getCurrentInitialCount();
 
   return (
     <section className={styles.servicesSection}>
@@ -113,19 +198,33 @@ export default function ServicesList({
         </div>
 
         <div className={styles.grid}>
-          {displayedServices.map((service) => (
-            <ServiceCard key={service.id} service={service} />
+          {displayedServices.map((service, index) => (
+            <div
+              key={service.id}
+              className={`${styles.serviceItem} ${
+                index >= currentInitialCount ? styles.fadeIn : ""
+              }`}
+            >
+              <ServiceCard service={service} />
+            </div>
           ))}
         </div>
 
-        {showMoreButton && servicesData.length > maxItems && (
-          <div className={styles.moreButtonContainer}>
-            <Link href="/services" className={styles.moreButton}>
-              すべてのサービスを見る
-              <span className={styles.arrow}>→</span>
-            </Link>
+        {hasMoreServices || isExpanded ? (
+          <div className={styles.buttonContainer}>
+            {!isExpanded ? (
+              <button onClick={handleShowMore} className={styles.moreButton}>
+                もっと見る（残り{servicesData.length - displayCount}件）
+                <span className={styles.arrow}>↓</span>
+              </button>
+            ) : (
+              <button onClick={handleShowLess} className={styles.lessButton}>
+                閉じる
+                <span className={styles.arrow}>↑</span>
+              </button>
+            )}
           </div>
-        )}
+        ) : null}
       </div>
     </section>
   );

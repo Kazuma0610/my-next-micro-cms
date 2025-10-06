@@ -72,7 +72,19 @@ export default async function Home() {
         </div>
       </section>
       {/* サービス一覧セクション */}
-      <ServicesList showMoreButton={true} maxItems={6} />
+      <ScrollAnimatedSection
+        animation="fadeInLeft"
+        delay={200}
+        duration={800}
+        threshold={0.2}
+        className={styles.servicesSection}
+      >
+        <ServicesList
+          desktopDisplayCount={3} // PC: 3件表示
+          tabletDisplayCount={2} // タブレット: 2件表示
+          mobileDisplayCount={1} // スマホ: 1件表示
+        />
+      </ScrollAnimatedSection>
       {/* BLOGセクション - 左からフェードイン */}
       <ScrollAnimatedSection
         animation="fadeInLeft"

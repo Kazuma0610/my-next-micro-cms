@@ -52,7 +52,7 @@
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: var(--font-size-s-base);
   font-weight: 700;
   color: #2d3748;
   margin-bottom: 12px;
@@ -130,7 +130,7 @@
   }
 
   .title {
-    font-size: 1.1rem;
+    font-size: var(--font-size-sm);
   }
 
   .imageContainer {
