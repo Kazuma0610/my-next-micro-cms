@@ -132,11 +132,7 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .menuLink:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 2.247);
   }
 
   .menuLink:hover {
@@ -144,6 +140,16 @@
     color: #fff;
     padding-left: 40px;
     transform: translateX(5px);
+  }
+
+  .menuLink::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: #0066cc;
   }
 
   .menuLink:hover::before {
