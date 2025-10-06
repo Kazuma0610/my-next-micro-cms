@@ -1,6 +1,6 @@
 /* app/_components/ServicesList/index.module.css */
 .servicesSection {
-  padding: 80px 0;
+  padding: 150px 0;
   background: #fff;
   /*background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);*/
 }
@@ -123,7 +123,7 @@
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
   .servicesSection {
-    padding: 60px 0;
+    padding: 150px 0 50px 0;
   }
 
   .container {
