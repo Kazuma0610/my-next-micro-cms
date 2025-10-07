@@ -1,10 +1,13 @@
 /* app/services/[slug]/page.module.css */
+
+/* ベースレイアウト */
 .article {
   max-width: 800px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
+/* ヘッダーセクション */
 .header {
   margin-bottom: 40px;
   text-align: center;
@@ -20,7 +23,7 @@
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
-  font-size: 0.9rem;
+  font-size: var(--font-size-xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -42,6 +45,7 @@
   margin: 0 auto;
 }
 
+/* メイン画像 */
 .imageContainer {
   margin: 40px 0;
   border-radius: 12px;
@@ -55,144 +59,352 @@
   display: block;
 }
 
-.overview {
+/* タブナビゲーション */
+.tabNavigation {
   margin: 40px 0;
-  padding: 32px;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-radius: 12px;
+  border-bottom: 2px solid #e2e8f0;
 }
 
-.overviewGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px;
+.tabList {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 8px 8px 8px;
 }
 
-.overviewItem {
-  text-align: center;
-}
-
-.overviewItem h3 {
-  font-size: 1rem;
-  color: #4a5568;
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.overviewItem p {
-  font-size: 1.1rem;
-  color: #2d3748;
-  font-weight: 700;
-}
-
-.features {
-  margin: 40px 0;
-}
-
-.features h2 {
-  font-size: 1.8rem;
-  color: #2d3748;
-  margin-bottom: 24px;
-  font-weight: 700;
-}
-
-.featuresList {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
-}
-
-.featureItem {
+.tabButton {
   display: flex;
   align-items: center;
-  padding: 16px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  padding: 12px 20px;
+  border: none;
+  background: #f8fafc;
+  color: #4a5568;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: var(--font-size-sm);
 }
 
-.featureItem:hover {
+.tabButton:hover {
+  background: #edf2f7;
+  color: #2d3748;
   transform: translateY(-2px);
 }
 
-.checkIcon {
-  color: #48bb78;
-  font-weight: bold;
-  font-size: 1.2rem;
-  margin-right: 12px;
-  flex-shrink: 0;
+.tabButton.active {
+  background: linear-gradient(135deg, #3182ce, #48bb78);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.3);
 }
 
-.technologies {
-  margin: 40px 0;
+.tabLabel {
+  font-weight: 600;
 }
 
-.technologies h2 {
+/* タブコンテンツ */
+.tabContainer {
+  background: #ffffff;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  min-height: 400px;
+}
+
+.tabContent {
+  padding: 40px;
+  line-height: 1.8;
+}
+
+.tabContent h2 {
   font-size: 1.8rem;
   color: #2d3748;
   margin-bottom: 24px;
   font-weight: 700;
 }
 
-.techTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.techTag {
-  background: #edf2f7;
-  color: #4a5568;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  border: 2px solid transparent;
-  transition: all 0.2s ease;
-}
-
-.techTag:hover {
-  background: #e2e8f0;
-  border-color: #cbd5e0;
-}
-
-.content {
-  margin: 40px 0;
-  line-height: 1.8;
-  color: #4a5568;
-}
-
-.content h2 {
-  font-size: 1.6rem;
+.tabContent h3 {
+  font-size: 1.4rem;
   color: #2d3748;
   margin: 32px 0 16px 0;
-  font-weight: 700;
-}
-
-.content h3 {
-  font-size: 1.3rem;
-  color: #2d3748;
-  margin: 24px 0 12px 0;
   font-weight: 600;
 }
 
-.content ul,
-.content ol {
+.tabContent h4 {
+  font-size: 1.2rem;
+  color: #2d3748;
+  margin: 16px 0 8px 0;
+  font-weight: 600;
+}
+
+.tabContent p {
+  margin-bottom: 16px;
+  color: #4a5568;
+}
+
+.tabContent ul,
+.tabContent ol {
   margin: 16px 0;
   padding-left: 24px;
 }
 
-.content li {
+.tabContent li {
   margin-bottom: 8px;
 }
 
-.content p {
-  margin-bottom: 16px;
+/* 特徴グリッド */
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin: 24px 0;
 }
 
+.featureCard {
+  background: #f8fafc;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-4px);
+}
+
+/* 料金プラン */
+.pricingGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  margin: 32px 0;
+}
+
+.pricingCard {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.pricingCard:hover {
+  border-color: #3182ce;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(49, 130, 206, 0.15);
+}
+
+.pricingHeader {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  padding: 24px;
+  text-align: center;
+}
+
+.pricingHeader h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.3rem;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+}
+
+.priceAmount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #3182ce;
+}
+
+.priceUnit {
+  font-size: 1rem;
+  color: #718096;
+}
+
+.pricingFeatures {
+  padding: 24px;
+}
+
+.pricingFeatures ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pricingFeatures li {
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+  position: relative;
+  padding-left: 24px;
+}
+
+.pricingFeatures li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #48bb78;
+  font-weight: bold;
+}
+
+/* タイムライン */
+.timelineGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.timelineItem {
+  text-align: center;
+  padding: 24px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+/* 技術グリッド */
+.techGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.techItem {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 24px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.techItem:hover {
+  border-color: #3182ce;
+  transform: translateY(-2px);
+}
+
+/* ツールリスト */
+.toolsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.toolItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.toolName {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.toolDesc {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+/* 制作フロー */
+.processSteps {
+  margin: 32px 0;
+}
+
+.processStep {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.processStep:last-child {
+  border-bottom: none;
+}
+
+.stepNumber {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #3182ce, #48bb78);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.stepContent h3 {
+  margin: 0 0 12px 0;
+  font-size: 1.3rem;
+}
+
+.stepDuration {
+  color: #3182ce;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+/* アフターサポート */
+.afterSupport {
+  margin-top: 40px;
+  padding: 32px;
+  background: linear-gradient(135deg, #f8fafc, #edf2f7);
+  border-radius: 16px;
+}
+
+.supportGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.supportItem {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.supportItem h4 {
+  margin: 0 0 12px 0;
+  color: #2d3748;
+}
+
+/* おすすめリスト */
+.recommendList {
+  background: #f0fff4;
+  padding: 24px;
+  border-radius: 12px;
+  border-left: 4px solid #48bb78;
+}
+
+.recommendList li {
+  margin-bottom: 8px;
+  position: relative;
+  padding-left: 20px;
+}
+
+.recommendList li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #48bb78;
+  font-weight: bold;
+}
+
+/* CTAセクション */
 .cta {
   margin: 60px 0 40px 0;
   padding: 40px;
@@ -269,17 +481,32 @@
     font-size: 1.1rem;
   }
 
-  .overview {
+  .tabContent {
     padding: 24px 16px;
   }
 
-  .overviewGrid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+  .tabList {
+    flex-direction: column;
   }
 
-  .featuresList {
+  .tabButton {
+    border-radius: 8px;
+    margin-bottom: 4px;
+  }
+
+  .featureGrid,
+  .pricingGrid,
+  .techGrid {
     grid-template-columns: 1fr;
+  }
+
+  .processStep {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .stepNumber {
+    align-self: center;
   }
 
   .cta {
@@ -303,7 +530,12 @@
     font-size: 1.8rem;
   }
 
-  .techTags {
-    justify-content: center;
+  .tabContent {
+    padding: 20px 12px;
+  }
+
+  .featureCard,
+  .pricingCard {
+    margin: 0 -8px;
   }
 }
