@@ -157,7 +157,7 @@ export default function ServicesPage() {
       if (servicesRef.current) {
         servicesRef.current.scrollIntoView({
           behavior: "smooth",
-          block: "start",
+          block: "center", // "start" から "center" に変更
         });
       }
     }, 100);
