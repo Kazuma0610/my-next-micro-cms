@@ -18,6 +18,7 @@ interface ServicesListProps {
 const servicesData: Service[] = [
   {
     id: "1",
+    slug: "web-design", // slugを追加
     title: "Webサイト制作",
     description:
       "レスポンシブデザインに対応した高品質なWebサイトを制作いたします。SEO対策も含めた総合的なWeb制作サービスです。",
@@ -32,6 +33,7 @@ const servicesData: Service[] = [
   },
   {
     id: "2",
+    slug: "mobile-app", // slugを追加
     title: "モバイルアプリ開発",
     description:
       "iOS・Android両対応のネイティブアプリ開発から、React NativeやFlutterを使用したクロスプラットフォーム開発まで対応。",
@@ -46,6 +48,7 @@ const servicesData: Service[] = [
   },
   {
     id: "3",
+    slug: "system-development", // slugを追加
     title: "システム開発",
     description:
       "業務効率化を実現するカスタムシステムの開発。既存システムとの連携や、クラウド環境での構築も可能です。",
@@ -60,6 +63,7 @@ const servicesData: Service[] = [
   },
   {
     id: "4",
+    slug: "ecommerce", // slugを追加
     title: "ECサイト構築",
     description:
       "売上向上を目指したECサイトの構築。決済システムの導入から商品管理、顧客管理まで一貫してサポートします。",
@@ -74,6 +78,7 @@ const servicesData: Service[] = [
   },
   {
     id: "5",
+    slug: "consulting", // slugを追加
     title: "ITコンサルティング",
     description:
       "企業のDX推進をサポート。現状分析から最適なソリューションの提案、導入支援まで包括的にサポートいたします。",
@@ -88,6 +93,7 @@ const servicesData: Service[] = [
   },
   {
     id: "6",
+    slug: "maintenance", // slugを追加
     title: "保守・運用",
     description:
       "Webサイトやシステムの継続的な保守・運用サービス。セキュリティ対策やパフォーマンス監視も含めた安心のサポート。",

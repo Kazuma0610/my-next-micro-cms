@@ -14,6 +14,7 @@ interface Service {
   id: string;
   title: string;
   description: string;
+  slug?: string; // slug プロパティを追加
   image?: ServiceImage;
   features?: string[];
   category?: string;
@@ -62,7 +63,10 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         )}
 
         {service.link && (
-          <Link href={service.link} className={styles.link}>
+          <Link
+            href={`/services/${service.slug || service.id}`}
+            className={styles.link}
+          >
             詳細を見る
           </Link>
         )}
