@@ -94,7 +94,7 @@ export default async function Home() {
         className={styles.blog}
       >
         <h2 className={styles.blogTitle}>BLOG</h2>
-        <BlogList blogs={data_blog.contents} />
+        <BlogList blogs={data_blog.contents} layout="grid" />
         <div className={styles.blogLink}>
           <ButtonLink href="/blog">もっとみる</ButtonLink>
         </div>

@@ -151,7 +151,7 @@ export default async function BlogPage({ searchParams }: Props) {
         </div>
       )}
 
-      <BlogList blogs={paginatedBlogs} />
+      <BlogList blogs={paginatedBlogs} layout="list" />
       <BlogPagination
         totalCount={finalTotalCount}
         current={currentPage}

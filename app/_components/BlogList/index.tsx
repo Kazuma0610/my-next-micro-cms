@@ -7,20 +7,23 @@ import BlogDate from "../BlogDate";
 
 type Props = {
   blogs: Blog[];
+  layout?: "grid" | "list"; // レイアウトタイプを追加
 };
 
-export default function BlogList({ blogs }: Props) {
+export default function BlogList({ blogs, layout = "list" }: Props) {
   if (blogs.length === 0) {
     return <p>記事がありません。</p>;
   }
 
+  // レイアウトに応じてクラス名を決定
+  const containerClass =
+    layout === "grid" ? styles.gridContainer : styles.listContainer;
+
   return (
-    <ul className={styles.blogList}>
+    <ul className={containerClass}>
       {blogs.map((article) => (
         <li key={article.id} className={styles.list}>
           <Link href={`/blog/${article.id}`} className={styles.link}>
-            {" "}
-            {/* divをLinkに変更 */}
             {article.thumbnail ? (
               <Image
                 src={article.thumbnail.url}

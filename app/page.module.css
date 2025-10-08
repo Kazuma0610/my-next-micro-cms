@@ -60,9 +60,9 @@
 .blog {
   position: relative;
   background-color: #fff;
-  width: 840px;
+  max-width: 1200px;
   margin: 100px auto 0;
-  padding: 24px 40px;
+  padding: 40px 40px;
   border-radius: var(--border-radius);
   border-color: var(--color-border);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -72,8 +72,8 @@
 }
 .blogLink {
   position: absolute;
-  right: -40px;
-  bottom: -40px;
+  right: -20px;
+  bottom: -60px;
 }
 
 /* アニメーションの基本スタイル */
