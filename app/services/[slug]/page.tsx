@@ -29,6 +29,55 @@ const servicesData = [
     },
     category: "アプリ開発",
   },
+  {
+    id: "system-development",
+    slug: "system-development",
+    title: "システム開発",
+    description: "業務効率化を実現するシステム開発を行います。",
+    image: {
+      url: "/system.png",
+      width: 800,
+      height: 400,
+    },
+    category: "システム開発",
+  },
+  {
+    id: "ecommerce",
+    slug: "ecommerce",
+    title: "ECサイト構築",
+    description: "売上アップを実現するECサイトの構築を行います。",
+    image: {
+      url: "/ec.png",
+      width: 800,
+      height: 400,
+    },
+    category: "EC構築",
+  },
+  {
+    id: "consulting",
+    slug: "consulting",
+    title: "コンサルティング",
+    description:
+      "ビジネスの成長を支援するコンサルティングサービスを提供します。",
+    image: {
+      url: "/it.png",
+      width: 800,
+      height: 400,
+    },
+    category: "コンサルティング",
+  },
+  {
+    id: "maintenance",
+    slug: "maintenance",
+    title: "保守・運用",
+    description: "システムの安定稼働を支援する保守・運用サービスを提供します。",
+    image: {
+      url: "/protect.png",
+      width: 800,
+      height: 400,
+    },
+    category: "保守・運用",
+  },
   // 他のサービスも追加...
 ];
 

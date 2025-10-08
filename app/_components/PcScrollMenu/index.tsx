@@ -196,6 +196,14 @@ export default function PCScrollMenu() {
           <li>
             <button
               className={styles.menuLink}
+              onClick={() => handleMenuItemClick("/services")}
+            >
+              サービス一覧
+            </button>
+          </li>
+          <li>
+            <button
+              className={styles.menuLink}
               onClick={() => handleMenuItemClick("/blog")}
             >
               ブログ

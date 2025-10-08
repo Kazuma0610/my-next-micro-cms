@@ -50,6 +50,13 @@ const Breadcrumbs: React.FC = () => {
     regional_exchange: "地域交流",
     reskilling_study: "リスキリング勉強会",
     seminar_information: "セミナーのご案内",
+    services: "サービス一覧",
+    "mobile-app": "モバイルアプリ開発",
+    "web-design": "Webサイト制作",
+    "system-development": "システム開発",
+    ecommerce: "ECサイト構築",
+    consulting: "コンサルティング",
+    maintenance: "保守・運用",
     // 必要に応じて追加
   };
 

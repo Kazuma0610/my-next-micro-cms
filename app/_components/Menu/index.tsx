@@ -198,6 +198,14 @@ export default function Menu() {
           <li>
             <button
               className={styles.menuLink}
+              onClick={(e) => handleMenuItemClick("/services", e)}
+            >
+              サービス一覧
+            </button>
+          </li>
+          <li>
+            <button
+              className={styles.menuLink}
               onClick={(e) => handleMenuItemClick("/blog", e)}
             >
               ブログ
