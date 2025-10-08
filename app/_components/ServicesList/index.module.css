@@ -1,6 +1,7 @@
 /* app/_components/ServicesList/index.module.css */
 .servicesSection {
   padding: 150px 0;
+  padding-bottom: 100px;
   background: #fff;
   /*background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);*/
 }

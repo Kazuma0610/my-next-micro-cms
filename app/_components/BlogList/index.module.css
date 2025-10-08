@@ -11,6 +11,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .gridContainer .list {
@@ -48,27 +51,24 @@
 }
 
 .listContainer .list {
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  background: white;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.listContainer .list:last-child {
+  border-bottom: none;
 }
 
 .listContainer .link {
   display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  height: 100%;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 24px 0;
 }
 
 .listContainer .image {
   width: 200px;
-  height: 120px;
-  object-fit: cover;
-  display: block;
-  flex-shrink: 0;
+  height: auto;
+  border-radius: var(--border-radius);
 }
 
 .listContainer .content {

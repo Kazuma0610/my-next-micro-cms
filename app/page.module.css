@@ -61,11 +61,8 @@
   position: relative;
   background-color: #fff;
   max-width: 1200px;
-  margin: 100px auto 0;
+  margin: 0px auto 0;
   padding: 40px 40px;
-  border-radius: var(--border-radius);
-  border-color: var(--color-border);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .blogTitle {
   font-size: var(--font-size-s-title);
@@ -73,7 +70,42 @@
 .blogLink {
   position: absolute;
   right: -20px;
-  bottom: -60px;
+  bottom: -20px;
+}
+
+/* ヘッダーセクション */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 40px 0;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.sectionTitle::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #3182ce, #48bb78);
+  border-radius: 2px;
+}
+
+.sectionSubtitle {
+  font-size: 1.2rem;
+  color: #718096;
+  line-height: 1.8;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 /* アニメーションの基本スタイル */
@@ -193,14 +225,18 @@
 
   .blog {
     width: calc(100% - 32px);
-    padding: 16px 24px;
+    padding: 16px 0px;
   }
 
   .blogLink {
     position: absolute;
     right: 0;
-    bottom: -40px;
+    bottom: -20px;
     margin-top: 16px;
+  }
+
+  .sectionTitle {
+    font-size: 1.8rem;
   }
 }
 

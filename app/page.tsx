@@ -64,6 +64,8 @@ export default async function Home() {
           transitionDuration={800} // 遷移時間を800msに設定
         />
       </section>
+
+      {/* NEWSセクション - ヘッダーなし */}
       <section className={styles.news}>
         <h2 className={styles.newsTitle}>NEWS</h2>
         <NewsList news={data.contents} />
@@ -71,6 +73,7 @@ export default async function Home() {
           <ButtonLink href="/news">もっとみる</ButtonLink>
         </div>
       </section>
+
       {/* サービス一覧セクション */}
       <ScrollAnimatedSection
         animation="fadeInLeft"
@@ -85,7 +88,8 @@ export default async function Home() {
           mobileDisplayCount={1} // スマホ: 1件表示
         />
       </ScrollAnimatedSection>
-      {/* BLOGセクション - 左からフェードイン */}
+
+      {/* BLOGセクション - 外側ヘッダー付き */}
       <ScrollAnimatedSection
         animation="fadeInLeft"
         delay={200}
@@ -93,15 +97,26 @@ export default async function Home() {
         threshold={0.2}
         className={styles.blog}
       >
-        <h2 className={styles.blogTitle}>BLOG</h2>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>ブログ一覧</h2>
+          <p className={styles.sectionSubtitle}>
+            最新の技術情報やお役立ち情報をお届けします
+          </p>
+        </div>
         <BlogList blogs={data_blog.contents} layout="grid" />
         <div className={styles.blogLink}>
           <ButtonLink href="/blog">もっとみる</ButtonLink>
         </div>
       </ScrollAnimatedSection>
-      {/* シンプルなStaggeredList使用例 */}
+
+      {/* お知らせセクション - 外側ヘッダー付き */}
       <section className={styles.simpleSection}>
-        <h2>お知らせ</h2>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>お知らせ</h2>
+          <p className={styles.sectionSubtitle}>
+            重要なお知らせをご確認ください
+          </p>
+        </div>
         <StaggeredList animation="fadeInLeft" staggerDelay={100}>
           <div className={styles.announcement}>重要なお知らせ1</div>
           <div className={styles.announcement}>重要なお知らせ2</div>

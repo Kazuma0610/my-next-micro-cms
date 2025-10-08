@@ -7,7 +7,7 @@ import BlogDate from "../BlogDate";
 
 type Props = {
   blogs: Blog[];
-  layout?: "grid" | "list"; // レイアウトタイプを追加
+  layout?: "grid" | "list";
 };
 
 export default function BlogList({ blogs, layout = "list" }: Props) {
@@ -41,13 +41,13 @@ export default function BlogList({ blogs, layout = "list" }: Props) {
                 height={630}
               />
             )}
-            <dl className={styles.content}>
-              <dt className={styles.title}>{article.title}</dt>
-              <dd className={styles.meta}>
+            <div className={styles.content}>
+              <h3 className={styles.contentTitle}>{article.title}</h3>
+              <div className={styles.meta}>
                 <BlogCategory blogcategory={article.category} />
                 <BlogDate blogdate={article.publishedAt ?? article.createdAt} />
-              </dd>
-            </dl>
+              </div>
+            </div>
           </Link>
         </li>
       ))}
