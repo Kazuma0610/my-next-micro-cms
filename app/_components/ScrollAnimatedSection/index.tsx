@@ -10,7 +10,11 @@ type AnimationType =
   | "fadeInDown"
   | "fadeInLeft"
   | "fadeInRight"
-  | "scaleUp";
+  | "scaleUp"
+  | "slideReveal"
+  | "slideRevealVertical"
+  | "slideRevealDiagonal"
+  | "curtainReveal";
 
 type Props = {
   children: React.ReactNode;

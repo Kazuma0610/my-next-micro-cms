@@ -32,14 +32,28 @@ const CompanyIntroduction = () => {
             className={styles.introTextWrapper}
           >
             <div className={styles.introText}>
-              <h3 className={styles.introTitle}>
-                信頼と実績で選ばれ続ける理由
-              </h3>
-              <p className={styles.introDescription}>
-                私たちは創業以来、お客様のビジネス課題を技術で解決することを使命としています。
-                経験豊富なエンジニアチームと最新の開発手法で、
-                お客様の成功を全力でサポートいたします。
-              </p>
+              <ScrollAnimatedSection
+                animation="slideReveal"
+                delay={0}
+                duration={800}
+                threshold={0.3}
+              >
+                <h3 className={styles.introTitle}>
+                  信頼と実績で選ばれ続ける理由
+                </h3>
+              </ScrollAnimatedSection>
+              <ScrollAnimatedSection
+                animation="fadeInUp"
+                delay={100}
+                duration={800}
+                threshold={0.3}
+              >
+                <p className={styles.introDescription}>
+                  私たちは創業以来、お客様のビジネス課題を技術で解決することを使命としています。
+                  経験豊富なエンジニアチームと最新の開発手法で、
+                  お客様の成功を全力でサポートいたします。
+                </p>
+              </ScrollAnimatedSection>
               <div className={styles.introFeatures}>
                 <ScrollAnimatedSection
                   animation="fadeInUp"

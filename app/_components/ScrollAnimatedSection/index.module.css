@@ -131,6 +131,254 @@
   }
 }
 
+/* 黒背景スライド + テキストフェードイン */
+.slideReveal {
+  position: relative;
+  opacity: 1; /* 初期状態で要素は見える */
+  overflow: hidden; /* 背景がはみ出さないように */
+}
+
+.slideReveal::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 10;
+  transition: none;
+}
+
+.slideReveal > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: none;
+}
+
+.slideReveal.visible::before {
+  animation: slideRevealBackground 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    forwards;
+}
+
+.slideReveal.visible > * {
+  animation: slideRevealText 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s
+    forwards;
+}
+
+@keyframes slideRevealBackground {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 0%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes slideRevealText {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* バリエーション1: 上から下に流れる */
+.slideRevealVertical {
+  position: relative;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.slideRevealVertical::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #000 0%, #333 50%, #000 100%);
+  z-index: 10;
+  transition: none;
+}
+
+.slideRevealVertical > * {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: none;
+}
+
+.slideRevealVertical.visible::before {
+  animation: slideRevealVerticalBg 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    forwards;
+}
+
+.slideRevealVertical.visible > * {
+  animation: slideRevealVerticalText 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    0.4s forwards;
+}
+
+@keyframes slideRevealVerticalBg {
+  0% {
+    top: -100%;
+  }
+  50% {
+    top: 0%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes slideRevealVerticalText {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* バリエーション2: 斜めにスライド */
+.slideRevealDiagonal {
+  position: relative;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.slideRevealDiagonal::before {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 141.42%; /* √2 × 100% for diagonal coverage */
+  height: 141.42%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    #000 50%,
+    #000 60%,
+    transparent 70%
+  );
+  z-index: 10;
+  transition: none;
+  transform: rotate(45deg);
+}
+
+.slideRevealDiagonal > * {
+  opacity: 0;
+  transform: translateX(-30px) translateY(30px);
+  transition: none;
+}
+
+.slideRevealDiagonal.visible::before {
+  animation: slideRevealDiagonalBg 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    forwards;
+}
+
+.slideRevealDiagonal.visible > * {
+  animation: slideRevealDiagonalText 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    0.5s forwards;
+}
+
+@keyframes slideRevealDiagonalBg {
+  from {
+    top: -141.42%;
+    left: -141.42%;
+  }
+  to {
+    top: 100%;
+    left: 100%;
+  }
+}
+
+@keyframes slideRevealDiagonalText {
+  from {
+    opacity: 0;
+    transform: translateX(-30px) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}
+
+/* バリエーション3: カーテン効果（中央から左右に広がる） */
+.curtainReveal {
+  position: relative;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.curtainReveal::before,
+.curtainReveal::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #000;
+  z-index: 10;
+  transition: none;
+}
+
+.curtainReveal::before {
+  left: 0;
+}
+
+.curtainReveal::after {
+  right: 0;
+}
+
+.curtainReveal > * {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  transition: none;
+}
+
+.curtainReveal.visible::before {
+  animation: curtainLeft 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+.curtainReveal.visible::after {
+  animation: curtainRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+}
+
+.curtainReveal.visible > * {
+  animation: curtainText 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s forwards;
+}
+
+@keyframes curtainLeft {
+  to {
+    left: -50%;
+  }
+}
+
+@keyframes curtainRight {
+  to {
+    right: -50%;
+  }
+}
+
+@keyframes curtainText {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
   .fadeInUp {
@@ -176,5 +424,15 @@
       opacity: 1;
       transform: translateX(0);
     }
+  }
+
+  .slideReveal > *,
+  .slideRevealVertical > *,
+  .slideRevealDiagonal > * {
+    transform: translateY(15px);
+  }
+
+  .slideRevealDiagonal > * {
+    transform: translateX(-20px) translateY(20px);
   }
 }
