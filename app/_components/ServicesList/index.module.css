@@ -181,6 +181,10 @@
     max-width: calc(100% - 20px);
   }
 
+  .servicesSection {
+    padding: 100px 10px;
+  }
+
   .grid {
     grid-template-columns: 1fr;
   }

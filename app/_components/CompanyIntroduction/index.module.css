@@ -44,11 +44,24 @@
 }
 
 .sectionTitle {
+  position: relative;
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 16px;
   color: #2c3e50;
   letter-spacing: 0.05em;
+}
+
+.sectionTitle::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #3182ce, #48bb78);
+  border-radius: 2px;
 }
 
 .sectionSubtitle {
@@ -222,6 +235,10 @@
 }
 
 @media (max-width: 480px) {
+  .companyIntroSection {
+    padding: 100px 10px;
+  }
+
   /* セクションTOPに横線を引く */
   .companyIntroSection::before {
     width: calc(100vw - 20px); /* さらに小さい画面では左右10pxずつ */

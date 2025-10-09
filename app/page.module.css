@@ -171,6 +171,10 @@
   .blog {
     padding: 100px 40px;
   }
+  .blogLink {
+    right: 0;
+    bottom: 50px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -231,7 +235,7 @@
 
   .blog {
     width: calc(100% - 32px);
-    padding: 16px 0px;
+    padding: 100px 10px;
   }
 
   .blogLink {
