@@ -62,7 +62,7 @@
   background-color: #fff;
   max-width: 1200px;
   margin: 0px auto 0;
-  padding: 40px 40px;
+  padding: 150px 40px;
 }
 .blogTitle {
   font-size: var(--font-size-s-title);
@@ -70,14 +70,13 @@
 .blogLink {
   position: absolute;
   right: -20px;
-  bottom: -20px;
+  bottom: 90px;
 }
 
 /* ヘッダーセクション */
 .sectionHeader {
   text-align: center;
   margin-bottom: 20px;
-  padding: 40px 0;
 }
 
 .sectionTitle {
@@ -101,7 +100,7 @@
 }
 
 .sectionSubtitle {
-  font-size: 1.2rem;
+  font-size: var(--font-size-sm); /*14px*/
   color: #718096;
   line-height: 1.8;
   max-width: 700px;
@@ -164,6 +163,13 @@
   }
   .blogLink {
     right: -20px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* blogセクションのスタイル */
+  .blog {
+    padding: 100px 40px;
   }
 }
 
