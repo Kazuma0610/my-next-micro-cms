@@ -101,12 +101,19 @@ export default async function Home() {
         threshold={0.2}
         className={styles.blog}
       >
-        <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>ブログ一覧</h2>
-          <p className={styles.sectionSubtitle}>
-            最新の技術情報やお役立ち情報をお届けします
-          </p>
-        </div>
+        <ScrollAnimatedSection
+          animation="fadeInLeft"
+          delay={0}
+          duration={800}
+          threshold={0.3}
+        >
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>ブログ一覧</h2>
+            <p className={styles.sectionSubtitle}>
+              最新の技術情報やお役立ち情報をお届けします
+            </p>
+          </div>
+        </ScrollAnimatedSection>
         <BlogList blogs={data_blog.contents} layout="grid" />
         <div className={styles.blogLink}>
           <ButtonLink href="/blog">もっとみる</ButtonLink>

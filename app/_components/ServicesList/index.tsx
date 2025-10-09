@@ -5,6 +5,7 @@ import Link from "next/link";
 import ServiceCard, { Service } from "../../_components/ServiceCard";
 import styles from "./index.module.css";
 import { useState, useEffect, useRef } from "react";
+import ScrollAnimatedSection from "../ScrollAnimatedSection";
 
 interface ServicesListProps {
   showMoreButton?: boolean;
@@ -230,12 +231,19 @@ export default function ServicesList({
     return (
       <section className={styles.servicesSection} ref={sectionRef}>
         <div className={styles.container}>
-          <div className={styles.header}>
-            <h2 className={styles.title}>サービス一覧</h2>
-            <p className={styles.subtitle}>
-              お客様のニーズに合わせた多様なサービスをご提供しています
-            </p>
-          </div>
+          <ScrollAnimatedSection
+            animation="fadeInLeft"
+            delay={0}
+            duration={800}
+            threshold={0.3}
+          >
+            <div className={styles.header}>
+              <h2 className={styles.title}>サービス一覧</h2>
+              <p className={styles.subtitle}>
+                お客様のニーズに合わせた多様なサービスをご提供しています
+              </p>
+            </div>
+          </ScrollAnimatedSection>
           <div className={styles.grid}>
             {servicesData.slice(0, desktopDisplayCount).map((service) => (
               <div key={service.id} className={styles.serviceItem}>
@@ -251,12 +259,19 @@ export default function ServicesList({
   return (
     <section className={styles.servicesSection} ref={sectionRef}>
       <div className={styles.container}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>サービス一覧</h2>
-          <p className={styles.subtitle}>
-            お客様のニーズに合わせた多様なサービスをご提供しています
-          </p>
-        </div>
+        <ScrollAnimatedSection
+          animation="fadeInLeft"
+          delay={0}
+          duration={800}
+          threshold={0.3}
+        >
+          <div className={styles.header}>
+            <h2 className={styles.title}>サービス一覧</h2>
+            <p className={styles.subtitle}>
+              お客様のニーズに合わせた多様なサービスをご提供しています
+            </p>
+          </div>
+        </ScrollAnimatedSection>
 
         <div className={styles.grid}>
           {displayedServices.map((service, index) => (

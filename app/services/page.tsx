@@ -8,6 +8,7 @@ import Breadcrumbs from "@/app/_components/Breadcrumbs";
 import Sheet from "@/app/_components/Sheet";
 import ServiceCard from "@/app/_components/ServiceCard";
 import styles from "./page.module.css";
+import ScrollAnimatedSection from "@/app/_components/ScrollAnimatedSection";
 
 // サービスデータを直接定義（詳細ページと同じデータを使用）
 const servicesData = [
