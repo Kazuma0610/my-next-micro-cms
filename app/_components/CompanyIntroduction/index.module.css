@@ -1,0 +1,244 @@
+.companyIntroSection {
+  margin-top: 180px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* セクションTOPに横線を引く */
+.companyIntroSection::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100vw - 40px); /* ビューポート幅から40px引く */
+  max-width: 1160px; /* 最大幅を制限 */
+  height: 1px;
+  background: #cccccc;
+  z-index: 1;
+}
+
+/*.companyIntroSection::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><pattern id='grid' width='10' height='10' patternUnits='userSpaceOnUse'><path d='M 10 0 L 0 0 0 10' fill='none' stroke='%23cccccc' stroke-width='0.5' opacity='0.3'/></pattern></defs><rect width='100' height='100' fill='url(%23grid)'/></svg>");
+  opacity: 0.3;
+}*/
+
+.introContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 50px;
+  position: relative;
+  z-index: 1;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.sectionTitle {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #2c3e50;
+  letter-spacing: 0.05em;
+}
+
+.sectionSubtitle {
+  color: #5a6c7d;
+  font-size: 1.2rem;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.introContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.introText {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.introTitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #2c3e50;
+}
+
+.introDescription {
+  color: #5a6c7d;
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.introFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.featureIcon {
+  color: #27ae60;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.featureText {
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.introImageWrapper {
+  position: relative;
+}
+
+.introImage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 画像の鮮明化 */
+.introImg {
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 2;
+
+  /* 最大解像度での表示 */
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.introImg:hover {
+  transform: scale(1.02); /* スケールを小さくして品質を保持 */
+}
+
+.imageDecoration1 {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.imageDecoration2 {
+  position: absolute;
+  bottom: -30px;
+  right: -30px;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(45deg, #ff6b6b, #feca57);
+  border-radius: 20px;
+  opacity: 0.4;
+  z-index: 1;
+  transform: rotate(15deg);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 992px) {
+  .sectionTitle {
+    font-size: 2.5rem;
+  }
+
+  .introContent {
+    gap: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .companyIntroSection {
+    padding: 60px 50px;
+  }
+
+  /* セクションTOPに横線を引く */
+  .companyIntroSection::before {
+    width: calc(100vw - 30px); /* モバイルでは左右15pxずつ */
+    max-width: calc(100% - 30px);
+  }
+
+  .introContainer {
+    padding: 0px;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 1rem;
+  }
+
+  .introContent {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .introText {
+    padding: 30px;
+  }
+
+  .introTitle {
+    font-size: 1.5rem;
+  }
+
+  .introImg {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  /* セクションTOPに横線を引く */
+  .companyIntroSection::before {
+    width: calc(100vw - 20px); /* さらに小さい画面では左右10pxずつ */
+    max-width: calc(100% - 20px);
+  }
+
+  .introContainer {
+    padding: 0 15px;
+  }
+
+  .sectionHeader {
+    margin-bottom: 50px;
+  }
+
+  .introText {
+    padding: 20px;
+  }
+
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+}

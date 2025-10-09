@@ -11,6 +11,7 @@ import Carousel from "./_components/Carousel";
 import ScrollAnimatedSection from "@/app/_components/ScrollAnimatedSection";
 import StaggeredList from "./_components/StaggeredList";
 import ServicesList from "./_components/ServicesList";
+import CompanyIntroduction from "@/app/_components/CompanyIntroduction";
 
 export const revalidate = 60;
 
@@ -74,9 +75,12 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* 会社紹介セクション - 新規追加 */}
+      <CompanyIntroduction />
+
       {/* サービス一覧セクション */}
       <ScrollAnimatedSection
-        animation="fadeInLeft"
+        animation="fadeInUp"
         delay={200}
         duration={800}
         threshold={0.2}
@@ -91,7 +95,7 @@ export default async function Home() {
 
       {/* BLOGセクション - 外側ヘッダー付き */}
       <ScrollAnimatedSection
-        animation="fadeInLeft"
+        animation="fadeInUp"
         delay={200}
         duration={800}
         threshold={0.2}
@@ -110,7 +114,7 @@ export default async function Home() {
       </ScrollAnimatedSection>
 
       {/* お知らせセクション - 外側ヘッダー付き */}
-      <section className={styles.simpleSection}>
+      {/*<section className={styles.simpleSection}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>お知らせ</h2>
           <p className={styles.sectionSubtitle}>
@@ -123,7 +127,7 @@ export default async function Home() {
           <div className={styles.announcement}>重要なお知らせ3</div>
           <div className={styles.announcement}>重要なお知らせ4</div>
         </StaggeredList>
-      </section>
+      </section>*/}
     </>
   );
 }
