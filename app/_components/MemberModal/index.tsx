@@ -1,6 +1,6 @@
 "use client";
-
-import { useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import styles from "./index.module.css";
 import { Member } from "@/app/_libs/microcms";
@@ -16,31 +16,139 @@ type SocialLink = {
   url: string;
   logo: string;
   alt: string;
-  width?: number; // オプショナルにする
-  height?: number; // オプショナルにする
+  width?: number;
+  height?: number;
 };
 
 const MemberModal = ({ member, isOpen, onClose }: Props) => {
+  const [isBodyLocked, setIsBodyLocked] = useState(false);
+  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
+  const scrollPositionRef = useRef<number>(0);
+  const hasProcessedRef = useRef<boolean>(false);
+
+  // モーダル用のルート要素作成
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      let root = document.getElementById("modal-root");
+      if (!root) {
+        root = document.createElement("div");
+        root.id = "modal-root";
+        root.style.cssText = `
+          position: fixed !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          pointer-events: none;
+          z-index: 99999;
+        `;
+        document.body.appendChild(root);
+      }
+      setModalRoot(root);
+    }
+
+    return () => {
+      // クリーンアップ時にはmodal-rootは残しておく（他のモーダルが使う可能性）
+    };
+  }, []);
+
+  // onCloseのハンドリングを強化（useCallbackでメモ化）
+  const handleClose = useCallback(() => {
+    onClose();
+  }, [onClose]);
+
+  const handleOverlayClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      // オーバーレイ自体がクリックされた場合のみ閉じる
+      if (e.target === e.currentTarget) {
+        handleClose();
+      }
+    },
+    [handleClose]
+  );
+
+  const handleContentClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+    },
+    []
+  );
+
+  const handleCloseButtonClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      handleClose();
+    },
+    [handleClose]
+  );
+
+  useEffect(() => {
+    if (isOpen && !hasProcessedRef.current) {
+      hasProcessedRef.current = true;
+
+      // 現在のスクロール位置を保存
+      scrollPositionRef.current = window.scrollY;
+
+      // 即座にbodyを固定
+      const lockBody = () => {
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${scrollPositionRef.current}px`;
+        document.body.style.left = "0";
+        document.body.style.right = "0";
+        document.body.style.width = "100%";
+        document.body.style.overflow = "hidden";
+        document.body.style.transform = "none";
+        document.body.style.transition = "none";
+
+        setIsBodyLocked(true);
+      };
+
+      lockBody();
+    }
+
+    if (!isOpen && hasProcessedRef.current) {
+      // bodyのスタイルを復元
+      const unlockBody = () => {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        document.body.style.transform = "";
+        document.body.style.transition = "";
+
+        // スクロール位置を復元
+        window.scrollTo(0, scrollPositionRef.current);
+
+        setIsBodyLocked(false);
+        hasProcessedRef.current = false;
+      };
+
+      unlockBody();
+    }
+    // isBodyLockedとhasProcessedRef.currentは意図的に依存配列から除外
+    // これらの値の変更でuseEffectを再実行すると無限ループになる可能性があるため
+  }, [isOpen, member?.name]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // ESCキーでモーダルを閉じる
   useEffect(() => {
     const handleEsc = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onClose();
+        handleClose();
       }
     };
 
     if (isOpen) {
       document.addEventListener("keydown", handleEsc);
-      document.body.style.overflow = "hidden"; // スクロールを無効化
     }
 
     return () => {
       document.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "unset"; // スクロールを有効化
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, handleClose]);
 
-  // メンバーごとのスキルと経験を直書きで定義
   const getMemberSkills = (memberName: string) => {
     switch (memberName) {
       case "デイビッド・チェン":
@@ -85,7 +193,6 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
     }
   };
 
-  // SNSリンクをロゴ画像付きで管理
   const getMemberSocialLinks = (memberName: string): SocialLink[] => {
     switch (memberName) {
       case "デイビッド・チェン":
@@ -95,7 +202,7 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             url: "#",
             logo: "/x.png",
             alt: "X logo",
-            width: 28, // Xロゴは少し小さく
+            width: 28,
             height: 28,
           },
           {
@@ -103,7 +210,7 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             url: "#",
             logo: "/insta.png",
             alt: "Instagram logo",
-            width: 32, // Instagramは標準サイズ
+            width: 32,
             height: 32,
           },
           {
@@ -111,8 +218,8 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             url: "#",
             logo: "/youtube.png",
             alt: "Youtube logo",
-            width: 120, // YouTubeは少し大きく
-            height: 36, // 横長なので高さを調整
+            width: 120,
+            height: 36,
           },
         ];
       case "エミリー・サンダース":
@@ -122,7 +229,7 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             url: "#",
             logo: "/x.png",
             alt: "X logo",
-            width: 28, // Xロゴは少し小さく
+            width: 28,
             height: 28,
           },
           {
@@ -130,7 +237,7 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             url: "#",
             logo: "/tiktok.png",
             alt: "TikTok logo",
-            width: 32, // TikTokは標準サイズ
+            width: 32,
             height: 32,
           },
           {
@@ -138,8 +245,8 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             url: "#",
             logo: "/line.png",
             alt: "LINE logo",
-            width: 32, // LINEは少し大きく
-            height: 32, // 横長なので高さを調整
+            width: 32,
+            height: 32,
           },
         ];
       case "ジョン・ウィルソン":
@@ -149,7 +256,7 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             url: "#",
             logo: "/fb.png",
             alt: "Facebook logo",
-            width: 32, // Facebookロゴは少し小さく
+            width: 32,
             height: 32,
           },
           {
@@ -157,7 +264,7 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             url: "#",
             logo: "/insta.png",
             alt: "Instagram logo",
-            width: 32, // Instagramは標準サイズ
+            width: 32,
             height: 32,
           },
           {
@@ -165,8 +272,8 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             url: "#",
             logo: "/note.png",
             alt: "Note logo",
-            width: 40, // Noteは少し大きく
-            height: 40, // 横長なので高さを調整
+            width: 40,
+            height: 40,
           },
         ];
       default:
@@ -174,16 +281,18 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
     }
   };
 
-  if (!isOpen || !member) return null;
+  if (!isOpen || !member || !modalRoot) {
+    return null;
+  }
 
   const skills = getMemberSkills(member.name);
   const experience = getMemberExperience(member.name);
   const socialLinks = getMemberSocialLinks(member.name);
 
-  return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeButton} onClick={onClose}>
+  const modalContent = (
+    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
+      <div className={styles.modalContent} onClick={handleContentClick}>
+        <button className={styles.closeButton} onClick={handleCloseButtonClick}>
           ×
         </button>
 
@@ -205,7 +314,6 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
           <h3 className={styles.sectionTitle}>プロフィール</h3>
           <p className={styles.modalProfile}>{member.profile}</p>
 
-          {/* スキル（直書き） */}
           <h3 className={styles.sectionTitle}>スキル</h3>
           <div className={styles.skills}>
             {skills.map((skill, index) => (
@@ -215,7 +323,6 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             ))}
           </div>
 
-          {/* 経験・実績（直書き） */}
           <h3 className={styles.sectionTitle}>経験・実績</h3>
           <div className={styles.modalExperience}>
             {experience.split("\n").map((line, index) => (
@@ -225,7 +332,6 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
             ))}
           </div>
 
-          {/* SNSリンク（ロゴ画像付きリンク） */}
           {socialLinks.length > 0 && (
             <>
               <h3 className={styles.sectionTitle}>SNS</h3>
@@ -240,14 +346,14 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
                       social.name.toLowerCase() === "youtube"
                         ? styles.socialLinkYoutube
                         : ""
-                    }`} // YouTubeの場合に追加クラスを付与
+                    }`}
                     title={social.name}
                   >
                     <Image
                       src={social.logo}
                       alt={social.alt}
-                      width={social.width} // 個別のwidth
-                      height={social.height} // 個別のheight
+                      width={social.width}
+                      height={social.height}
                       className={styles.socialLogoCompact}
                     />
                   </a>
@@ -259,6 +365,9 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
       </div>
     </div>
   );
+
+  // createPortalでmodal-rootにレンダリング
+  return createPortal(modalContent, modalRoot);
 };
 
 export default MemberModal;

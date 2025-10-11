@@ -1,21 +1,19 @@
 .modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9000;
+  z-index: 1;
   padding: 20px;
-  animation: modalFadeIn 0.3s ease-out;
   box-sizing: border-box;
-  /* 完璧な中央配置のための追加 */
-  min-height: 100vh;
-  min-width: 100vw;
-  overflow: auto; /* スクロールが必要な場合に対応 */
+  /* ポインターイベントを有効にする */
+  pointer-events: auto !important;
+  cursor: pointer;
 }
 
 .modalContent {
@@ -23,18 +21,13 @@
   border-radius: 20px;
   max-width: 600px;
   width: 100%;
-  max-height: calc(100vh - 40px); /* パディングを考慮 */
+  max-height: calc(100vh - 40px);
   overflow-y: auto;
   position: relative;
-  animation: modalSlideIn 0.3s ease-out;
-  /* 完璧な中央配置のための修正 */
   margin: auto;
-  flex-shrink: 0; /* flexアイテムとしての縮小を防ぐ */
-  /* スクロール位置に関係なく中央に表示 */
-  transform: none;
-  /* 中央配置を確実にする */
-  align-self: center;
-  justify-self: center;
+  flex-shrink: 0;
+  transform: none !important;
+  cursor: default;
 }
 
 .closeButton {
@@ -43,21 +36,22 @@
   right: 20px;
   background: none;
   border: none;
-  font-size: 2rem;
+  font-size: 30px;
   cursor: pointer;
   color: #666;
-  z-index: 10;
+  z-index: 2;
+  padding: 0;
   width: 40px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .closeButton:hover {
-  background: #f0f0f0;
+  background-color: #f0f0f0;
   color: #333;
 }
 

@@ -411,6 +411,7 @@
 .mainContent {
   min-height: 100vh;
   width: 100%;
+  /* 通常表示用のスタイル（アニメーション無し） */
 }
 
 .mainContentHidden {
@@ -419,11 +420,22 @@
   visibility: hidden;
 }
 
+/* 初回オーバーレイ後専用のアニメーションクラス */
 .mainContentFadeIn {
   opacity: 0;
   transform: translateY(30px);
   visibility: visible;
   animation: mainContentSlideUp 1.5s ease-out forwards;
+}
+
+/* 即座表示用のクラス（アニメーション無し） */
+.mainContentInstant {
+  min-height: 100vh;
+  width: 100%;
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  /* アニメーション無し - 即座に表示 */
 }
 
 @keyframes mainContentSlideUp {
