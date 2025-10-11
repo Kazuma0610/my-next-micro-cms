@@ -13,7 +13,6 @@ export default function Menu() {
   const [isMobile, setIsMobile] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isMounted, setIsMounted] = useState(false); // マウント状態を追加
   const pathname = usePathname();
   const router = useRouter();
 
@@ -97,29 +96,10 @@ export default function Menu() {
     };
   }, [isOpen]);
 
-  // マウント処理 - SSR/CSR問題の解決
+  // デバイス判定
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // デバイス判定 - より信頼性の高い判定
-  useEffect(() => {
-    if (!isMounted) return;
-
     const checkDevice = () => {
-      // UserAgentも併用してモバイル判定を強化
-      const userAgent = navigator.userAgent.toLowerCase();
-      const isMobileUA =
-        /iphone|ipod|ipad|android|blackberry|windows phone|webos/.test(
-          userAgent
-        );
-      const isSmallScreen = window.innerWidth <= 768;
-      const isTouchDevice =
-        "ontouchstart" in window || navigator.maxTouchPoints > 0;
-
-      // 複数の条件でモバイル判定
-      const mobile = (isSmallScreen && isTouchDevice) || isMobileUA;
-
+      const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
 
       if (!mobile) {
@@ -130,32 +110,23 @@ export default function Menu() {
       }
     };
 
-    // 初回実行
     checkDevice();
-
-    // リサイズとオリエンテーション変更を監視
-    window.addEventListener("resize", checkDevice, { passive: true });
-    window.addEventListener("orientationchange", checkDevice, {
-      passive: true,
-    });
+    window.addEventListener("resize", checkDevice);
 
     return () => {
       window.removeEventListener("resize", checkDevice);
-      window.removeEventListener("orientationchange", checkDevice);
     };
-  }, [isMounted]);
+  }, []);
 
-  // モバイル時のメニュー制御 - より強固なイベント処理
+  // モバイル時のメニュー制御
   useEffect(() => {
-    if (!isMounted || !isMobile) return;
+    if (!isMobile) return;
 
     if (pathname !== "/") {
-      // TOPページ以外では即座に表示
       setIsMenuVisible(true);
       return;
     }
 
-    // TOPページでは初期非表示
     setIsMenuVisible(false);
 
     const handleHideMenu = () => {
@@ -166,36 +137,20 @@ export default function Menu() {
       setIsMenuVisible(true);
     };
 
-    // イベントリスナー登録
     window.addEventListener("hideMenuButton", handleHideMenu);
     window.addEventListener("showMenuButton", handleShowMenu);
 
-    // フォールバック: 一定時間後に強制表示
     const fallbackTimer = setTimeout(() => {
       setIsMenuVisible(true);
     }, 8000);
-
-    // 追加のフォールバック: DOMContentLoadedでも表示
-    const domLoadedTimer = setTimeout(() => {
-      if (document.readyState === "complete") {
-        setIsMenuVisible(true);
-      }
-    }, 3000);
 
     return () => {
       window.removeEventListener("hideMenuButton", handleHideMenu);
       window.removeEventListener("showMenuButton", handleShowMenu);
       clearTimeout(fallbackTimer);
-      clearTimeout(domLoadedTimer);
     };
-  }, [pathname, isMobile, isMounted]);
+  }, [pathname, isMobile]);
 
-  // マウント前は何も表示しない（SSR対策）
-  if (!isMounted) {
-    return null;
-  }
-
-  // PC判定時は何も表示しない
   if (!isMobile) {
     return null;
   }
@@ -291,26 +246,12 @@ export default function Menu() {
         />
       )}
 
-      {/* ハンバーガーメニューボタン - 強制表示オプション付き */}
+      {/* ハンバーガーメニューボタン */}
       {isMenuVisible && (
         <button
-          className={cx(
-            styles.button,
-            styles.visible,
-            // 強制表示クラスを追加（CSS側で !important 指定）
-            styles.forceVisible
-          )}
+          className={cx(styles.button, styles.visible)}
           onClick={toggleHam}
-          aria-label="メニューを開く"
-          // タッチイベントも追加
-          onTouchStart={(e) => e.preventDefault()}
-          style={{
-            // インラインスタイルでも保険をかける
-            display: "block",
-            visibility: "visible",
-            opacity: 1,
-            pointerEvents: "auto",
-          }}
+          aria-label="メニュー"
         >
           <div className={cx(styles.openbtn, isOpen && styles.open)}>
             <span></span>
