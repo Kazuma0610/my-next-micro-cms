@@ -10,6 +10,9 @@ export default function Footer() {
             <Link href="/news">ニュース</Link>
           </li>
           <li className={styles.item}>
+            <Link href="/services">サービス一覧</Link>
+          </li>
+          <li className={styles.item}>
             <Link href="/blog">ブログ</Link>
           </li>
           <li className={styles.item}>

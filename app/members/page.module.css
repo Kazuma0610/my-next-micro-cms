@@ -1,10 +1,17 @@
+/* ==========================================================================
+   共通スタイル
+   ========================================================================== */
+
 .container {
   max-width: 840px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-/* 会社概要セクション */
+/* ==========================================================================
+   会社概要セクション
+   ========================================================================== */
+
 .companyOverview {
   padding: 100px 0;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -21,9 +28,10 @@
   background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
 }
 
+/* ヘッダー */
 .overviewHeader {
   text-align: center;
-  margin-bottom: 80px;
+  margin-bottom: 50px;
 }
 
 .overviewTitle {
@@ -99,7 +107,10 @@
   font-size: var(--font-size-xs);
 }
 
-/* ミッション・ビジョン */
+/* ==========================================================================
+   ミッション・ビジョン・バリュー
+   ========================================================================== */
+
 .missionVision {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -141,7 +152,10 @@
   font-size: var(--font-size-xs);
 }
 
-/* チーム紹介セクション */
+/* ==========================================================================
+   チーム紹介セクション
+   ========================================================================== */
+
 .intro {
   padding: 100px 0;
   background: white;
@@ -179,79 +193,9 @@
   margin: 0 auto;
 }
 
-/* レスポンシブ対応 */
-@media (max-width: 992px) {
-  .overviewTitle {
-    font-size: 2.5rem;
-  }
-
-  .overviewGrid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-  }
-
-  .missionVision {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-}
-
-@media (max-width: 768px) {
-  .companyOverview {
-    padding: 80px 0;
-  }
-
-  .overviewTitle {
-    font-size: 2rem;
-  }
-
-  .overviewGrid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
-
-  .overviewItem {
-    padding: 25px;
-  }
-
-  .missionItem {
-    padding: 30px;
-  }
-
-  .intro {
-    padding: 80px 0;
-  }
-
-  .title {
-    font-size: 2rem;
-  }
-
-  .description {
-    font-size: var(--font-size-xs);
-  }
-}
-
-@media (max-width: 480px) {
-  .companyOverview {
-    padding: 60px 0;
-  }
-
-  .overviewTitle {
-    font-size: 1.8rem;
-  }
-
-  .overviewItem {
-    padding: 20px;
-  }
-
-  .missionItem {
-    padding: 25px;
-  }
-
-  .missionTitle {
-    font-size: 1.3rem;
-  }
-}
+/* ==========================================================================
+   メンバーリスト
+   ========================================================================== */
 
 .text {
   text-align: center;
@@ -288,26 +232,7 @@
   font-size: var(--font-size-sm);
 }
 
-.footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-top: 1px solid var(--color-border);
-  padding-top: 40px;
-  text-align: center;
-  gap: 24px;
-}
-
-.message {
-  font-size: var(--font-size-3xl);
-  font-weight: bold;
-}
-
-.empty {
-  margin-bottom: 40px;
-}
-
-/*詳細を見るボタンを追加*/
+/* 詳細ボタン */
 .buttonContainer {
   margin-top: 16px;
 }
@@ -334,6 +259,87 @@
   transform: translateY(0);
 }
 
+/* ==========================================================================
+   その他のコンポーネント
+   ========================================================================== */
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+  padding-top: 40px;
+  text-align: center;
+  gap: 24px;
+}
+
+.message {
+  font-size: var(--font-size-3xl);
+  font-weight: bold;
+}
+
+.empty {
+  margin-bottom: 40px;
+}
+
+/* ==========================================================================
+   レスポンシブデザイン
+   ========================================================================== */
+
+/* タブレット */
+@media (max-width: 992px) {
+  .overviewTitle {
+    font-size: 2.5rem;
+  }
+
+  .overviewGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+  }
+
+  .missionVision {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* モバイル大 */
+@media (max-width: 768px) {
+  .companyOverview {
+    padding: 80px 0;
+  }
+
+  .intro {
+    padding: 80px 0;
+  }
+
+  .overviewTitle {
+    font-size: 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .overviewGrid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .overviewItem {
+    padding: 25px;
+  }
+
+  .missionItem {
+    padding: 30px;
+  }
+
+  .description {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* モバイル中 */
 @media (max-width: 640px) {
   .text {
     text-align: left;
@@ -356,5 +362,28 @@
 
   .position {
     text-align: center;
+  }
+}
+
+/* モバイル小 */
+@media (max-width: 480px) {
+  .companyOverview {
+    padding: 60px 0;
+  }
+
+  .overviewTitle {
+    font-size: 1.8rem;
+  }
+
+  .overviewItem {
+    padding: 20px;
+  }
+
+  .missionItem {
+    padding: 25px;
+  }
+
+  .missionTitle {
+    font-size: 1.3rem;
   }
 }

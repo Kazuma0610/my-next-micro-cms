@@ -3,6 +3,7 @@
 import Image from "next/image";
 import styles from "./index.module.css";
 import ScrollAnimatedSection from "../ScrollAnimatedSection";
+import ButtonLink from "../ButtonLink";
 
 const CompanyIntroduction = () => {
   return (
@@ -111,6 +112,9 @@ const CompanyIntroduction = () => {
             </div>
           </ScrollAnimatedSection>
         </div>
+      </div>
+      <div className={styles.companyLink}>
+        <ButtonLink href="/members">会社概要</ButtonLink>
       </div>
     </section>
   );
