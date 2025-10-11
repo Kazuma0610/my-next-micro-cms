@@ -27,7 +27,6 @@ const MembersClient = ({ members }: Props) => {
 
   return (
     <div className={styles.container}>
-      <Breadcrumbs />
       {members.length === 0 ? (
         <p className={styles.empty}>メンバーが登録されていません。</p>
       ) : (

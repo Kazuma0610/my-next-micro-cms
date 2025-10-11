@@ -214,7 +214,7 @@ export default function PCScrollMenu() {
               className={styles.menuLink}
               onClick={() => handleMenuItemClick("/members")}
             >
-              会社役員
+              会社概要
             </button>
           </li>
           <li>

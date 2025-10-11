@@ -216,7 +216,7 @@ export default function Menu() {
               className={styles.menuLink}
               onClick={(e) => handleMenuItemClick("/members", e)}
             >
-              会社役員
+              会社概要
             </button>
           </li>
           <li>

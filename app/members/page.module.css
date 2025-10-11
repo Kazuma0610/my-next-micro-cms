@@ -1,3 +1,258 @@
+.container {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 会社概要セクション */
+.companyOverview {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  position: relative;
+}
+
+.companyOverview::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+}
+
+.overviewHeader {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.overviewTitle {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.overviewTitle::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #3182ce, #48bb78);
+  border-radius: 2px;
+}
+
+.overviewSubtitle {
+  color: #5a6c7d;
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+/* 会社概要グリッド */
+.overviewContent {
+  margin-bottom: 80px;
+}
+
+.overviewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+}
+
+.overviewItem {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.overviewItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.itemTitle {
+  font-size: var(--font-size-sm);
+  font-weight: bold;
+  color: #3182ce;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.itemTitle::before {
+  content: "▶";
+  color: #48bb78;
+  font-size: 0.8rem;
+}
+
+.itemContent {
+  color: #5a6c7d;
+  line-height: 1.6;
+  margin: 0;
+  font-size: var(--font-size-xs);
+}
+
+/* ミッション・ビジョン */
+.missionVision {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 40px;
+}
+
+.missionItem {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.missionItem::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.missionTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.missionText {
+  color: #5a6c7d;
+  line-height: 1.8;
+  margin: 0;
+  font-size: var(--font-size-xs);
+}
+
+/* チーム紹介セクション */
+.intro {
+  padding: 100px 0;
+  background: white;
+}
+
+.intro .container {
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.title::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #3182ce, #48bb78);
+  border-radius: 2px;
+}
+
+.description {
+  color: #5a6c7d;
+  font-size: var(--font-size-xs);
+  line-height: 1.8;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 992px) {
+  .overviewTitle {
+    font-size: 2.5rem;
+  }
+
+  .overviewGrid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+  }
+
+  .missionVision {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .companyOverview {
+    padding: 80px 0;
+  }
+
+  .overviewTitle {
+    font-size: 2rem;
+  }
+
+  .overviewGrid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .overviewItem {
+    padding: 25px;
+  }
+
+  .missionItem {
+    padding: 30px;
+  }
+
+  .intro {
+    padding: 80px 0;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .companyOverview {
+    padding: 60px 0;
+  }
+
+  .overviewTitle {
+    font-size: 1.8rem;
+  }
+
+  .overviewItem {
+    padding: 20px;
+  }
+
+  .missionItem {
+    padding: 25px;
+  }
+
+  .missionTitle {
+    font-size: 1.3rem;
+  }
+}
+
 .text {
   text-align: center;
   margin-bottom: 40px;

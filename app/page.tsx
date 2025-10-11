@@ -31,7 +31,7 @@ export default async function Home() {
       description: "私たちは市場をリードしているテックカンパニーです",
       image: "/mv_4.png", //1枚目の画像
       buttonText: "詳しく見る",
-      buttonLink: "/about",
+      buttonLink: "/members",
     },
     {
       id: "2",
