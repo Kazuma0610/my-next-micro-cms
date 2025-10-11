@@ -221,7 +221,7 @@
   }
 
   .modalContent {
-    max-height: calc(100vh - 100px);
+    max-height: calc(90vh - 100px);
     border-radius: 20px;
     width: calc(100% - 20px);
     max-width: none;
@@ -264,7 +264,7 @@
 
   .modalContent {
     width: calc(100% - 10px);
-    max-height: calc(100vh - 120px);
+    max-height: calc(80vh - 120px);
     border-radius: 15px;
   }
 
