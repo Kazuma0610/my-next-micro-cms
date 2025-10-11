@@ -7,9 +7,7 @@ import styles from "./index.module.css";
 
 export default function PCScrollMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-  const [shouldRender, setShouldRender] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   const router = useRouter();
@@ -25,15 +23,8 @@ export default function PCScrollMenu() {
     setTimeout(() => {
       setIsOpen(false);
       setIsClosing(false);
-
-      // スクロール位置もチェックして要素を削除するか判定
-      if (!isVisible) {
-        setTimeout(() => {
-          setShouldRender(false);
-        }, 100);
-      }
     }, 400);
-  }, [isVisible]);
+  }, []);
 
   // スムーズスクロール関数
   const scrollToTop = useCallback(() => {
@@ -62,57 +53,25 @@ export default function PCScrollMenu() {
     [handleCloseMenu, router, scrollToTop]
   );
 
+  // PC判定のみ（スクロール処理を削除）
   useEffect(() => {
     if (!isMounted) return;
 
-    const handleScroll = () => {
-      // PC判定
-      const isPC = window.innerWidth > 768;
-      if (!isPC) {
-        setIsVisible(false);
-        setIsOpen(false);
-        setShouldRender(false);
-        return;
-      }
-
-      const scrollY = window.scrollY;
-      const shouldShow = scrollY > 100;
-
-      if (shouldShow && !isVisible) {
-        // 表示開始
-        console.log("PCScrollMenu: Showing");
-        setIsVisible(true);
-        setShouldRender(true);
-      } else if (!shouldShow && isVisible) {
-        // 非表示開始（フェードアウト）
-        console.log("PCScrollMenu: Hiding");
-        setIsVisible(false);
-
-        if (isOpen) {
-          // メニューが開いている場合はクローズアニメーション
-          handleCloseMenu();
-        } else {
-          // ハンバーガーボタンのフェードアウト
-          setTimeout(() => {
-            setShouldRender(false);
-          }, 500); // フェードアウト時間
-        }
-      }
-    };
-
     const handleResize = () => {
-      handleScroll();
+      // PC判定のみ実行
+      const isPC = window.innerWidth > 768;
+      if (!isPC && isOpen) {
+        // モバイルに変更された場合はメニューを閉じる
+        handleCloseMenu();
+      }
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
     };
-  }, [isOpen, isVisible, isMounted, handleCloseMenu]);
+  }, [isOpen, isMounted, handleCloseMenu]);
 
   const toggleMenu = () => {
     if (isClosing) return;
@@ -123,7 +82,7 @@ export default function PCScrollMenu() {
     handleCloseMenu();
   };
 
-  // マウント前またはPC以外では何も表示しない
+  // マウント前では何も表示しない
   if (!isMounted) {
     return null;
   }
@@ -133,20 +92,11 @@ export default function PCScrollMenu() {
     return null;
   }
 
-  // 要素をレンダリングしない場合
-  if (!shouldRender) {
-    return null;
-  }
-
   return (
     <>
-      {/* ハンバーガーボタン */}
+      {/* ハンバーガーボタン - 常に表示 */}
       <button
-        className={cx(
-          styles.hamburgerButton,
-          isVisible && styles.visible,
-          !isVisible && styles.fadeOut
-        )}
+        className={cx(styles.hamburgerButton, styles.visible)}
         onClick={toggleMenu}
         aria-label="メニュー"
       >

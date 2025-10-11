@@ -71,7 +71,7 @@ export default async function Home() {
         <h2 className={styles.newsTitle}>NEWS</h2>
         <NewsList news={data.contents} />
         <div className={styles.newsLink}>
-          <ButtonLink href="/news">もっとみる</ButtonLink>
+          <ButtonLink href="/news">ニュース一覧</ButtonLink>
         </div>
       </section>
 
@@ -116,7 +116,7 @@ export default async function Home() {
         </ScrollAnimatedSection>
         <BlogList blogs={data_blog.contents} layout="grid" />
         <div className={styles.blogLink}>
-          <ButtonLink href="/blog">もっとみる</ButtonLink>
+          <ButtonLink href="/blog">ブログ一覧</ButtonLink>
         </div>
       </ScrollAnimatedSection>
 
