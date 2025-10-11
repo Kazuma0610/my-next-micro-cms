@@ -8,11 +8,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9000;
   padding: 20px;
   animation: modalFadeIn 0.3s ease-out;
-  /* モーダルを確実に中央配置 */
   box-sizing: border-box;
+  /* 完璧な中央配置のための追加 */
+  min-height: 100vh;
+  min-width: 100vw;
+  overflow: auto; /* スクロールが必要な場合に対応 */
 }
 
 .modalContent {
@@ -20,14 +23,18 @@
   border-radius: 20px;
   max-width: 600px;
   width: 100%;
-  max-height: 90vh;
+  max-height: calc(100vh - 40px); /* パディングを考慮 */
   overflow-y: auto;
   position: relative;
   animation: modalSlideIn 0.3s ease-out;
-  /* 中央配置を確実にする */
+  /* 完璧な中央配置のための修正 */
   margin: auto;
+  flex-shrink: 0; /* flexアイテムとしての縮小を防ぐ */
   /* スクロール位置に関係なく中央に表示 */
   transform: none;
+  /* 中央配置を確実にする */
+  align-self: center;
+  justify-self: center;
 }
 
 .closeButton {
@@ -149,6 +156,40 @@
   font-weight: 500;
 }
 
+/* SNSのスタイル... */
+
+.socialLinksCompact {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  justify-content: flex-start;
+}
+
+.socialLinkCompact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.socialLinkYoutube {
+  margin-left: -10px; /* YouTubeのロゴを少し左に寄せる */
+}
+
+/* ロゴにのみホバー効果を適用 */
+.socialLogoCompact {
+  transition: all 0.3s ease;
+  filter: grayscale(50%);
+}
+
+.socialLinkCompact:hover .socialLogoCompact {
+  transform: translateY(-3px) scale(1.1); /* ロゴだけを浮上＋拡大 */
+  filter: grayscale(0%);
+  /* ロゴにシャドウを追加 */
+  filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.3)) grayscale(0%);
+}
+
 /* アニメーション */
 @keyframes modalFadeIn {
   from {
@@ -200,6 +241,19 @@
   .modalName {
     font-size: 1.5rem;
   }
+  .socialLinksContainer {
+    gap: 10px;
+  }
+
+  .socialLink {
+    min-width: 120px;
+    padding: 10px 15px;
+  }
+
+  .socialLogo {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -220,5 +274,14 @@
 
   .modalBody {
     padding: 15px;
+  }
+
+  .socialLinksContainer {
+    flex-direction: column;
+  }
+
+  .socialLink {
+    width: 100%;
+    justify-content: center;
   }
 }

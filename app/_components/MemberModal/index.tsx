@@ -11,6 +11,15 @@ type Props = {
   onClose: () => void;
 };
 
+type SocialLink = {
+  name: string;
+  url: string;
+  logo: string;
+  alt: string;
+  width?: number; // オプショナルにする
+  height?: number; // オプショナルにする
+};
+
 const MemberModal = ({ member, isOpen, onClose }: Props) => {
   // ESCキーでモーダルを閉じる
   useEffect(() => {
@@ -76,10 +85,100 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
     }
   };
 
+  // SNSリンクをロゴ画像付きで管理
+  const getMemberSocialLinks = (memberName: string): SocialLink[] => {
+    switch (memberName) {
+      case "デイビッド・チェン":
+        return [
+          {
+            name: "X",
+            url: "#",
+            logo: "/x.png",
+            alt: "X logo",
+            width: 28, // Xロゴは少し小さく
+            height: 28,
+          },
+          {
+            name: "Instagram",
+            url: "#",
+            logo: "/insta.png",
+            alt: "Instagram logo",
+            width: 32, // Instagramは標準サイズ
+            height: 32,
+          },
+          {
+            name: "Youtube",
+            url: "#",
+            logo: "/youtube.png",
+            alt: "Youtube logo",
+            width: 120, // YouTubeは少し大きく
+            height: 36, // 横長なので高さを調整
+          },
+        ];
+      case "エミリー・サンダース":
+        return [
+          {
+            name: "X",
+            url: "#",
+            logo: "/x.png",
+            alt: "X logo",
+            width: 28, // Xロゴは少し小さく
+            height: 28,
+          },
+          {
+            name: "TikTok",
+            url: "#",
+            logo: "/tiktok.png",
+            alt: "TikTok logo",
+            width: 32, // TikTokは標準サイズ
+            height: 32,
+          },
+          {
+            name: "LINE",
+            url: "#",
+            logo: "/line.png",
+            alt: "LINE logo",
+            width: 32, // LINEは少し大きく
+            height: 32, // 横長なので高さを調整
+          },
+        ];
+      case "ジョン・ウィルソン":
+        return [
+          {
+            name: "Facebook",
+            url: "#",
+            logo: "/fb.png",
+            alt: "Facebook logo",
+            width: 32, // Facebookロゴは少し小さく
+            height: 32,
+          },
+          {
+            name: "Instagram",
+            url: "#",
+            logo: "/insta.png",
+            alt: "Instagram logo",
+            width: 32, // Instagramは標準サイズ
+            height: 32,
+          },
+          {
+            name: "Note",
+            url: "#",
+            logo: "/note.png",
+            alt: "Note logo",
+            width: 40, // Noteは少し大きく
+            height: 40, // 横長なので高さを調整
+          },
+        ];
+      default:
+        return [];
+    }
+  };
+
   if (!isOpen || !member) return null;
 
   const skills = getMemberSkills(member.name);
   const experience = getMemberExperience(member.name);
+  const socialLinks = getMemberSocialLinks(member.name);
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
@@ -125,6 +224,37 @@ const MemberModal = ({ member, isOpen, onClose }: Props) => {
               </p>
             ))}
           </div>
+
+          {/* SNSリンク（ロゴ画像付きリンク） */}
+          {socialLinks.length > 0 && (
+            <>
+              <h3 className={styles.sectionTitle}>SNS</h3>
+              <div className={styles.socialLinksCompact}>
+                {socialLinks.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${styles.socialLinkCompact} ${
+                      social.name.toLowerCase() === "youtube"
+                        ? styles.socialLinkYoutube
+                        : ""
+                    }`} // YouTubeの場合に追加クラスを付与
+                    title={social.name}
+                  >
+                    <Image
+                      src={social.logo}
+                      alt={social.alt}
+                      width={social.width} // 個別のwidth
+                      height={social.height} // 個別のheight
+                      className={styles.socialLogoCompact}
+                    />
+                  </a>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
